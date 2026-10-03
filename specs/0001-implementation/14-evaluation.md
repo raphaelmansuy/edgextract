@@ -18,8 +18,11 @@ The names in that note are already listed in the ontology, so finding them is a 
 | Tev1, same questions | 1.00 | 0.67 | 9.4 seconds |
 | Tev1, one yes-or-no for each allowed link type | 1.00 | 0.78 | 7.9 seconds |
 | A chat model (gemma4) writing JSON | 0.95 | 0.89 | 77.8 seconds |
+| Mistral Small, JSON, hosted (saved run) | 0.89 | 0.80 | 3.9 seconds |
 
-The last Tev1 row is the current question shape. On that note it kept both “EdgeQuake uses PostgreSQL” and “EdgeQuake depends on PostgreSQL.” It missed the links from EdgeQuake to Apache AGE and to pgvector. It also kept two links that are not in the answer key: Jane Doe is part of Acme Inc, and Nimble uses Ollama (the direction is reversed).
+The last Tev1 row in the first block is the current question shape. On that note it kept both “EdgeQuake uses PostgreSQL” (probability 0.96) and “EdgeQuake depends on PostgreSQL” (1.00). It missed the links from EdgeQuake to Apache AGE and to pgvector. It also kept two links that are not in the answer key: Jane Doe is part of Acme Inc (0.94), and Nimble uses Ollama (0.85). The answer key says Ollama uses Nimble, which the model also kept, at 0.94. Both 0.85 and 0.94 are above the 0.80 keep cutoff.
+
+The 7.9 second time is that earlier comparison. `docs/results/golden-tev1.json` times the same note at 4.29 seconds with the model already loaded. The Mistral row is `docs/results/golden-mistral-small.json` (3.86 seconds, shown as 3.9). Relationship `weight` and entity `importance` are that probability. An earlier build stored `0.4 + 0.6 × probability`, which is why a draft quoted 0.91 for the 0.85 answer.
 
 ## A public news benchmark
 

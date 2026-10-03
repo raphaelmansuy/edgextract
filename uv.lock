@@ -289,6 +289,7 @@ dev = [
 spans = [
     { name = "gliner2", extra = ["local"] },
     { name = "protobuf" },
+    { name = "transformers" },
 ]
 
 [package.dev-dependencies]
@@ -308,6 +309,7 @@ requires-dist = [
     { name = "pytest-asyncio", marker = "extra == 'dev'", specifier = ">=0.24" },
     { name = "pyyaml", specifier = ">=6.0" },
     { name = "ruff", marker = "extra == 'dev'", specifier = ">=0.7" },
+    { name = "transformers", marker = "extra == 'spans'", specifier = ">=4.38,<5" },
 ]
 
 [package.metadata.requires-dev]

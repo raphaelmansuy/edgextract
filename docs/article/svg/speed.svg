@@ -3,8 +3,8 @@
   <rect width="1100" height="288" fill="#f7f3ec"/>
   <text x="0" y="28" fill="#1f1d1a" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="19" font-weight="600" text-anchor="start">Mistral Small</text>
   <text x="0" y="48" fill="#6b645a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" text-anchor="start">hosted API, chat JSON</text>
-  <rect x="290" y="6" width="31.49100257069409" height="40" rx="12" fill="#f5d4c1"/>
-  <text x="335.4910025706941" y="33" fill="#80401f" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="17" font-weight="700" text-anchor="start">3.5 s</text>
+  <rect x="290" y="6" width="35.08997429305913" height="40" rx="12" fill="#f5d4c1"/>
+  <text x="339.08997429305913" y="33" fill="#80401f" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="17" font-weight="700" text-anchor="start">3.9 s</text>
   <text x="0" y="90" fill="#1f1d1a" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="19" font-weight="600" text-anchor="start">tev1</text>
   <text x="0" y="110" fill="#6b645a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" text-anchor="start">local, closed decisions</text>
   <rect x="290" y="68" width="71.07969151670952" height="40" rx="12" fill="#cfe3c9"/>

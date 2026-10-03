@@ -59,7 +59,7 @@ def assemble(
                 name=name,
                 entity_type=t.entity_type,
                 description=evidence,
-                importance=min(1.0, 0.4 + t.winner_prob * 0.6),
+                importance=t.winner_prob,
                 source_spans=[t.mention.text],
                 source_chunk_ids=[chunk_id],
                 source_document_id=document_id,
@@ -70,7 +70,7 @@ def assemble(
                 existing.source_spans.append(t.mention.text)
             if chunk_id not in existing.source_chunk_ids:
                 existing.source_chunk_ids.append(chunk_id)
-            existing.importance = max(existing.importance, min(1.0, 0.4 + t.winner_prob * 0.6))
+            existing.importance = max(existing.importance, t.winner_prob)
 
     for name, entity in entities_acc.items():
         entity.description = "; ".join(dict.fromkeys(descriptions[name]))[:500]
@@ -106,13 +106,14 @@ def assemble(
         if key in seen_rel:
             continue
         seen_rel.add(key)
+        # weight is the model's probability, the same number the cutoff compares.
         rels.append(
             ExtractedRelationship(
                 source=src,
                 target=tgt,
                 relation_type=h.relation_type,
                 description=h.evidence,
-                weight=min(1.0, 0.4 + h.winner_prob * 0.6),
+                weight=h.winner_prob,
                 keywords=[h.relation_type.lower().replace("_", " ")],
                 source_chunk_ids=[chunk_id],
                 source_document_id=document_id,

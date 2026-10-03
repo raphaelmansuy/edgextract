@@ -42,7 +42,7 @@
   <text x="26" y="435.0" fill="#3d3a80" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="38" font-weight="600" text-anchor="start">5</text>
   <text x="66" y="431.0" fill="#3d3a80" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="22" font-weight="600" text-anchor="start">Check links</text>
   <text x="298" y="419" fill="#1f1d1a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="16" font-weight="500" text-anchor="start">One yes-or-no question for each legal link.</text>
-  <text x="298" y="445" fill="#6b645a" font-family="Menlo, SF Mono, Consolas, monospace" font-size="13.5" font-weight="400" text-anchor="start">uses 0.97     depends on 1.00</text>
+  <text x="298" y="445" fill="#6b645a" font-family="Menlo, SF Mono, Consolas, monospace" font-size="13.5" font-weight="400" text-anchor="start">uses 0.96     depends on 1.00</text>
   <rect x="928" y="398" width="121" height="26" rx="8" fill="#d9d6f3"/>
   <text x="940" y="415.375" fill="#3d3a80" font-family="Menlo, SF Mono, Consolas, monospace" font-size="12.5" font-weight="400" text-anchor="start">model answers</text>
   <path d="M124.0 467.0 L131.0 475.0 L138.0 467.0" fill="none" stroke="#9a9183" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -51,7 +51,7 @@
   <text x="26" y="531.0" fill="#80401f" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="38" font-weight="600" text-anchor="start">6</text>
   <text x="66" y="527.0" fill="#80401f" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="22" font-weight="600" text-anchor="start">Decide</text>
   <text x="298" y="515" fill="#1f1d1a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="16" font-weight="500" text-anchor="start">Your cutoffs turn each number into keep, review, or drop.</text>
-  <text x="298" y="541" fill="#6b645a" font-family="Menlo, SF Mono, Consolas, monospace" font-size="13.5" font-weight="400" text-anchor="start">0.97 and 1.00 are both above 0.80  -&gt;  keep</text>
+  <text x="298" y="541" fill="#6b645a" font-family="Menlo, SF Mono, Consolas, monospace" font-size="13.5" font-weight="400" text-anchor="start">0.96 and 1.00 are both above 0.80  -&gt;  keep</text>
   <rect x="928" y="494" width="91" height="26" rx="8" fill="#f5d4c1"/>
   <text x="940" y="511.375" fill="#80401f" font-family="Menlo, SF Mono, Consolas, monospace" font-size="12.5" font-weight="400" text-anchor="start">your rule</text>
   <text x="0" y="580" fill="#6b645a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="14" font-weight="400" text-anchor="start">Worked example: the sentence "EdgeQuake depends on PostgreSQL." goes through all six steps.</text>

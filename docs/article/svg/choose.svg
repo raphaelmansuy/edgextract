@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="312" viewBox="0 0 1100 312" role="img" aria-label="When to use edgextract, a trained model, or a chat model">
-  <rect width="1100" height="312" fill="#f7f3ec"/>
-  <rect x="0" y="0" width="262" height="96" rx="16" fill="#cfe3c9"/>
-  <rect x="272" y="0" width="828" height="96" rx="16" fill="#efe8da"/>
-  <text x="24" y="55.0" fill="#2f4d2a" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="22" font-weight="600" text-anchor="start">Use edgextract</text>
-  <text x="294" y="39.0" fill="#1f1d1a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="16" font-weight="500" text-anchor="start">You can write down your kinds and links, and you cannot label thousands of sentences.</text>
-  <text x="294" y="65.0" fill="#6b645a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="14" font-weight="400" text-anchor="start">You want an unsure answer to wait for a person instead of entering the graph.</text>
-  <rect x="0" y="108" width="262" height="96" rx="16" fill="#d9d6f3"/>
-  <rect x="272" y="108" width="828" height="96" rx="16" fill="#efe8da"/>
-  <text x="24" y="163.0" fill="#3d3a80" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="22" font-weight="600" text-anchor="start">Train a model</text>
-  <text x="294" y="147.0" fill="#1f1d1a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="16" font-weight="500" text-anchor="start">You have labeled sentences in your domain and you need the best score.</text>
-  <text x="294" y="173.0" fill="#6b645a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="14" font-weight="400" text-anchor="start">On CoNLL04 a trained model scores 0.89 and 0.71. Nothing here does.</text>
-  <rect x="0" y="216" width="262" height="96" rx="16" fill="#f5d4c1"/>
-  <rect x="272" y="216" width="828" height="96" rx="16" fill="#efe8da"/>
-  <text x="24" y="258.0" fill="#80401f" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="22" font-weight="600" text-anchor="start">Ask a</text>
-  <text x="24" y="285.0" fill="#80401f" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="22" font-weight="600" text-anchor="start">chat model</text>
-  <text x="294" y="255.0" fill="#1f1d1a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="16" font-weight="500" text-anchor="start">You are exploring, your list of kinds keeps changing, or a wrong link is cheap to delete.</text>
-  <text x="294" y="281.0" fill="#6b645a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="14" font-weight="400" text-anchor="start">Expect extra links. Check them.</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="266" viewBox="0 0 1100 266" role="img" aria-label="When to use edgextract, a trained model, or a chat model">
+  <rect width="1100" height="266" fill="#f7f3ec"/>
+  <rect x="0" y="0" width="262" height="82" rx="16" fill="#cfe3c9"/>
+  <rect x="272" y="0" width="828" height="82" rx="16" fill="#efe8da"/>
+  <text x="24" y="48.0" fill="#2f4d2a" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="22" font-weight="600" text-anchor="start">Use edgextract</text>
+  <text x="294" y="32.0" fill="#1f1d1a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="16" font-weight="500" text-anchor="start">You can write down your kinds and links, and you cannot label thousands of sentences.</text>
+  <text x="294" y="58.0" fill="#6b645a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="14" font-weight="400" text-anchor="start">You want an unsure answer to wait for a person instead of entering the graph.</text>
+  <rect x="0" y="92" width="262" height="82" rx="16" fill="#d9d6f3"/>
+  <rect x="272" y="92" width="828" height="82" rx="16" fill="#efe8da"/>
+  <text x="24" y="140.0" fill="#3d3a80" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="22" font-weight="600" text-anchor="start">Train a model</text>
+  <text x="294" y="124.0" fill="#1f1d1a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="16" font-weight="500" text-anchor="start">You have labeled sentences in your domain and you need the best score.</text>
+  <text x="294" y="150.0" fill="#6b645a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="14" font-weight="400" text-anchor="start">On CoNLL04 a trained model scores 0.89 and 0.71. Nothing here does.</text>
+  <rect x="0" y="184" width="262" height="82" rx="16" fill="#f5d4c1"/>
+  <rect x="272" y="184" width="828" height="82" rx="16" fill="#efe8da"/>
+  <text x="24" y="219.0" fill="#80401f" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="22" font-weight="600" text-anchor="start">Ask a</text>
+  <text x="24" y="246.0" fill="#80401f" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="22" font-weight="600" text-anchor="start">chat model</text>
+  <text x="294" y="216.0" fill="#1f1d1a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="16" font-weight="500" text-anchor="start">You are exploring, your list of kinds keeps changing, or a wrong link is cheap to delete.</text>
+  <text x="294" y="242.0" fill="#6b645a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="14" font-weight="400" text-anchor="start">Expect extra links. Check them.</text>
 </svg>

@@ -205,8 +205,8 @@ def pipeline() -> str:
         ("2", "Spot names", "Find the names on your list, then clues in the markdown.", "EdgeQuake, PostgreSQL", "code"),
         ("3", "Name the kind", "Look up known names. Ask the model only about unknown ones.", "EdgeQuake = product,  PostgreSQL = technology", "model"),
         ("4", "Filter", "Your list says which links are legal between two kinds.", "product -> technology:  uses, depends on", "code"),
-        ("5", "Check links", "One yes-or-no question for each legal link.", "uses 0.97     depends on 1.00", "model"),
-        ("6", "Decide", "Your cutoffs turn each number into keep, review, or drop.", "0.97 and 1.00 are both above 0.80  ->  keep", "you"),
+        ("5", "Check links", "One yes-or-no question for each legal link.", "uses 0.96     depends on 1.00", "model"),
+        ("6", "Decide", "Your cutoffs turn each number into keep, review, or drop.", "0.96 and 1.00 are both above 0.80  ->  keep", "you"),
     ]
     actors = {
         "code": (SKY, "plain code"),
@@ -376,9 +376,9 @@ def choose() -> str:
     ]
     out, y = [], 0
     for c, label, lines in rows:
-        out.append(row(y, 96, c, label, lines))
-        y += 96 + 12
-    return svg(y - 12, "When to use edgextract, a trained model, or a chat model", "\n".join(out))
+        out.append(row(y, 82, c, label, lines))
+        y += 82 + 10
+    return svg(y - 10, "When to use edgextract, a trained model, or a chat model", "\n".join(out))
 
 
 FIGURES = {

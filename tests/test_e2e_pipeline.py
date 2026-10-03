@@ -133,6 +133,7 @@ def test_atomic_noul_accepts_each_legal_predicate(ontology):
         rels = {(r.source, r.relation_type, r.target) for r in result.relationships}
         assert ("EDGEQUAKE", "USES", "POSTGRESQL") in rels
         assert ("EDGEQUAKE", "DEPENDS_ON", "POSTGRESQL") in rels
+        assert {r.weight for r in result.relationships} == {0.95}
         assert ("EDGEQUAKE", "PART_OF", "POSTGRESQL") not in rels
     finally:
         stop()

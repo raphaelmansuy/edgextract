@@ -133,7 +133,7 @@
       "target": "ACME_INC",
       "relation_type": "WORKS_AT",
       "description": "In 2024, Jane Doe joined Acme Inc. as VP Engineering in Berlin.",
-      "weight": 0.9961662812103342,
+      "weight": 0.9936104686838904,
       "keywords": [
         "works at"
       ],
@@ -147,7 +147,7 @@
       "target": "ACME_INC",
       "relation_type": "PART_OF",
       "description": "In 2024, Jane Doe joined Acme Inc. as VP Engineering in Berlin.",
-      "weight": 0.96497161543835,
+      "weight": 0.9416193590639166,
       "keywords": [
         "part of"
       ],
@@ -161,7 +161,7 @@
       "target": "BERLIN",
       "relation_type": "LOCATED_IN",
       "description": "In 2024, Jane Doe joined Acme Inc. as VP Engineering in Berlin.",
-      "weight": 0.9561055121913342,
+      "weight": 0.9268425203188904,
       "keywords": [
         "located in"
       ],
@@ -175,7 +175,7 @@
       "target": "BERLIN",
       "relation_type": "LOCATED_IN",
       "description": "In 2024, Jane Doe joined Acme Inc. as VP Engineering in Berlin.",
-      "weight": 0.9692222931076089,
+      "weight": 0.9487038218460148,
       "keywords": [
         "located in"
       ],
@@ -189,7 +189,7 @@
       "target": "EDGEQUAKE",
       "relation_type": "USES",
       "description": "Acme Inc uses EdgeQuake to index markdown documentation.",
-      "weight": 0.9973140162068159,
+      "weight": 0.9955233603446932,
       "keywords": [
         "uses"
       ],
@@ -203,7 +203,7 @@
       "target": "NIMBLE",
       "relation_type": "USES",
       "description": "Ollama serves Nimble on a local machine.",
-      "weight": 0.9665829977072695,
+      "weight": 0.9443049961787826,
       "keywords": [
         "uses"
       ],
@@ -217,7 +217,7 @@
       "target": "OLLAMA",
       "relation_type": "USES",
       "description": "Ollama serves Nimble on a local machine.",
-      "weight": 0.9070973757534543,
+      "weight": 0.8451622929224237,
       "keywords": [
         "uses"
       ],
@@ -231,7 +231,7 @@
       "target": "POSTGRESQL",
       "relation_type": "USES",
       "description": "EdgeQuake depends on PostgreSQL.",
-      "weight": 0.9733351156364104,
+      "weight": 0.955558526060684,
       "keywords": [
         "uses"
       ],
@@ -245,7 +245,7 @@
       "target": "POSTGRESQL",
       "relation_type": "DEPENDS_ON",
       "description": "EdgeQuake depends on PostgreSQL.",
-      "weight": 0.9985237130797491,
+      "weight": 0.9975395217995818,
       "keywords": [
         "depends on"
       ],

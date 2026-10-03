@@ -50,8 +50,9 @@ header.cover { margin: 0 0 7mm; }
 .byline strong { color: #1f1d1a; font-weight: 600; }
 .dot-sep { margin: 0 2.6mm; color: #b9ad97; }
 
-.duel { display: flex; gap: 4mm; margin: 0 0 4mm; }
+.duel { display: flex; margin: 0 0 5mm; }
 .duel-col { flex: 1; border-radius: 5mm; padding: 6mm 6mm 6mm; }
+.duel-col + .duel-col { margin-left: 5mm; }
 .duel-col.chat { background: #f2d0d7; color: #5d2a38; }
 .duel-col.decide { background: #cfe3c9; color: #26421f; }
 .duel-h { font: 700 7.4pt "Inter", sans-serif; letter-spacing: 0.16em; text-transform: uppercase; margin: 0 0 2.5mm; opacity: 0.85; }
@@ -68,8 +69,9 @@ pre.duel-code b { font-weight: 700; color: #1b3316; background: #b3d3a9; padding
 .duel-note { font-size: 7.8pt; margin: 0; opacity: 0.85; }
 .duel-note code { background: rgba(255,255,255,0.55); color: inherit; }
 
-.stats { display: flex; gap: 4mm; margin: 0 0 4mm; }
+.stats { display: flex; margin: 0 0 5mm; }
 .stat { flex: 1; border-radius: 5mm; padding: 5.5mm 5.5mm; }
+.stat + .stat { margin-left: 5mm; }
 .stat:nth-child(1) { background: #d9d6f3; color: #3d3a80; }
 .stat:nth-child(2) { background: #f5d4c1; color: #80401f; }
 .stat:nth-child(3) { background: #cfe2ee; color: #2b536f; }
@@ -136,7 +138,7 @@ pre code { background: none; padding: 0; color: inherit; font-size: inherit; }
 /* ------------------------------------------------------------ figures */
 figure { margin: 5.5mm 0 7mm; padding: 0; break-inside: avoid; counter-increment: fig; }
 figure img { display: block; width: 100%; height: auto; border-radius: 3.4mm; margin: 0; }
-figure img.shot { width: auto; max-width: 100%; max-height: 84mm; margin: 0 auto; }
+figure img.shot { width: auto; max-width: 100%; max-height: 70mm; margin: 0 auto; }
 .keep { break-inside: avoid; }
 figcaption {
   font: 400 8.2pt/1.5 "Inter", sans-serif; color: #6b645a; margin-top: 2.2mm;
@@ -159,7 +161,7 @@ td:first-child { font-weight: 600; }
 hr { border: 0; border-top: 0.5pt solid #d6ccb8; margin: 8mm 0; }
 
 /* ------------------------------------------------------------ closing */
-.closing { background: #cfe3c9; color: #26421f; border-radius: 5mm; padding: 5mm 6mm; margin: 8mm 0 0; break-inside: avoid; }
-.closing p { margin: 0 0 1.6mm; }
-.closing .big { font: 600 15pt/1.2 "Iowan Old Style", Georgia, serif; margin-bottom: 2.4mm; }
+.closing { background: #cfe3c9; color: #26421f; border-radius: 5mm; padding: 3.2mm 6mm; margin: 3mm 0 0; break-inside: avoid; }
+.closing p { margin: 0 0 1.1mm; }
+.closing .big { font: 600 14pt/1.15 "Iowan Old Style", Georgia, serif; margin-bottom: 1.2mm; }
 .closing a { color: #1b3316; text-decoration: underline; }

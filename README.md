@@ -4,7 +4,7 @@
 
 Your code proposes names. Your ontology says which kinds and links are legal. A small local decision model answers one closed yes-or-no question at a time. Anything it is unsure about waits for a person instead of silently entering your graph.
 
-![An interactive knowledge graph built by edgextract from five sentences of company news](docs/img/graph.png)
+![An interactive knowledge graph built by edgextract from four sentences of company news](docs/img/graph.png)
 
 <sub>Real output from a local `tev1` run on [`13_northwind.md`](data/golden/docs/13_northwind.md): [open the interactive page](docs/article/sample-graph.html) · [full report](docs/article/sample-report.html) · [read the article (PDF)](docs/article/article.pdf). One of the five links in that graph is wrong (`Acme ACQUIRED Northwind`; the text says "invested in"). We left it in. That is what the review queue and your cutoff are for.</sub>
 
@@ -51,7 +51,7 @@ We measured it on [CoNLL04](https://github.com/lavis-nlp/spert), a standard news
 | edgextract + `tev1`, first run | 0.658 | 0.411 | no |
 | Mistral Small, JSON per sentence | 0.643 | 0.330 | no |
 
-**Read this table honestly.** A model trained on the benchmark's own training sentences still wins by a wide margin. The comparison that matters is the zero-shot rows. There, the closed decision keeps far fewer wrong links than the chat model (links precision 0.41 against 0.27; 218 wrong links kept against 504) and gives up some recall for it. On our small tech-docs set Mistral Small is competitive on names; see the [full evaluation](specs/0001-implementation/14-evaluation.md) for every number and the command that produced it.
+**Read this table honestly.** A model trained on the benchmark's own training sentences still wins by a wide margin. The comparison that matters is the zero-shot rows. There, the closed decision keeps far fewer wrong links than the chat model (links precision 0.41 against 0.27; 218 wrong links kept against 504) and gives up some recall for it. Name scores on that test are close (0.690 against 0.643). On the twelve tech notes they are not: `tev1` scores 0.97, mostly because the names are already on the list, and Mistral Small scored 0.68 on the saved run (0.80 on an earlier run the same day). See the [full evaluation](specs/0001-implementation/14-evaluation.md).
 
 ## How it works
 
@@ -111,8 +111,9 @@ EdgeQuake-shaped JSON: entities with canonical `UPPER_SNAKE` names and kinds, re
 
 - **The cutoffs are not calibrated.** `GateConfig.fitted` starts false. Fit them on your labels with `edgextract calibrate`. We do not claim anything about hosted-Jev calibration.
 - **Pronouns are skipped.** There is no coreference and links do not cross sentences in this version.
-- **Direction can flip.** On CoNLL04 the final run kept 16 reversed links (9 in the first run), and you can see one in the software-docs sample report.
-- **It is slower than a hosted chat model per call**, and it needs Ollama 0.35+ with a decision model. It is faster than a *local* chat model: 7.9 s against 77.8 s for `gemma4` on one seven-sentence note.
+- **Direction can flip.** On CoNLL04 the final run kept 16 reversed links (9 in the first run). On the EdgeQuake sample the model kept "Nimble uses Ollama" at 0.85, and the answer key says the other direction.
+- **`weight` is the model's probability.** The cutoff compares that number. It is not a rescaled score.
+- **It needs Ollama 0.35+ with a decision model.** On one seven-sentence note, an earlier comparison took 7.9 s for `tev1` and 77.8 s for `gemma4` on the same computer, and 3.9 s for hosted Mistral. A later `tev1` pass with the model already loaded took 4.3 s. The library default model is `nimble`, which scored 0.38 on links for that note. The published CoNLL04 run used `tev1` and the larger name finder, which `edgextract report` does not load unless you run `eval-benchmark`.
 - **A trained joint model beats it** if you have labeled sentences in your domain.
 - `format`/JSON-schema on a chat host is not a decision. Do not call it one.
 

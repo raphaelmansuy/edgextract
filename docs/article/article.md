@@ -6,13 +6,13 @@ lang: en
 
 # The problem, in one minute
 
-Your company already knows a lot. It is written down in notes, tickets, wikis, and release posts. A person can read one page and answer "Who works where?" A computer cannot, because the facts are buried inside sentences.
+A person can read the note below and answer "Who works where?" A computer cannot. The facts are buried in the sentences.
 
 > Jane Doe joined Acme Inc in Berlin. Acme Inc uses EdgeQuake. EdgeQuake depends on PostgreSQL.
 
-A **knowledge graph** fixes that. It is a list of things (people, companies, products, places) and the links between them ("works at", "uses", "depends on"). Once the facts are in a graph, you can ask "Who works at Acme?" or "Which products depend on PostgreSQL?" and get the answer in a second, across a thousand files.
+A **knowledge graph** is those facts pulled out: the people, companies, products, and places, and the links between them ("works at", "uses", "depends on"). Once they are a graph, you can ask "Who works at Acme?" or "Which products depend on PostgreSQL?" across a thousand files.
 
-Pulling the things and the links out of the text is called **extraction**. It is the hard part.
+Pulling the links out of the text is called **extraction**. Most tools ask a chat model to write the whole graph. This one asks one yes-or-no question per link, keeps the number the model returns, and lets your code decide what is sure enough to keep.
 
 ![A note, and the same facts as a graph.](svg/problem.png)
 
@@ -22,13 +22,13 @@ There are five common ways to do it. Each one gives something up.
 
 ![Five ways to find names and links in text. The last row is the method in this article.](svg/landscape.png)
 
-**Rules** (word lists and search patterns) are cheap, but they break the moment someone phrases a sentence differently. **Older trained tools** work well on the kind of text they were trained on, usually news, and badly on anything else. **Newer trained models** give the best scores, but only after someone labels thousands of examples for your topic.
+**Rules** (word lists and search patterns) are cheap, and they break as soon as a sentence is phrased a new way. **Older trained tools** work on the kind of text they were trained on, usually news, and fail when your list of kinds is different. **Newer trained models** score highest, after someone labels thousands of examples for your topic.
 
-The fourth way is the popular one: ask a **chat model** to write the answer as JSON, a tidy format that programs can read. It works on almost anything and takes ten minutes to try. The catch is easy to miss. A tidy answer is not a true answer. The model is still just writing the next word. It does not tell you how sure it is, so a guess looks exactly like a fact, and you end up reading every link yourself.
+The popular shortcut is a **chat model** writing JSON, a tidy format programs can read. It works on almost any topic and takes ten minutes to try. A tidy answer can still be the wrong answer. The model is writing the next word. It does not hand you a number, so a guess looks like a fact, and someone has to read every link.
 
 # The idea: ask small questions, get a number
 
-A **decision model** is a small AI model that does not write. It answers one **closed question**. "Closed" means you decide what shape the answer can take before the model runs. There are three shapes.
+A **decision model** does not write. It answers one **closed question**: you decide the shape of the answer before it runs. The small models used here are the kind people call **Jev-style**. There are three shapes.
 
 ![Three kinds of closed question. The technical names are in small print.](svg/question.png)
 
@@ -47,7 +47,7 @@ Time: 2.9 seconds.   Words written by the model: 3 tokens.
 
 A **token** is a small piece of text, about three-quarters of a word. For comparison, Mistral Small, a chat model, wrote about 250 tokens for each news sentence we gave it, because it writes out every link in full.
 
-Two things to know before you trust the number. First, it is not an exact odds. A 0.9 does not mean "right nine times in ten". You have to check it against your own examples. Second, it needs the right tools. **Ollama** is a free program that runs AI models on your own computer. Since version 0.35 it has a special door for this kind of model, called `/v1/systemone`. We measured the models `tev1` and `nimble`. We have not tested `clef` or `clef-flash`.
+Two limits on that number. Treat 0.9 as a score to check on your own examples, not as "right nine times in ten". And the model has to be served the right way. **Ollama** is a free program that runs models on your own computer. From version 0.35 it has a door for this kind of model, `POST /v1/systemone`. We measured `tev1` and `nimble`. We have not tested `clef` or `clef-flash`.
 
 ![A decision model and a chat model with a JSON format are not the same thing.](svg/contract.png)
 
@@ -59,9 +59,9 @@ edgextract is a small Python library. You give it a markdown file and a list. It
 
 The tool works in six steps, shown in the figure below on one sentence: "EdgeQuake depends on PostgreSQL." Three ideas hold the design together.
 
-- **The code finds, the model only judges.** Names come from your list and from markdown clues, such as bold text. The model is asked about a name only when the code has never seen it.
-- **Your list shrinks the questions.** It says a product can *use* or *depend on* a technology. It says nothing about a place depending on a person, so that pair is never asked. This is why the tool cannot invent a kind of link.
-- **Each link is its own question.** "Uses" and "depends on" can both be true, so each gets its own yes-or-no. Here the answers were 0.97 and 1.00.
+- **The code finds. The decision model judges.** On an ordinary run, names come from your list and from markdown clues, such as bold text. The decision model is asked about a name only when that name is not on the list.
+- **Your list shrinks the questions.** A product may *use* or *depend on* a technology. A place depending on a person is not on the list, so that pair is never asked. A kind of link you did not write cannot appear.
+- **Each allowed link is its own question.** "Uses" and "depends on" can both be true. Here the model said 0.96 and 1.00, and both were kept.
 
 ![Six steps, with one sentence followed all the way through. Plain code finds, the model answers closed questions, your rule makes the final call.](svg/pipeline.png)
 
@@ -71,7 +71,7 @@ In the default setting a yes at 0.80 or higher is kept, a no at 0.20 or lower is
 
 ![A few of the links the software-documentation list allows. The full list has seven kinds of link.](svg/ontology.png)
 
-The model never finds a name by itself and never invents a kind. It only answers the questions the code asks.
+The decision model does not hunt for names, and it does not invent a kind of link. It answers the questions the code asks. The public news test later in this article adds a separate name finder, because none of those names were on a list. The five-line example does not load that finder.
 
 # Write your own list in ten minutes
 
@@ -96,22 +96,26 @@ write_report("graph.html", text, result, ontology, title="My note")
 
 # What we measured
 
-Every number here was produced on one computer on 3 October 2026. The commands are in the repository. Most results below use a **score** between 0 and 1. It goes up when the tool finds the right items, and down when it keeps wrong ones. 1.00 is a perfect match with the answer key. We also give raw counts, because they are easier to understand than a score.
+Every number below was produced on one computer on 3 October 2026. The commands are in the repository. A **score** runs from 0 to 1. It rises when the tool finds the right items and falls when it keeps wrong ones. 1.00 matches the answer key exactly. Counts sit beside the scores, because "218 wrong links" is easier to picture than 0.39.
+
+There are two tests. A note we wrote, where the names are already on the list. Then a public news test, where the tool has to find the names itself. Remember the second one.
 
 ## One short software note
 
-We took a seven-sentence note about EdgeQuake and compared four ways of doing the job. The names on this note are on the list, so a perfect name score here only shows that lookup works.
+Seven sentences about EdgeQuake. The names are on the list, so a perfect name score here only shows that lookup works.
 
 | Method | Names | Links | Seconds |
 |---|---|---|---|
 | `tev1`, one yes-or-no per link | 1.00 | 0.78 | 7.9 |
 | `nimble`, the same questions | 1.00 | 0.38 | 19.0 |
-| Mistral Small, JSON (hosted service) | 0.89 | 0.80 | 3.5 |
+| Mistral Small, JSON (hosted service) | 0.89 | 0.80 | 3.9 |
 | `gemma4`, JSON (same computer) | 0.95 | 0.89 | 77.8 |
 
 ![Seconds to process one note. The hosted model is the fastest. Among models on your own computer, the decision models are far faster.](svg/speed.png)
 
-Read this fairly. On a single note, a chat model matched or beat the decision model on links. The decision model's advantage here is speed against a chat model on the same computer, plus the numbers and the review list. A hosted service is fast too, but it sends your text out and charges for every token.
+On this one note a chat model matched or beat `tev1` on links. What `tev1` adds is a number on every link, a review list, and speed against a chat model on the same computer. A hosted chat model is fast too. It sends your text out and charges for every token.
+
+The 3.9 seconds for Mistral is the saved run (3.86, rounded). The other three times are an earlier pass of the same note. With `tev1` already loaded, that note later took 4.3 seconds. The "10 times" line on the cover is 7.9 against 77.8, those two earlier times.
 
 ## Twelve software notes
 
@@ -139,13 +143,17 @@ Treat this as a sanity check, not a fair contest. We used these notes while buil
 
 ![Scores on the news test. The trained model has seen this kind of text before; the others have not.](svg/benchmark.png)
 
-Here is the fair reading.
+Read the table this way.
 
-- **A trained model still wins.** If you have labeled examples in your own domain, train a model. That is the right tool for the job and we say so.
-- **Against a chat model, the decision model keeps far fewer wrong links.** In the final run it kept 218 wrong links where Mistral Small kept 504, while finding 154 right ones against 183. It gives up a little recall to avoid a lot of noise.
-- **We ran it twice and report both.** The first run used a small name-finding model. For the second we switched to a larger one and changed to one question per link. The larger finder helped with names (correct names went from 634 to 683). It did not help with links: the score slipped from 0.41 to 0.39, and reversed links went from 9 to 16. On the development sentences the change had looked better, so the gain did not carry over to the test. We kept the final run as the number of record and did not pick the better-looking one.
-- **The test was opened twice, once per configuration.** The development sentences were used for all tuning.
-- **`gemma4` has no news-test score.** We started it through Ollama, stopped after about ten sentences when we moved the comparison to Mistral Small, and do not count that partial run.
+A trained model still wins. It has seen this kind of sentence before. If you can label examples in your own topic, train one.
+
+Against a chat model that was not trained on this test, `tev1` keeps fewer wrong links: 218 against 504. It also finds fewer right ones: 154 against 183. Fewer false links, more missed ones.
+
+The run this repository ships is the second one, and its link score is the lower of the two. A larger name finder raised correct names from 634 to 683. The link score fell from 0.41 to 0.39, and reversed links rose from 9 to 16. On the development sentences the same change had looked better. We reported both and kept the shipped setup.
+
+The test sentences were opened twice, once per setup. Tuning used the development sentences only. `gemma4` was started on this test and stopped after about ten sentences. That partial run is not a score.
+
+This news test puts a name finder (`fastino/gliner2.5-base-v1`, cutoff 0.30) in front of `tev1`. The command is in the evaluation note. `edgextract report` does not load that finder, and the library's default model is `nimble`, which scored 0.38 on links for the short note above.
 
 ## What it costs to run
 
@@ -153,18 +161,18 @@ Here is the fair reading.
 |---|---|---|
 | Money | Your own hardware, no per-token bill | Charged per token |
 | Where your text goes | Stays on your computer | Sent to the provider |
-| Speed on the news test | Seconds per sentence | 1.8 seconds per sentence |
+| Speed on the seven-sentence note | 7.9 s, or 4.3 s once the model is loaded | 3.9 s hosted. 77.8 s for a chat model on the same computer |
 | Wrong links kept (news test) | 218 | 504 |
 | What it does with an unsure answer | Puts it in a review list | Keeps it |
-| New topic | Edit the list | Rewrite the prompt and hope |
+| New topic | Edit the list | Rewrite the instructions |
 
 # Where it gets things wrong
 
 The tool makes mistakes, and the number does not always warn you.
 
-- **Direction.** On the EdgeQuake note it kept both "Ollama uses Nimble" (0.97, which is right) and the reversed "Nimble uses Ollama" (0.91, which is wrong). A confident number can be confidently wrong.
+- **Direction.** On the EdgeQuake note it kept both "Ollama uses Nimble" (0.94, which is right) and the reversed "Nimble uses Ollama" (0.85, which is wrong). Both are above the 0.80 keep cutoff. A high number can still be wrong.
 - **Look-alike links.** In the Northwind sample it kept "Acme Inc acquired Northwind", but the text says Acme *invested in* it. That one is wrong, and it is still in the sample graph in this repository on purpose.
-- **Extra links.** It also kept "Jane Doe is part of Acme Inc" at 0.96, which the answer key does not contain.
+- **Extra links.** It also kept "Jane Doe is part of Acme Inc" at 0.94, which the answer key does not contain.
 - **One sentence at a time.** Links across sentences are not joined, and pronouns such as "she" or "it" are skipped.
 - **It needs Ollama 0.35 or newer** and a decision model on your computer.
 
@@ -178,11 +186,9 @@ Every run can write one self-contained web page, with no internet needed. It sho
 
 ![Unsure items wait as plain sentences. A person keeps or drops each one.](svg/review.png)
 
-```
-edgextract --model tev1 report note.md --ontology company_news --out graph.html
-```
-
 # Which one should you use
+
+Use edgextract when you can write the list and you want an unsure link to wait. Train a model when you have labeled sentences and you need the best score. Ask a chat model when you are still exploring and a wrong link is cheap to delete. All three are reasonable.
 
 ![Pick the tool that fits what you have. All three are reasonable.](svg/choose.png)
 
@@ -197,7 +203,7 @@ edgextract --model tev1 report data/golden/docs/13_northwind.md --ontology compa
 make test examples      # no model needed: uses a stand-in
 ```
 
-Nine short examples teach one idea each. The full evaluation, with every number and the command that produced it, is in `specs/0001-implementation/14-evaluation.md`.
+The report command is the demo. Those names are already on the list, so the result will not match the news test. Nine examples, and every command behind a number in this article, are in `specs/0001-implementation/14-evaluation.md`.
 
 <div class="closing">
 <p class="big">The cutoff is yours.</p>
