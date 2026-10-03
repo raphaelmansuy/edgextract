@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="214" viewBox="0 0 1100 214" role="img" aria-label="A decision endpoint versus a JSON schema on a chat model">
+  <rect width="1100" height="214" fill="#f7f3ec"/>
+  <rect x="0" y="0" width="542" height="214" rx="16" fill="#cfe3c9"/>
+  <text x="28" y="40" fill="#2f4d2a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" text-anchor="start" letter-spacing="2">A DECISION ENDPOINT</text>
+  <text x="28" y="88" fill="#2f4d2a" font-family="Menlo, SF Mono, Consolas, monospace" font-size="26" font-weight="600" text-anchor="start">POST /v1/systemone</text>
+  <text x="28" y="130" fill="#1f1d1a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="16" font-weight="400" text-anchor="start">You declare the answer type first.</text>
+  <text x="28" y="156" fill="#1f1d1a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="16" font-weight="400" text-anchor="start">You get a value inside it, with a probability.</text>
+  <text x="28" y="182" fill="#1f1d1a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="16" font-weight="400" text-anchor="start">Your code still decides what to keep.</text>
+  <rect x="558" y="0" width="542" height="214" rx="16" fill="#f2d0d7"/>
+  <text x="586" y="40" fill="#7f3446" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" text-anchor="start" letter-spacing="2">A JSON COAT ON A CHAT MODEL</text>
+  <text x="586" y="88" fill="#7f3446" font-family="Menlo, SF Mono, Consolas, monospace" font-size="26" font-weight="600" text-anchor="start">format / schema / grammar</text>
+  <text x="586" y="130" fill="#1f1d1a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="16" font-weight="400" text-anchor="start">It forces a legal string.</text>
+  <text x="586" y="156" fill="#1f1d1a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="16" font-weight="400" text-anchor="start">A legal string can still be the wrong branch.</text>
+  <text x="586" y="182" fill="#1f1d1a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="16" font-weight="400" text-anchor="start">The model is still writing the next token.</text>
+</svg>

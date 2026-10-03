@@ -1,0 +1,24 @@
+{
+  "entities": [
+    {"name": "EdgeQuake", "type": "PRODUCT"},
+    {"name": "PostgreSQL", "type": "TECHNOLOGY"},
+    {"name": "Apache AGE", "type": "TECHNOLOGY"},
+    {"name": "pgvector", "type": "TECHNOLOGY"},
+    {"name": "Jane Doe", "type": "PERSON"},
+    {"name": "Acme Inc", "type": "ORGANIZATION"},
+    {"name": "Berlin", "type": "LOCATION"},
+    {"name": "Nimble", "type": "PRODUCT"},
+    {"name": "Ollama", "type": "PRODUCT"}
+  ],
+  "relations": [
+    {"source": "EdgeQuake", "target": "PostgreSQL", "type": "USES"},
+    {"source": "EdgeQuake", "target": "Apache AGE", "type": "USES"},
+    {"source": "EdgeQuake", "target": "pgvector", "type": "USES"},
+    {"source": "Jane Doe", "target": "Acme Inc", "type": "WORKS_AT"},
+    {"source": "Acme Inc", "target": "Berlin", "type": "LOCATED_IN"},
+    {"source": "Jane Doe", "target": "Berlin", "type": "LOCATED_IN"},
+    {"source": "Acme Inc", "target": "EdgeQuake", "type": "USES"},
+    {"source": "Ollama", "target": "Nimble", "type": "USES"},
+    {"source": "EdgeQuake", "target": "PostgreSQL", "type": "DEPENDS_ON"}
+  ]
+}

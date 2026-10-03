@@ -1,0 +1,10 @@
+{
+  "entities": [
+    {"name": "EdgeQuake", "type": "PRODUCT"},
+    {"name": "Ollama", "type": "PRODUCT"},
+    {"name": "Nimble", "type": "PRODUCT"}
+  ],
+  "relations": [
+    {"source": "Ollama", "target": "Nimble", "type": "USES"}
+  ]
+}

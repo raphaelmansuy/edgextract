@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="324" viewBox="0 0 1100 324" role="img" aria-label="Three kinds of closed question: pick one, yes or no, give a level">
+  <rect width="1100" height="324" fill="#f7f3ec"/>
+  <rect x="0" y="0" width="262" height="100" rx="16" fill="#cfe3c9"/>
+  <rect x="272" y="0" width="828" height="100" rx="16" fill="#efe8da"/>
+  <text x="24" y="44.0" fill="#2f4d2a" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="22" font-weight="600" text-anchor="start">Pick one</text>
+  <text x="24" y="67.0" fill="#2f4d2a" font-family="Menlo, SF Mono, Consolas, monospace" font-size="12.5" font-weight="400" text-anchor="start">(called Choice)</text>
+  <text x="294" y="41.0" fill="#1f1d1a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="16" font-weight="500" text-anchor="start">Choose one label from a short list you wrote.</text>
+  <text x="294" y="67.0" fill="#6b645a" font-family="Menlo, SF Mono, Consolas, monospace" font-size="14" font-weight="400" text-anchor="start">returns: the winner, and how sure it is of every label</text>
+  <rect x="0" y="112" width="262" height="100" rx="16" fill="#d9d6f3"/>
+  <rect x="272" y="112" width="828" height="100" rx="16" fill="#efe8da"/>
+  <text x="24" y="156.0" fill="#3d3a80" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="22" font-weight="600" text-anchor="start">Yes or no</text>
+  <text x="24" y="179.0" fill="#3d3a80" font-family="Menlo, SF Mono, Consolas, monospace" font-size="12.5" font-weight="400" text-anchor="start">(called Noul)</text>
+  <text x="294" y="153.0" fill="#1f1d1a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="16" font-weight="500" text-anchor="start">Answer a yes-or-no question.</text>
+  <text x="294" y="179.0" fill="#6b645a" font-family="Menlo, SF Mono, Consolas, monospace" font-size="14" font-weight="400" text-anchor="start">Does EdgeQuake use PostgreSQL?  -&gt;  0.99</text>
+  <rect x="0" y="224" width="262" height="100" rx="16" fill="#f5d4c1"/>
+  <rect x="272" y="224" width="828" height="100" rx="16" fill="#efe8da"/>
+  <text x="24" y="268.0" fill="#80401f" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="22" font-weight="600" text-anchor="start">Give a level</text>
+  <text x="24" y="291.0" fill="#80401f" font-family="Menlo, SF Mono, Consolas, monospace" font-size="12.5" font-weight="400" text-anchor="start">(called Score)</text>
+  <text x="294" y="265.0" fill="#1f1d1a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="16" font-weight="500" text-anchor="start">Rate something on a short scale you wrote.</text>
+  <text x="294" y="291.0" fill="#6b645a" font-family="Menlo, SF Mono, Consolas, monospace" font-size="14" font-weight="400" text-anchor="start">returns: the expected level, and how sure it is of each</text>
+</svg>

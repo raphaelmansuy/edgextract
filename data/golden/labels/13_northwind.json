@@ -1,0 +1,16 @@
+{
+  "entities": [
+    {"name": "Ada Lovelace", "type": "PERSON"},
+    {"name": "Northwind", "type": "COMPANY"},
+    {"name": "Paris", "type": "LOCATION"},
+    {"name": "Acme Inc", "type": "COMPANY"},
+    {"name": "Jane Doe", "type": "PERSON"},
+    {"name": "Berlin", "type": "LOCATION"}
+  ],
+  "relations": [
+    {"source": "Ada Lovelace", "target": "Northwind", "type": "FOUNDED"},
+    {"source": "Northwind", "target": "Paris", "type": "HEADQUARTERED_IN"},
+    {"source": "Acme Inc", "target": "Northwind", "type": "INVESTED_IN"},
+    {"source": "Jane Doe", "target": "Acme Inc", "type": "WORKS_FOR"}
+  ]
+}

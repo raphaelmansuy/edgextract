@@ -1,0 +1,33 @@
+{
+  "_note": "Single source for numbers shown in figures. Each value is reproducible by the command in specs/0001-implementation/14-evaluation.md.",
+  "conll04_test": {
+    "spert_trained": {
+      "names_f1": 0.8894,
+      "links_f1": 0.7147
+    },
+    "tev1_first": {
+      "names_f1": 0.658,
+      "links_f1": 0.411,
+      "links_tp": 155,
+      "links_fp": 177
+    },
+    "mistral_small": {
+      "names_f1": 0.643,
+      "links_f1": 0.33,
+      "links_tp": 183,
+      "links_fp": 504
+    },
+    "tev1_final": {
+      "names_f1": 0.69,
+      "links_f1": 0.388,
+      "links_tp": 154,
+      "links_fp": 218
+    }
+  },
+  "one_note_seconds": {
+    "tev1": 7.9,
+    "nimble": 19.0,
+    "mistral_small_hosted": 3.5,
+    "gemma4_local_chat": 77.8
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "split": "test",
+  "n_docs": 288,
+  "encoder_threshold": 0.3,
+  "model": "tev1",
+  "summary": {
+    "entities": {
+      "tp": 683.0,
+      "fp": 218.0,
+      "fn": 396.0,
+      "precision": 0.758046614872364,
+      "recall": 0.6329935125115848,
+      "f1": 0.6898989898989899
+    },
+    "relations": {
+      "tp": 154.0,
+      "fp": 218.0,
+      "fn": 268.0,
+      "precision": 0.41397849462365593,
+      "recall": 0.36492890995260663,
+      "f1": 0.3879093198992444
+    },
+    "boundary_only": 18.0,
+    "direction_swaps": 16.0
+  },
+  "ceiling": {
+    "source": "SpERT (Eberts and Ulges, ECAI 2020), supervised on train",
+    "entity_f1": 0.8894,
+    "relation_f1": 0.7147
+  }
+}

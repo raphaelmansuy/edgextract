@@ -1,0 +1,12 @@
+{
+  "entities": [
+    {"name": "Acme Inc", "type": "ORGANIZATION"},
+    {"name": "EdgeQuake", "type": "PRODUCT"},
+    {"name": "Jane Doe", "type": "PERSON"},
+    {"name": "TypeSafe", "type": "ORGANIZATION"},
+    {"name": "PostgreSQL", "type": "TECHNOLOGY"}
+  ],
+  "relations": [
+    {"source": "EdgeQuake", "target": "PostgreSQL", "type": "DEPENDS_ON"}
+  ]
+}

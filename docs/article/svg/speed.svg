@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="288" viewBox="0 0 1100 288" role="img" aria-label="Seconds to extract one short note, by method">
+  <rect width="1100" height="288" fill="#f7f3ec"/>
+  <text x="0" y="28" fill="#1f1d1a" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="19" font-weight="600" text-anchor="start">Mistral Small</text>
+  <text x="0" y="48" fill="#6b645a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" text-anchor="start">hosted API, chat JSON</text>
+  <rect x="290" y="6" width="31.49100257069409" height="40" rx="12" fill="#f5d4c1"/>
+  <text x="335.4910025706941" y="33" fill="#80401f" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="17" font-weight="700" text-anchor="start">3.5 s</text>
+  <text x="0" y="90" fill="#1f1d1a" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="19" font-weight="600" text-anchor="start">tev1</text>
+  <text x="0" y="110" fill="#6b645a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" text-anchor="start">local, closed decisions</text>
+  <rect x="290" y="68" width="71.07969151670952" height="40" rx="12" fill="#cfe3c9"/>
+  <text x="375.07969151670954" y="95" fill="#2f4d2a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="17" font-weight="700" text-anchor="start">7.9 s</text>
+  <text x="0" y="152" fill="#1f1d1a" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="19" font-weight="600" text-anchor="start">nimble</text>
+  <text x="0" y="172" fill="#6b645a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" text-anchor="start">local, closed decisions</text>
+  <rect x="290" y="130" width="170.95115681233935" height="40" rx="12" fill="#d9d6f3"/>
+  <text x="474.9511568123394" y="157" fill="#3d3a80" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="17" font-weight="700" text-anchor="start">19.0 s</text>
+  <text x="0" y="214" fill="#1f1d1a" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="19" font-weight="600" text-anchor="start">gemma4</text>
+  <text x="0" y="234" fill="#6b645a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12.5" font-weight="400" text-anchor="start">local, chat JSON</text>
+  <rect x="290" y="192" width="700.0" height="40" rx="12" fill="#f2d0d7"/>
+  <text x="1004.0" y="219" fill="#7f3446" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="17" font-weight="700" text-anchor="start">77.8 s</text>
+  <text x="0" y="272" fill="#6b645a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13.5" font-weight="400" text-anchor="start">One seven-sentence software note, one machine. A hosted model is fast but sends your text out and bills by the token.</text>
+</svg>

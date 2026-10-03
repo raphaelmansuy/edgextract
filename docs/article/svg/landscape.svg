@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="448" viewBox="0 0 1100 448" role="img" aria-label="Five ways to extract names and links, this method highlighted">
+  <rect width="1100" height="448" fill="#f7f3ec"/>
+  <rect x="0" y="0" width="262" height="80" rx="16" fill="#f1e2b5"/>
+  <rect x="272" y="0" width="828" height="80" rx="16" fill="#efe8da"/>
+  <text x="24" y="34.0" fill="#6f5210" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="22" font-weight="600" text-anchor="start">Hand-written</text>
+  <text x="24" y="61.0" fill="#6f5210" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="22" font-weight="600" text-anchor="start">rules</text>
+  <text x="294" y="31.0" fill="#1f1d1a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="16" font-weight="500" text-anchor="start">Regex and word lists.</text>
+  <text x="294" y="57.0" fill="#6b645a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="14" font-weight="400" text-anchor="start">Cheap and fast. Breaks on new names and new phrasing.</text>
+  <rect x="0" y="92" width="262" height="80" rx="16" fill="#cfe2ee"/>
+  <rect x="272" y="92" width="828" height="80" rx="16" fill="#efe8da"/>
+  <text x="24" y="126.0" fill="#2b536f" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="22" font-weight="600" text-anchor="start">Classic</text>
+  <text x="24" y="153.0" fill="#2b536f" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="22" font-weight="600" text-anchor="start">NLP taggers</text>
+  <text x="294" y="123.0" fill="#1f1d1a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="16" font-weight="500" text-anchor="start">Trained on news or biomedical text.</text>
+  <text x="294" y="149.0" fill="#6b645a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="14" font-weight="400" text-anchor="start">Breaks when your list of kinds is different.</text>
+  <rect x="0" y="184" width="262" height="80" rx="16" fill="#d9d6f3"/>
+  <rect x="272" y="184" width="828" height="80" rx="16" fill="#efe8da"/>
+  <text x="24" y="231.0" fill="#3d3a80" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="22" font-weight="600" text-anchor="start">Trained models</text>
+  <text x="294" y="215.0" fill="#1f1d1a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="16" font-weight="500" text-anchor="start">Best scores on the benchmark they trained on (SpERT-class).</text>
+  <text x="294" y="241.0" fill="#6b645a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="14" font-weight="400" text-anchor="start">You must label data, then retrain for each domain.</text>
+  <rect x="0" y="276" width="262" height="80" rx="16" fill="#f2d0d7"/>
+  <rect x="272" y="276" width="828" height="80" rx="16" fill="#efe8da"/>
+  <text x="24" y="310.0" fill="#7f3446" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="22" font-weight="600" text-anchor="start">Chat</text>
+  <text x="24" y="337.0" fill="#7f3446" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="22" font-weight="600" text-anchor="start">model, JSON</text>
+  <text x="294" y="307.0" fill="#1f1d1a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="16" font-weight="500" text-anchor="start">Fast to try, and works on anything.</text>
+  <text x="294" y="333.0" fill="#6b645a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="14" font-weight="400" text-anchor="start">Gives no probability. Keeps every guess it writes.</text>
+  <rect x="0" y="368" width="262" height="80" rx="16" fill="#f5d4c1"/>
+  <rect x="272" y="368" width="828" height="80" rx="16" fill="#efe8da"/>
+  <rect x="885" y="382" width="193" height="24" rx="12" fill="#80401f"/>
+  <text x="981.5" y="398" fill="#ffffff" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="10.5" font-weight="700" text-anchor="middle" letter-spacing="1.2">THE METHOD IN THIS ARTICLE</text>
+  <text x="24" y="415.0" fill="#80401f" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="22" font-weight="600" text-anchor="start">This method</text>
+  <text x="294" y="399.0" fill="#1f1d1a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="16" font-weight="500" text-anchor="start">Code proposes. Your ontology limits. A decision model says yes or no.</text>
+  <text x="294" y="425.0" fill="#6b645a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="14" font-weight="400" text-anchor="start">Your cutoff keeps, reviews, or drops each link.</text>
+</svg>

@@ -1,0 +1,9 @@
+{
+  "entities": [
+    {"name": "Acme Inc", "type": "ORGANIZATION"},
+    {"name": "EdgeQuake", "type": "PRODUCT"},
+    {"name": "Jane Doe", "type": "PERSON"},
+    {"name": "TypeSafe", "type": "ORGANIZATION"}
+  ],
+  "relations": []
+}

@@ -1,0 +1,7 @@
+{
+  "model": "clef-flash",
+  "answers": {
+    "has_ollama": {"type": "noul", "noul": 0.958}
+  },
+  "usage": {"input_tokens": 548, "output_tokens": 0}
+}

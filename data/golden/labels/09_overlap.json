@@ -1,0 +1,9 @@
+{
+  "entities": [
+    {"name": "Apache AGE", "type": "TECHNOLOGY"},
+    {"name": "PostgreSQL", "type": "TECHNOLOGY"}
+  ],
+  "relations": [
+    {"source": "Apache AGE", "target": "PostgreSQL", "type": "DEPENDS_ON"}
+  ]
+}

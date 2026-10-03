@@ -1,0 +1,27 @@
+{
+  "split": "test",
+  "n_docs": 288,
+  "model": "tev1",
+  "encoder_threshold": 0.3,
+  "summary": {
+    "entities": {
+      "tp": 634.0,
+      "fp": 213.0,
+      "fn": 445.0,
+      "precision": 0.7485242030696576,
+      "recall": 0.58758109360519,
+      "f1": 0.6583592938733125
+    },
+    "relations": {
+      "tp": 155.0,
+      "fp": 177.0,
+      "fn": 267.0,
+      "precision": 0.46686746987951805,
+      "recall": 0.36729857819905215,
+      "f1": 0.41114058355437666
+    },
+    "boundary_only": 15.0,
+    "direction_swaps": 9.0
+  },
+  "resumed_from_cache": 243
+}

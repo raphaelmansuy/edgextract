@@ -1,0 +1,45 @@
+<header class="cover">
+  <p class="eyebrow">Don&rsquo;t generate the graph. Decide it.</p>
+  <p class="cover-title">Extract a knowledge graph with a Jev-style decision model on Ollama</p>
+  <p class="deck">Most tools ask an AI to write a knowledge graph and hope it is right. This one asks small yes-or-no questions, one link at a time, and keeps only the answers the model is sure about. The rest wait for a person.</p>
+  <p class="byline"><strong>Raphael MANSUY</strong><span class="dot-sep">&middot;</span><a href="https://www.linkedin.com/in/raphaelmansuy/">linkedin.com/in/raphaelmansuy</a><span class="dot-sep">&middot;</span>3 October 2026</p>
+</header>
+
+<section class="duel" aria-label="Two ways to get the same answer">
+  <div class="duel-col chat">
+    <p class="duel-h">A chat model writes the answer</p>
+    <p class="duel-big">~250 tokens<span>written for each sentence (a token is about &frac34; of a word)</span></p>
+    <ul>
+      <li>It writes every link it can think of</li>
+      <li>It does not say how sure it is</li>
+      <li>A guess looks the same as a fact</li>
+    </ul>
+  </div>
+  <div class="duel-col decide">
+    <p class="duel-h">A decision model answers a question</p>
+    <p class="duel-big">3 tokens<span>for two complete answers</span></p>
+    <pre class="duel-code">Does EdgeQuake use PostgreSQL?   <b>0.99</b>
+Did Acme Inc found PostgreSQL?   <b>0.01</b></pre>
+    <p class="duel-note">A real call to <code>tev1</code> on one computer, 2.9 seconds. 0.99 means &ldquo;very sure: yes&rdquo;.</p>
+  </div>
+</section>
+
+<section class="stats" aria-label="Measured results">
+  <div class="stat">
+    <p class="stat-n">2.3&times;</p>
+    <p class="stat-t">fewer wrong links than Mistral Small</p>
+    <p class="stat-s">On a public news test of 288 sentences it kept 218 wrong links against 504. It found 154 right links to Mistral&rsquo;s 183.</p>
+  </div>
+  <div class="stat">
+    <p class="stat-n">10&times;</p>
+    <p class="stat-t">faster than a chat model on the same computer</p>
+    <p class="stat-s">One seven-sentence note: 7.9 seconds for <code>tev1</code> against 77.8 for <code>gemma4</code>.</p>
+  </div>
+  <div class="stat">
+    <p class="stat-n">0</p>
+    <p class="stat-t">invented kinds of name or link</p>
+    <p class="stat-s">Everything must come from the list you wrote. A link your list forbids is never even asked.</p>
+  </div>
+</section>
+
+<p class="caveat"><strong>What it does not do.</strong> A model trained on that same test still scores higher (0.89 on names and 0.71 on links, against 0.69 and 0.39 here). A chat model on a hosted service can be faster: 3.5 seconds on that note. And a high number can still be wrong: it kept both &ldquo;Ollama uses Nimble&rdquo; (right, 0.97) and the reversed &ldquo;Nimble uses Ollama&rdquo; (wrong, 0.91). This article shows all of it.</p>

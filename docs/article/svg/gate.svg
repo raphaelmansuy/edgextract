@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="352" viewBox="0 0 1100 352" role="img" aria-label="Keep, review, or drop">
+  <rect width="1100" height="352" fill="#f7f3ec"/>
+  <rect x="0" y="0" width="262" height="96" rx="16" fill="#cfe3c9"/>
+  <rect x="272" y="0" width="828" height="96" rx="16" fill="#efe8da"/>
+  <text x="24" y="55.0" fill="#2f4d2a" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="22" font-weight="600" text-anchor="start">Keep</text>
+  <text x="294" y="39.0" fill="#1f1d1a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="16" font-weight="500" text-anchor="start">The model is sure. The link goes into the graph.</text>
+  <text x="294" y="65.0" fill="#6b645a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="14" font-weight="400" text-anchor="start">It carries its probability and the sentence it came from.</text>
+  <rect x="0" y="108" width="262" height="96" rx="16" fill="#f1e2b5"/>
+  <rect x="272" y="108" width="828" height="96" rx="16" fill="#efe8da"/>
+  <text x="24" y="163.0" fill="#6f5210" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="22" font-weight="600" text-anchor="start">Review</text>
+  <text x="294" y="147.0" fill="#1f1d1a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="16" font-weight="500" text-anchor="start">The model is unsure. The link waits for a person.</text>
+  <text x="294" y="173.0" fill="#6b645a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="14" font-weight="400" text-anchor="start">It is written as a plain sentence, and drawn dashed on the graph.</text>
+  <rect x="0" y="216" width="262" height="96" rx="16" fill="#f2d0d7"/>
+  <rect x="272" y="216" width="828" height="96" rx="16" fill="#efe8da"/>
+  <text x="24" y="271.0" fill="#7f3446" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="22" font-weight="600" text-anchor="start">Drop</text>
+  <text x="294" y="255.0" fill="#1f1d1a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="16" font-weight="500" text-anchor="start">The model says no, or your ontology forbids it.</text>
+  <text x="294" y="281.0" fill="#6b645a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="14" font-weight="400" text-anchor="start">It never enters the graph.</text>
+  <text x="0" y="336" fill="#6b645a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="14" font-weight="400" text-anchor="start">Your code owns the two cutoffs. They start unfitted: fit them on your own labeled notes.</text>
+</svg>

@@ -1,0 +1,12 @@
+{
+  "entities": [
+    {"name": "GraphRAG Summit", "type": "EVENT"},
+    {"name": "Paris", "type": "LOCATION"},
+    {"name": "TypeSafe", "type": "ORGANIZATION"},
+    {"name": "Jev", "type": "PRODUCT"}
+  ],
+  "relations": [
+    {"source": "GraphRAG Summit", "target": "Paris", "type": "HAPPENED_AT"},
+    {"source": "Jev", "target": "TypeSafe", "type": "CREATED_BY"}
+  ]
+}

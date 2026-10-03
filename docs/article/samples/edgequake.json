@@ -1,0 +1,1603 @@
+{
+  "entities": [
+    {
+      "name": "ACME_INC",
+      "entity_type": "ORGANIZATION",
+      "description": "Acme Inc",
+      "importance": 1.0,
+      "source_spans": [
+        "Acme Inc"
+      ],
+      "source_chunk_ids": [
+        "01_edgequake-chunk-0"
+      ],
+      "source_document_id": "01_edgequake",
+      "display_name": "Acme Inc"
+    },
+    {
+      "name": "APACHE_AGE",
+      "entity_type": "TECHNOLOGY",
+      "description": "Apache AGE",
+      "importance": 1.0,
+      "source_spans": [
+        "Apache AGE"
+      ],
+      "source_chunk_ids": [
+        "01_edgequake-chunk-0"
+      ],
+      "source_document_id": "01_edgequake",
+      "display_name": "Apache AGE"
+    },
+    {
+      "name": "BERLIN",
+      "entity_type": "LOCATION",
+      "description": "Berlin",
+      "importance": 1.0,
+      "source_spans": [
+        "Berlin"
+      ],
+      "source_chunk_ids": [
+        "01_edgequake-chunk-0"
+      ],
+      "source_document_id": "01_edgequake",
+      "display_name": "Berlin"
+    },
+    {
+      "name": "EDGEQUAKE",
+      "entity_type": "PRODUCT",
+      "description": "EdgeQuake",
+      "importance": 1.0,
+      "source_spans": [
+        "EdgeQuake"
+      ],
+      "source_chunk_ids": [
+        "01_edgequake-chunk-0"
+      ],
+      "source_document_id": "01_edgequake",
+      "display_name": "EdgeQuake"
+    },
+    {
+      "name": "JANE_DOE",
+      "entity_type": "PERSON",
+      "description": "Jane Doe",
+      "importance": 1.0,
+      "source_spans": [
+        "Jane Doe"
+      ],
+      "source_chunk_ids": [
+        "01_edgequake-chunk-0"
+      ],
+      "source_document_id": "01_edgequake",
+      "display_name": "Jane Doe"
+    },
+    {
+      "name": "NIMBLE",
+      "entity_type": "PRODUCT",
+      "description": "Nimble",
+      "importance": 1.0,
+      "source_spans": [
+        "Nimble"
+      ],
+      "source_chunk_ids": [
+        "01_edgequake-chunk-0"
+      ],
+      "source_document_id": "01_edgequake",
+      "display_name": "Nimble"
+    },
+    {
+      "name": "OLLAMA",
+      "entity_type": "PRODUCT",
+      "description": "Ollama",
+      "importance": 1.0,
+      "source_spans": [
+        "Ollama"
+      ],
+      "source_chunk_ids": [
+        "01_edgequake-chunk-0"
+      ],
+      "source_document_id": "01_edgequake",
+      "display_name": "Ollama"
+    },
+    {
+      "name": "PGVECTOR",
+      "entity_type": "TECHNOLOGY",
+      "description": "pgvector",
+      "importance": 1.0,
+      "source_spans": [
+        "pgvector"
+      ],
+      "source_chunk_ids": [
+        "01_edgequake-chunk-0"
+      ],
+      "source_document_id": "01_edgequake",
+      "display_name": "pgvector"
+    },
+    {
+      "name": "POSTGRESQL",
+      "entity_type": "TECHNOLOGY",
+      "description": "PostgreSQL",
+      "importance": 1.0,
+      "source_spans": [
+        "PostgreSQL"
+      ],
+      "source_chunk_ids": [
+        "01_edgequake-chunk-0"
+      ],
+      "source_document_id": "01_edgequake",
+      "display_name": "PostgreSQL"
+    }
+  ],
+  "relationships": [
+    {
+      "source": "JANE_DOE",
+      "target": "ACME_INC",
+      "relation_type": "WORKS_AT",
+      "description": "In 2024, Jane Doe joined Acme Inc. as VP Engineering in Berlin.",
+      "weight": 0.9961662812103342,
+      "keywords": [
+        "works at"
+      ],
+      "source_chunk_ids": [
+        "01_edgequake-chunk-0"
+      ],
+      "source_document_id": "01_edgequake"
+    },
+    {
+      "source": "JANE_DOE",
+      "target": "ACME_INC",
+      "relation_type": "PART_OF",
+      "description": "In 2024, Jane Doe joined Acme Inc. as VP Engineering in Berlin.",
+      "weight": 0.96497161543835,
+      "keywords": [
+        "part of"
+      ],
+      "source_chunk_ids": [
+        "01_edgequake-chunk-0"
+      ],
+      "source_document_id": "01_edgequake"
+    },
+    {
+      "source": "JANE_DOE",
+      "target": "BERLIN",
+      "relation_type": "LOCATED_IN",
+      "description": "In 2024, Jane Doe joined Acme Inc. as VP Engineering in Berlin.",
+      "weight": 0.9561055121913342,
+      "keywords": [
+        "located in"
+      ],
+      "source_chunk_ids": [
+        "01_edgequake-chunk-0"
+      ],
+      "source_document_id": "01_edgequake"
+    },
+    {
+      "source": "ACME_INC",
+      "target": "BERLIN",
+      "relation_type": "LOCATED_IN",
+      "description": "In 2024, Jane Doe joined Acme Inc. as VP Engineering in Berlin.",
+      "weight": 0.9692222931076089,
+      "keywords": [
+        "located in"
+      ],
+      "source_chunk_ids": [
+        "01_edgequake-chunk-0"
+      ],
+      "source_document_id": "01_edgequake"
+    },
+    {
+      "source": "ACME_INC",
+      "target": "EDGEQUAKE",
+      "relation_type": "USES",
+      "description": "Acme Inc uses EdgeQuake to index markdown documentation.",
+      "weight": 0.9973140162068159,
+      "keywords": [
+        "uses"
+      ],
+      "source_chunk_ids": [
+        "01_edgequake-chunk-0"
+      ],
+      "source_document_id": "01_edgequake"
+    },
+    {
+      "source": "OLLAMA",
+      "target": "NIMBLE",
+      "relation_type": "USES",
+      "description": "Ollama serves Nimble on a local machine.",
+      "weight": 0.9665829977072695,
+      "keywords": [
+        "uses"
+      ],
+      "source_chunk_ids": [
+        "01_edgequake-chunk-0"
+      ],
+      "source_document_id": "01_edgequake"
+    },
+    {
+      "source": "NIMBLE",
+      "target": "OLLAMA",
+      "relation_type": "USES",
+      "description": "Ollama serves Nimble on a local machine.",
+      "weight": 0.9070973757534543,
+      "keywords": [
+        "uses"
+      ],
+      "source_chunk_ids": [
+        "01_edgequake-chunk-0"
+      ],
+      "source_document_id": "01_edgequake"
+    },
+    {
+      "source": "EDGEQUAKE",
+      "target": "POSTGRESQL",
+      "relation_type": "USES",
+      "description": "EdgeQuake depends on PostgreSQL.",
+      "weight": 0.9733351156364104,
+      "keywords": [
+        "uses"
+      ],
+      "source_chunk_ids": [
+        "01_edgequake-chunk-0"
+      ],
+      "source_document_id": "01_edgequake"
+    },
+    {
+      "source": "EDGEQUAKE",
+      "target": "POSTGRESQL",
+      "relation_type": "DEPENDS_ON",
+      "description": "EdgeQuake depends on PostgreSQL.",
+      "weight": 0.9985237130797491,
+      "keywords": [
+        "depends on"
+      ],
+      "source_chunk_ids": [
+        "01_edgequake-chunk-0"
+      ],
+      "source_document_id": "01_edgequake"
+    }
+  ],
+  "source_chunk_id": "01_edgequake-chunk-0",
+  "metadata": {
+    "parser": "edgextract",
+    "ontology_id": "tech_docs",
+    "model": "tev1",
+    "gate_fitted": false,
+    "stats": {
+      "sentences": 7,
+      "mentions_proposed": 16,
+      "mentions_skipped": 1,
+      "pairs_considered": 31,
+      "pairs_truncated": 0,
+      "systemone_calls": 0,
+      "cache_hits": 6,
+      "input_tokens": 0,
+      "output_tokens": 0,
+      "elapsed_ms": 1
+    }
+  },
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "extraction_time_ms": 1,
+  "review": [
+    {
+      "kind": "entity",
+      "text": "markdown",
+      "type": "NOT_ENTITY",
+      "band": "REVIEW",
+      "prob": 0.31574917499568844,
+      "confidence": null,
+      "flipped": false,
+      "span": [
+        256,
+        264
+      ],
+      "sentence_id": "01_edgequake-s3"
+    },
+    {
+      "kind": "relation",
+      "source": "PostgreSQL",
+      "target": "Apache AGE",
+      "type": "NONE",
+      "band": "REVIEW",
+      "prob": 0.45779945829450713,
+      "confidence": null,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s1"
+    },
+    {
+      "kind": "relation",
+      "source": "PostgreSQL",
+      "target": "Apache AGE",
+      "type": "NONE",
+      "band": "REVIEW",
+      "prob": 0.5001564025827894,
+      "confidence": null,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s1"
+    },
+    {
+      "kind": "relation",
+      "source": "PostgreSQL",
+      "target": "pgvector",
+      "type": "NONE",
+      "band": "REVIEW",
+      "prob": 0.3996304085295101,
+      "confidence": null,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s1"
+    },
+    {
+      "kind": "relation",
+      "source": "Apache AGE",
+      "target": "PostgreSQL",
+      "type": "NONE",
+      "band": "REVIEW",
+      "prob": 0.40139264418428094,
+      "confidence": null,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s1"
+    },
+    {
+      "kind": "relation",
+      "source": "Apache AGE",
+      "target": "PostgreSQL",
+      "type": "NONE",
+      "band": "REVIEW",
+      "prob": 0.5584643315696955,
+      "confidence": null,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s1"
+    },
+    {
+      "kind": "relation",
+      "source": "pgvector",
+      "target": "PostgreSQL",
+      "type": "NONE",
+      "band": "REVIEW",
+      "prob": 0.575668152924121,
+      "confidence": null,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s1"
+    },
+    {
+      "kind": "relation",
+      "source": "pgvector",
+      "target": "Apache AGE",
+      "type": "NONE",
+      "band": "REVIEW",
+      "prob": 0.2697657461491725,
+      "confidence": null,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s1"
+    },
+    {
+      "kind": "relation",
+      "source": "Ollama",
+      "target": "Nimble",
+      "type": "NONE",
+      "band": "REVIEW",
+      "prob": 0.34780876361791435,
+      "confidence": null,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s5"
+    },
+    {
+      "kind": "relation",
+      "source": "Ollama",
+      "target": "Nimble",
+      "type": "NONE",
+      "band": "REVIEW",
+      "prob": 0.7272133305592811,
+      "confidence": null,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s5"
+    },
+    {
+      "kind": "relation",
+      "source": "Nimble",
+      "target": "Ollama",
+      "type": "NONE",
+      "band": "REVIEW",
+      "prob": 0.6807609111751859,
+      "confidence": null,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s5"
+    },
+    {
+      "kind": "relation",
+      "source": "Nimble",
+      "target": "Ollama",
+      "type": "NONE",
+      "band": "REVIEW",
+      "prob": 0.7818528715073556,
+      "confidence": null,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s5"
+    }
+  ],
+  "rejected": [
+    {
+      "kind": "relation",
+      "source": "PostgreSQL",
+      "target": "pgvector",
+      "type": "NONE",
+      "band": "REJECT",
+      "prob": 0.10122029102683311,
+      "confidence": null,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s1"
+    },
+    {
+      "kind": "relation",
+      "source": "Apache AGE",
+      "target": "pgvector",
+      "type": "NONE",
+      "band": "REJECT",
+      "prob": 0.17653514385461194,
+      "confidence": null,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s1"
+    },
+    {
+      "kind": "relation",
+      "source": "Apache AGE",
+      "target": "pgvector",
+      "type": "NONE",
+      "band": "REJECT",
+      "prob": 0.13978490300767568,
+      "confidence": null,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s1"
+    },
+    {
+      "kind": "relation",
+      "source": "pgvector",
+      "target": "PostgreSQL",
+      "type": "NONE",
+      "band": "REJECT",
+      "prob": 0.11647164979662893,
+      "confidence": null,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s1"
+    },
+    {
+      "kind": "relation",
+      "source": "pgvector",
+      "target": "Apache AGE",
+      "type": "NONE",
+      "band": "REJECT",
+      "prob": 0.04686857420118916,
+      "confidence": null,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s1"
+    },
+    {
+      "kind": "relation",
+      "source": "Acme Inc",
+      "target": "EdgeQuake",
+      "type": "NONE",
+      "band": "REJECT",
+      "prob": 0.02738624439897133,
+      "confidence": null,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s3"
+    },
+    {
+      "kind": "relation",
+      "source": "EdgeQuake",
+      "target": "Acme Inc",
+      "type": "NONE",
+      "band": "REJECT",
+      "prob": 0.055719482981201725,
+      "confidence": null,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s3"
+    },
+    {
+      "kind": "relation",
+      "source": "EdgeQuake",
+      "target": "Acme Inc",
+      "type": "NONE",
+      "band": "REJECT",
+      "prob": 0.021406576992318883,
+      "confidence": null,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s3"
+    },
+    {
+      "kind": "relation",
+      "source": "EdgeQuake",
+      "target": "PostgreSQL",
+      "type": "NONE",
+      "band": "REJECT",
+      "prob": 0.17345660480742803,
+      "confidence": null,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s6"
+    },
+    {
+      "kind": "relation",
+      "source": "PostgreSQL",
+      "target": "EdgeQuake",
+      "type": "NONE",
+      "band": "REJECT",
+      "prob": 0.04243916230159823,
+      "confidence": null,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s6"
+    },
+    {
+      "kind": "relation",
+      "source": "PostgreSQL",
+      "target": "EdgeQuake",
+      "type": "NONE",
+      "band": "REJECT",
+      "prob": 0.07601128059884942,
+      "confidence": null,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s6"
+    }
+  ],
+  "mentions": [
+    {
+      "mention": {
+        "text": "EdgeQuake",
+        "start": 13,
+        "end": 22,
+        "sentence_id": "01_edgequake-s0",
+        "heading_path": [
+          "EdgeQuake"
+        ],
+        "source": "gazetteer",
+        "skipped_reason": null
+      },
+      "entity_type": "PRODUCT",
+      "probabilities": {
+        "PRODUCT": 1.0
+      },
+      "confidence": 1.0,
+      "band": "ACCEPT",
+      "winner_prob": 1.0,
+      "flipped": false,
+      "question_id": "g0",
+      "decided_by": "ontology"
+    },
+    {
+      "mention": {
+        "text": "PostgreSQL",
+        "start": 107,
+        "end": 117,
+        "sentence_id": "01_edgequake-s1",
+        "heading_path": [
+          "EdgeQuake"
+        ],
+        "source": "gazetteer",
+        "skipped_reason": null
+      },
+      "entity_type": "TECHNOLOGY",
+      "probabilities": {
+        "TECHNOLOGY": 1.0
+      },
+      "confidence": 1.0,
+      "band": "ACCEPT",
+      "winner_prob": 1.0,
+      "flipped": false,
+      "question_id": "g0",
+      "decided_by": "ontology"
+    },
+    {
+      "mention": {
+        "text": "Apache AGE",
+        "start": 127,
+        "end": 137,
+        "sentence_id": "01_edgequake-s1",
+        "heading_path": [
+          "EdgeQuake"
+        ],
+        "source": "gazetteer",
+        "skipped_reason": null
+      },
+      "entity_type": "TECHNOLOGY",
+      "probabilities": {
+        "TECHNOLOGY": 1.0
+      },
+      "confidence": 1.0,
+      "band": "ACCEPT",
+      "winner_prob": 1.0,
+      "flipped": false,
+      "question_id": "g1",
+      "decided_by": "ontology"
+    },
+    {
+      "mention": {
+        "text": "pgvector",
+        "start": 146,
+        "end": 154,
+        "sentence_id": "01_edgequake-s1",
+        "heading_path": [
+          "EdgeQuake"
+        ],
+        "source": "gazetteer",
+        "skipped_reason": null
+      },
+      "entity_type": "TECHNOLOGY",
+      "probabilities": {
+        "TECHNOLOGY": 1.0
+      },
+      "confidence": 1.0,
+      "band": "ACCEPT",
+      "winner_prob": 1.0,
+      "flipped": false,
+      "question_id": "g2",
+      "decided_by": "ontology"
+    },
+    {
+      "mention": {
+        "text": "Jane Doe",
+        "start": 168,
+        "end": 176,
+        "sentence_id": "01_edgequake-s2",
+        "heading_path": [
+          "EdgeQuake"
+        ],
+        "source": "gazetteer",
+        "skipped_reason": null
+      },
+      "entity_type": "PERSON",
+      "probabilities": {
+        "PERSON": 1.0
+      },
+      "confidence": 1.0,
+      "band": "ACCEPT",
+      "winner_prob": 1.0,
+      "flipped": false,
+      "question_id": "g0",
+      "decided_by": "ontology"
+    },
+    {
+      "mention": {
+        "text": "Acme Inc",
+        "start": 184,
+        "end": 192,
+        "sentence_id": "01_edgequake-s2",
+        "heading_path": [
+          "EdgeQuake"
+        ],
+        "source": "gazetteer",
+        "skipped_reason": null
+      },
+      "entity_type": "ORGANIZATION",
+      "probabilities": {
+        "ORGANIZATION": 1.0
+      },
+      "confidence": 1.0,
+      "band": "ACCEPT",
+      "winner_prob": 1.0,
+      "flipped": false,
+      "question_id": "g1",
+      "decided_by": "ontology"
+    },
+    {
+      "mention": {
+        "text": "Berlin",
+        "start": 215,
+        "end": 221,
+        "sentence_id": "01_edgequake-s2",
+        "heading_path": [
+          "EdgeQuake"
+        ],
+        "source": "gazetteer",
+        "skipped_reason": null
+      },
+      "entity_type": "LOCATION",
+      "probabilities": {
+        "LOCATION": 1.0
+      },
+      "confidence": 1.0,
+      "band": "ACCEPT",
+      "winner_prob": 1.0,
+      "flipped": false,
+      "question_id": "g2",
+      "decided_by": "ontology"
+    },
+    {
+      "mention": {
+        "text": "Acme Inc",
+        "start": 223,
+        "end": 231,
+        "sentence_id": "01_edgequake-s3",
+        "heading_path": [
+          "EdgeQuake"
+        ],
+        "source": "gazetteer",
+        "skipped_reason": null
+      },
+      "entity_type": "ORGANIZATION",
+      "probabilities": {
+        "ORGANIZATION": 1.0
+      },
+      "confidence": 1.0,
+      "band": "ACCEPT",
+      "winner_prob": 1.0,
+      "flipped": false,
+      "question_id": "g0",
+      "decided_by": "ontology"
+    },
+    {
+      "mention": {
+        "text": "EdgeQuake",
+        "start": 237,
+        "end": 246,
+        "sentence_id": "01_edgequake-s3",
+        "heading_path": [
+          "EdgeQuake"
+        ],
+        "source": "gazetteer",
+        "skipped_reason": null
+      },
+      "entity_type": "PRODUCT",
+      "probabilities": {
+        "PRODUCT": 1.0
+      },
+      "confidence": 1.0,
+      "band": "ACCEPT",
+      "winner_prob": 1.0,
+      "flipped": false,
+      "question_id": "g1",
+      "decided_by": "ontology"
+    },
+    {
+      "mention": {
+        "text": "markdown",
+        "start": 256,
+        "end": 264,
+        "sentence_id": "01_edgequake-s3",
+        "heading_path": [
+          "EdgeQuake"
+        ],
+        "source": "gazetteer",
+        "skipped_reason": null
+      },
+      "entity_type": "NOT_ENTITY",
+      "probabilities": {
+        "yes": 0.31574917499568844,
+        "no": 0.6842508250043116
+      },
+      "confidence": null,
+      "band": "REVIEW",
+      "winner_prob": 0.31574917499568844,
+      "flipped": false,
+      "question_id": "e2",
+      "decided_by": "model"
+    },
+    {
+      "mention": {
+        "text": "Nimble",
+        "start": 281,
+        "end": 287,
+        "sentence_id": "01_edgequake-s4",
+        "heading_path": [
+          "EdgeQuake"
+        ],
+        "source": "gazetteer",
+        "skipped_reason": null
+      },
+      "entity_type": "PRODUCT",
+      "probabilities": {
+        "PRODUCT": 1.0
+      },
+      "confidence": 1.0,
+      "band": "ACCEPT",
+      "winner_prob": 1.0,
+      "flipped": false,
+      "question_id": "g0",
+      "decided_by": "ontology"
+    },
+    {
+      "mention": {
+        "text": "Ollama",
+        "start": 309,
+        "end": 315,
+        "sentence_id": "01_edgequake-s5",
+        "heading_path": [
+          "EdgeQuake"
+        ],
+        "source": "gazetteer",
+        "skipped_reason": null
+      },
+      "entity_type": "PRODUCT",
+      "probabilities": {
+        "PRODUCT": 1.0
+      },
+      "confidence": 1.0,
+      "band": "ACCEPT",
+      "winner_prob": 1.0,
+      "flipped": false,
+      "question_id": "g0",
+      "decided_by": "ontology"
+    },
+    {
+      "mention": {
+        "text": "Nimble",
+        "start": 323,
+        "end": 329,
+        "sentence_id": "01_edgequake-s5",
+        "heading_path": [
+          "EdgeQuake"
+        ],
+        "source": "gazetteer",
+        "skipped_reason": null
+      },
+      "entity_type": "PRODUCT",
+      "probabilities": {
+        "PRODUCT": 1.0
+      },
+      "confidence": 1.0,
+      "band": "ACCEPT",
+      "winner_prob": 1.0,
+      "flipped": false,
+      "question_id": "g1",
+      "decided_by": "ontology"
+    },
+    {
+      "mention": {
+        "text": "EdgeQuake",
+        "start": 350,
+        "end": 359,
+        "sentence_id": "01_edgequake-s6",
+        "heading_path": [
+          "EdgeQuake"
+        ],
+        "source": "gazetteer",
+        "skipped_reason": null
+      },
+      "entity_type": "PRODUCT",
+      "probabilities": {
+        "PRODUCT": 1.0
+      },
+      "confidence": 1.0,
+      "band": "ACCEPT",
+      "winner_prob": 1.0,
+      "flipped": false,
+      "question_id": "g0",
+      "decided_by": "ontology"
+    },
+    {
+      "mention": {
+        "text": "PostgreSQL",
+        "start": 371,
+        "end": 381,
+        "sentence_id": "01_edgequake-s6",
+        "heading_path": [
+          "EdgeQuake"
+        ],
+        "source": "gazetteer",
+        "skipped_reason": null
+      },
+      "entity_type": "TECHNOLOGY",
+      "probabilities": {
+        "TECHNOLOGY": 1.0
+      },
+      "confidence": 1.0,
+      "band": "ACCEPT",
+      "winner_prob": 1.0,
+      "flipped": false,
+      "question_id": "g1",
+      "decided_by": "ontology"
+    }
+  ],
+  "relation_hits": [
+    {
+      "source_text": "PostgreSQL",
+      "source_type": "TECHNOLOGY",
+      "source_start": 107,
+      "source_end": 117,
+      "target_text": "Apache AGE",
+      "target_type": "TECHNOLOGY",
+      "target_start": 127,
+      "target_end": 137,
+      "relation_type": "NONE",
+      "probabilities": {
+        "NONE": 0.45779945829450713
+      },
+      "confidence": null,
+      "band": "REVIEW",
+      "winner_prob": 0.45779945829450713,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s1",
+      "heading_path": [
+        "EdgeQuake"
+      ],
+      "evidence": "It stores entities in **PostgreSQL** with **Apache AGE** and **pgvector**."
+    },
+    {
+      "source_text": "PostgreSQL",
+      "source_type": "TECHNOLOGY",
+      "source_start": 107,
+      "source_end": 117,
+      "target_text": "Apache AGE",
+      "target_type": "TECHNOLOGY",
+      "target_start": 127,
+      "target_end": 137,
+      "relation_type": "NONE",
+      "probabilities": {
+        "NONE": 0.5001564025827894
+      },
+      "confidence": null,
+      "band": "REVIEW",
+      "winner_prob": 0.5001564025827894,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s1",
+      "heading_path": [
+        "EdgeQuake"
+      ],
+      "evidence": "It stores entities in **PostgreSQL** with **Apache AGE** and **pgvector**."
+    },
+    {
+      "source_text": "PostgreSQL",
+      "source_type": "TECHNOLOGY",
+      "source_start": 107,
+      "source_end": 117,
+      "target_text": "pgvector",
+      "target_type": "TECHNOLOGY",
+      "target_start": 146,
+      "target_end": 154,
+      "relation_type": "NONE",
+      "probabilities": {
+        "NONE": 0.10122029102683311
+      },
+      "confidence": null,
+      "band": "REJECT",
+      "winner_prob": 0.10122029102683311,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s1",
+      "heading_path": [
+        "EdgeQuake"
+      ],
+      "evidence": "It stores entities in **PostgreSQL** with **Apache AGE** and **pgvector**."
+    },
+    {
+      "source_text": "PostgreSQL",
+      "source_type": "TECHNOLOGY",
+      "source_start": 107,
+      "source_end": 117,
+      "target_text": "pgvector",
+      "target_type": "TECHNOLOGY",
+      "target_start": 146,
+      "target_end": 154,
+      "relation_type": "NONE",
+      "probabilities": {
+        "NONE": 0.3996304085295101
+      },
+      "confidence": null,
+      "band": "REVIEW",
+      "winner_prob": 0.3996304085295101,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s1",
+      "heading_path": [
+        "EdgeQuake"
+      ],
+      "evidence": "It stores entities in **PostgreSQL** with **Apache AGE** and **pgvector**."
+    },
+    {
+      "source_text": "Apache AGE",
+      "source_type": "TECHNOLOGY",
+      "source_start": 127,
+      "source_end": 137,
+      "target_text": "PostgreSQL",
+      "target_type": "TECHNOLOGY",
+      "target_start": 107,
+      "target_end": 117,
+      "relation_type": "NONE",
+      "probabilities": {
+        "NONE": 0.40139264418428094
+      },
+      "confidence": null,
+      "band": "REVIEW",
+      "winner_prob": 0.40139264418428094,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s1",
+      "heading_path": [
+        "EdgeQuake"
+      ],
+      "evidence": "It stores entities in **PostgreSQL** with **Apache AGE** and **pgvector**."
+    },
+    {
+      "source_text": "Apache AGE",
+      "source_type": "TECHNOLOGY",
+      "source_start": 127,
+      "source_end": 137,
+      "target_text": "PostgreSQL",
+      "target_type": "TECHNOLOGY",
+      "target_start": 107,
+      "target_end": 117,
+      "relation_type": "NONE",
+      "probabilities": {
+        "NONE": 0.5584643315696955
+      },
+      "confidence": null,
+      "band": "REVIEW",
+      "winner_prob": 0.5584643315696955,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s1",
+      "heading_path": [
+        "EdgeQuake"
+      ],
+      "evidence": "It stores entities in **PostgreSQL** with **Apache AGE** and **pgvector**."
+    },
+    {
+      "source_text": "Apache AGE",
+      "source_type": "TECHNOLOGY",
+      "source_start": 127,
+      "source_end": 137,
+      "target_text": "pgvector",
+      "target_type": "TECHNOLOGY",
+      "target_start": 146,
+      "target_end": 154,
+      "relation_type": "NONE",
+      "probabilities": {
+        "NONE": 0.17653514385461194
+      },
+      "confidence": null,
+      "band": "REJECT",
+      "winner_prob": 0.17653514385461194,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s1",
+      "heading_path": [
+        "EdgeQuake"
+      ],
+      "evidence": "It stores entities in **PostgreSQL** with **Apache AGE** and **pgvector**."
+    },
+    {
+      "source_text": "Apache AGE",
+      "source_type": "TECHNOLOGY",
+      "source_start": 127,
+      "source_end": 137,
+      "target_text": "pgvector",
+      "target_type": "TECHNOLOGY",
+      "target_start": 146,
+      "target_end": 154,
+      "relation_type": "NONE",
+      "probabilities": {
+        "NONE": 0.13978490300767568
+      },
+      "confidence": null,
+      "band": "REJECT",
+      "winner_prob": 0.13978490300767568,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s1",
+      "heading_path": [
+        "EdgeQuake"
+      ],
+      "evidence": "It stores entities in **PostgreSQL** with **Apache AGE** and **pgvector**."
+    },
+    {
+      "source_text": "pgvector",
+      "source_type": "TECHNOLOGY",
+      "source_start": 146,
+      "source_end": 154,
+      "target_text": "PostgreSQL",
+      "target_type": "TECHNOLOGY",
+      "target_start": 107,
+      "target_end": 117,
+      "relation_type": "NONE",
+      "probabilities": {
+        "NONE": 0.11647164979662893
+      },
+      "confidence": null,
+      "band": "REJECT",
+      "winner_prob": 0.11647164979662893,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s1",
+      "heading_path": [
+        "EdgeQuake"
+      ],
+      "evidence": "It stores entities in **PostgreSQL** with **Apache AGE** and **pgvector**."
+    },
+    {
+      "source_text": "pgvector",
+      "source_type": "TECHNOLOGY",
+      "source_start": 146,
+      "source_end": 154,
+      "target_text": "PostgreSQL",
+      "target_type": "TECHNOLOGY",
+      "target_start": 107,
+      "target_end": 117,
+      "relation_type": "NONE",
+      "probabilities": {
+        "NONE": 0.575668152924121
+      },
+      "confidence": null,
+      "band": "REVIEW",
+      "winner_prob": 0.575668152924121,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s1",
+      "heading_path": [
+        "EdgeQuake"
+      ],
+      "evidence": "It stores entities in **PostgreSQL** with **Apache AGE** and **pgvector**."
+    },
+    {
+      "source_text": "pgvector",
+      "source_type": "TECHNOLOGY",
+      "source_start": 146,
+      "source_end": 154,
+      "target_text": "Apache AGE",
+      "target_type": "TECHNOLOGY",
+      "target_start": 127,
+      "target_end": 137,
+      "relation_type": "NONE",
+      "probabilities": {
+        "NONE": 0.04686857420118916
+      },
+      "confidence": null,
+      "band": "REJECT",
+      "winner_prob": 0.04686857420118916,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s1",
+      "heading_path": [
+        "EdgeQuake"
+      ],
+      "evidence": "It stores entities in **PostgreSQL** with **Apache AGE** and **pgvector**."
+    },
+    {
+      "source_text": "pgvector",
+      "source_type": "TECHNOLOGY",
+      "source_start": 146,
+      "source_end": 154,
+      "target_text": "Apache AGE",
+      "target_type": "TECHNOLOGY",
+      "target_start": 127,
+      "target_end": 137,
+      "relation_type": "NONE",
+      "probabilities": {
+        "NONE": 0.2697657461491725
+      },
+      "confidence": null,
+      "band": "REVIEW",
+      "winner_prob": 0.2697657461491725,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s1",
+      "heading_path": [
+        "EdgeQuake"
+      ],
+      "evidence": "It stores entities in **PostgreSQL** with **Apache AGE** and **pgvector**."
+    },
+    {
+      "source_text": "Jane Doe",
+      "source_type": "PERSON",
+      "source_start": 168,
+      "source_end": 176,
+      "target_text": "Acme Inc",
+      "target_type": "ORGANIZATION",
+      "target_start": 184,
+      "target_end": 192,
+      "relation_type": "WORKS_AT",
+      "probabilities": {
+        "WORKS_AT": 0.9936104686838904
+      },
+      "confidence": null,
+      "band": "ACCEPT",
+      "winner_prob": 0.9936104686838904,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s2",
+      "heading_path": [
+        "EdgeQuake"
+      ],
+      "evidence": "In 2024, Jane Doe joined Acme Inc. as VP Engineering in Berlin."
+    },
+    {
+      "source_text": "Jane Doe",
+      "source_type": "PERSON",
+      "source_start": 168,
+      "source_end": 176,
+      "target_text": "Acme Inc",
+      "target_type": "ORGANIZATION",
+      "target_start": 184,
+      "target_end": 192,
+      "relation_type": "PART_OF",
+      "probabilities": {
+        "PART_OF": 0.9416193590639166
+      },
+      "confidence": null,
+      "band": "ACCEPT",
+      "winner_prob": 0.9416193590639166,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s2",
+      "heading_path": [
+        "EdgeQuake"
+      ],
+      "evidence": "In 2024, Jane Doe joined Acme Inc. as VP Engineering in Berlin."
+    },
+    {
+      "source_text": "Jane Doe",
+      "source_type": "PERSON",
+      "source_start": 168,
+      "source_end": 176,
+      "target_text": "Berlin",
+      "target_type": "LOCATION",
+      "target_start": 215,
+      "target_end": 221,
+      "relation_type": "LOCATED_IN",
+      "probabilities": {
+        "LOCATED_IN": 0.9268425203188904
+      },
+      "confidence": null,
+      "band": "ACCEPT",
+      "winner_prob": 0.9268425203188904,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s2",
+      "heading_path": [
+        "EdgeQuake"
+      ],
+      "evidence": "In 2024, Jane Doe joined Acme Inc. as VP Engineering in Berlin."
+    },
+    {
+      "source_text": "Acme Inc",
+      "source_type": "ORGANIZATION",
+      "source_start": 184,
+      "source_end": 192,
+      "target_text": "Berlin",
+      "target_type": "LOCATION",
+      "target_start": 215,
+      "target_end": 221,
+      "relation_type": "LOCATED_IN",
+      "probabilities": {
+        "LOCATED_IN": 0.9487038218460148
+      },
+      "confidence": null,
+      "band": "ACCEPT",
+      "winner_prob": 0.9487038218460148,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s2",
+      "heading_path": [
+        "EdgeQuake"
+      ],
+      "evidence": "In 2024, Jane Doe joined Acme Inc. as VP Engineering in Berlin."
+    },
+    {
+      "source_text": "Acme Inc",
+      "source_type": "ORGANIZATION",
+      "source_start": 223,
+      "source_end": 231,
+      "target_text": "EdgeQuake",
+      "target_type": "PRODUCT",
+      "target_start": 237,
+      "target_end": 246,
+      "relation_type": "USES",
+      "probabilities": {
+        "USES": 0.9955233603446932
+      },
+      "confidence": null,
+      "band": "ACCEPT",
+      "winner_prob": 0.9955233603446932,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s3",
+      "heading_path": [
+        "EdgeQuake"
+      ],
+      "evidence": "Acme Inc uses EdgeQuake to index markdown documentation."
+    },
+    {
+      "source_text": "Acme Inc",
+      "source_type": "ORGANIZATION",
+      "source_start": 223,
+      "source_end": 231,
+      "target_text": "EdgeQuake",
+      "target_type": "PRODUCT",
+      "target_start": 237,
+      "target_end": 246,
+      "relation_type": "NONE",
+      "probabilities": {
+        "NONE": 0.02738624439897133
+      },
+      "confidence": null,
+      "band": "REJECT",
+      "winner_prob": 0.02738624439897133,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s3",
+      "heading_path": [
+        "EdgeQuake"
+      ],
+      "evidence": "Acme Inc uses EdgeQuake to index markdown documentation."
+    },
+    {
+      "source_text": "EdgeQuake",
+      "source_type": "PRODUCT",
+      "source_start": 237,
+      "source_end": 246,
+      "target_text": "Acme Inc",
+      "target_type": "ORGANIZATION",
+      "target_start": 223,
+      "target_end": 231,
+      "relation_type": "NONE",
+      "probabilities": {
+        "NONE": 0.055719482981201725
+      },
+      "confidence": null,
+      "band": "REJECT",
+      "winner_prob": 0.055719482981201725,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s3",
+      "heading_path": [
+        "EdgeQuake"
+      ],
+      "evidence": "Acme Inc uses EdgeQuake to index markdown documentation."
+    },
+    {
+      "source_text": "EdgeQuake",
+      "source_type": "PRODUCT",
+      "source_start": 237,
+      "source_end": 246,
+      "target_text": "Acme Inc",
+      "target_type": "ORGANIZATION",
+      "target_start": 223,
+      "target_end": 231,
+      "relation_type": "NONE",
+      "probabilities": {
+        "NONE": 0.021406576992318883
+      },
+      "confidence": null,
+      "band": "REJECT",
+      "winner_prob": 0.021406576992318883,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s3",
+      "heading_path": [
+        "EdgeQuake"
+      ],
+      "evidence": "Acme Inc uses EdgeQuake to index markdown documentation."
+    },
+    {
+      "source_text": "Ollama",
+      "source_type": "PRODUCT",
+      "source_start": 309,
+      "source_end": 315,
+      "target_text": "Nimble",
+      "target_type": "PRODUCT",
+      "target_start": 323,
+      "target_end": 329,
+      "relation_type": "USES",
+      "probabilities": {
+        "USES": 0.9443049961787826
+      },
+      "confidence": null,
+      "band": "ACCEPT",
+      "winner_prob": 0.9443049961787826,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s5",
+      "heading_path": [
+        "EdgeQuake"
+      ],
+      "evidence": "Ollama serves Nimble on a local machine."
+    },
+    {
+      "source_text": "Ollama",
+      "source_type": "PRODUCT",
+      "source_start": 309,
+      "source_end": 315,
+      "target_text": "Nimble",
+      "target_type": "PRODUCT",
+      "target_start": 323,
+      "target_end": 329,
+      "relation_type": "NONE",
+      "probabilities": {
+        "NONE": 0.34780876361791435
+      },
+      "confidence": null,
+      "band": "REVIEW",
+      "winner_prob": 0.34780876361791435,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s5",
+      "heading_path": [
+        "EdgeQuake"
+      ],
+      "evidence": "Ollama serves Nimble on a local machine."
+    },
+    {
+      "source_text": "Ollama",
+      "source_type": "PRODUCT",
+      "source_start": 309,
+      "source_end": 315,
+      "target_text": "Nimble",
+      "target_type": "PRODUCT",
+      "target_start": 323,
+      "target_end": 329,
+      "relation_type": "NONE",
+      "probabilities": {
+        "NONE": 0.7272133305592811
+      },
+      "confidence": null,
+      "band": "REVIEW",
+      "winner_prob": 0.7272133305592811,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s5",
+      "heading_path": [
+        "EdgeQuake"
+      ],
+      "evidence": "Ollama serves Nimble on a local machine."
+    },
+    {
+      "source_text": "Nimble",
+      "source_type": "PRODUCT",
+      "source_start": 323,
+      "source_end": 329,
+      "target_text": "Ollama",
+      "target_type": "PRODUCT",
+      "target_start": 309,
+      "target_end": 315,
+      "relation_type": "USES",
+      "probabilities": {
+        "USES": 0.8451622929224237
+      },
+      "confidence": null,
+      "band": "ACCEPT",
+      "winner_prob": 0.8451622929224237,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s5",
+      "heading_path": [
+        "EdgeQuake"
+      ],
+      "evidence": "Ollama serves Nimble on a local machine."
+    },
+    {
+      "source_text": "Nimble",
+      "source_type": "PRODUCT",
+      "source_start": 323,
+      "source_end": 329,
+      "target_text": "Ollama",
+      "target_type": "PRODUCT",
+      "target_start": 309,
+      "target_end": 315,
+      "relation_type": "NONE",
+      "probabilities": {
+        "NONE": 0.6807609111751859
+      },
+      "confidence": null,
+      "band": "REVIEW",
+      "winner_prob": 0.6807609111751859,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s5",
+      "heading_path": [
+        "EdgeQuake"
+      ],
+      "evidence": "Ollama serves Nimble on a local machine."
+    },
+    {
+      "source_text": "Nimble",
+      "source_type": "PRODUCT",
+      "source_start": 323,
+      "source_end": 329,
+      "target_text": "Ollama",
+      "target_type": "PRODUCT",
+      "target_start": 309,
+      "target_end": 315,
+      "relation_type": "NONE",
+      "probabilities": {
+        "NONE": 0.7818528715073556
+      },
+      "confidence": null,
+      "band": "REVIEW",
+      "winner_prob": 0.7818528715073556,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s5",
+      "heading_path": [
+        "EdgeQuake"
+      ],
+      "evidence": "Ollama serves Nimble on a local machine."
+    },
+    {
+      "source_text": "EdgeQuake",
+      "source_type": "PRODUCT",
+      "source_start": 350,
+      "source_end": 359,
+      "target_text": "PostgreSQL",
+      "target_type": "TECHNOLOGY",
+      "target_start": 371,
+      "target_end": 381,
+      "relation_type": "USES",
+      "probabilities": {
+        "USES": 0.955558526060684
+      },
+      "confidence": null,
+      "band": "ACCEPT",
+      "winner_prob": 0.955558526060684,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s6",
+      "heading_path": [
+        "EdgeQuake"
+      ],
+      "evidence": "EdgeQuake depends on PostgreSQL."
+    },
+    {
+      "source_text": "EdgeQuake",
+      "source_type": "PRODUCT",
+      "source_start": 350,
+      "source_end": 359,
+      "target_text": "PostgreSQL",
+      "target_type": "TECHNOLOGY",
+      "target_start": 371,
+      "target_end": 381,
+      "relation_type": "NONE",
+      "probabilities": {
+        "NONE": 0.17345660480742803
+      },
+      "confidence": null,
+      "band": "REJECT",
+      "winner_prob": 0.17345660480742803,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s6",
+      "heading_path": [
+        "EdgeQuake"
+      ],
+      "evidence": "EdgeQuake depends on PostgreSQL."
+    },
+    {
+      "source_text": "EdgeQuake",
+      "source_type": "PRODUCT",
+      "source_start": 350,
+      "source_end": 359,
+      "target_text": "PostgreSQL",
+      "target_type": "TECHNOLOGY",
+      "target_start": 371,
+      "target_end": 381,
+      "relation_type": "DEPENDS_ON",
+      "probabilities": {
+        "DEPENDS_ON": 0.9975395217995818
+      },
+      "confidence": null,
+      "band": "ACCEPT",
+      "winner_prob": 0.9975395217995818,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s6",
+      "heading_path": [
+        "EdgeQuake"
+      ],
+      "evidence": "EdgeQuake depends on PostgreSQL."
+    },
+    {
+      "source_text": "PostgreSQL",
+      "source_type": "TECHNOLOGY",
+      "source_start": 371,
+      "source_end": 381,
+      "target_text": "EdgeQuake",
+      "target_type": "PRODUCT",
+      "target_start": 350,
+      "target_end": 359,
+      "relation_type": "NONE",
+      "probabilities": {
+        "NONE": 0.04243916230159823
+      },
+      "confidence": null,
+      "band": "REJECT",
+      "winner_prob": 0.04243916230159823,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s6",
+      "heading_path": [
+        "EdgeQuake"
+      ],
+      "evidence": "EdgeQuake depends on PostgreSQL."
+    },
+    {
+      "source_text": "PostgreSQL",
+      "source_type": "TECHNOLOGY",
+      "source_start": 371,
+      "source_end": 381,
+      "target_text": "EdgeQuake",
+      "target_type": "PRODUCT",
+      "target_start": 350,
+      "target_end": 359,
+      "relation_type": "NONE",
+      "probabilities": {
+        "NONE": 0.07601128059884942
+      },
+      "confidence": null,
+      "band": "REJECT",
+      "winner_prob": 0.07601128059884942,
+      "flipped": false,
+      "sentence_id": "01_edgequake-s6",
+      "heading_path": [
+        "EdgeQuake"
+      ],
+      "evidence": "EdgeQuake depends on PostgreSQL."
+    }
+  ]
+}

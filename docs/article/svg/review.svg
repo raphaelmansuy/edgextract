@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="150" viewBox="0 0 1100 150" role="img" aria-label="Review workflow: extract, review, keep or drop">
+  <rect width="1100" height="150" fill="#f7f3ec"/>
+  <rect x="0" y="0" width="263" height="150" rx="16" fill="#efe8da"/>
+  <text x="22" y="38" fill="#9a9183" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" text-anchor="start" letter-spacing="2">1</text>
+  <text x="22" y="80" fill="#1f1d1a" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="25" font-weight="600" text-anchor="start">Extract</text>
+  <text x="22" y="112" fill="#6b645a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" text-anchor="start">Code proposes. The model decides.</text>
+  <rect x="279" y="0" width="263" height="150" rx="16" fill="#f1e2b5"/>
+  <text x="301" y="38" fill="#9a9183" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" text-anchor="start" letter-spacing="2">2</text>
+  <text x="301" y="80" fill="#1f1d1a" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="25" font-weight="600" text-anchor="start">Review list</text>
+  <text x="301" y="112" fill="#6b645a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" text-anchor="start">Unsure items wait as plain sentenc</text>
+  <text x="301" y="130" fill="#6b645a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" text-anchor="start">es.</text>
+  <rect x="558" y="0" width="263" height="150" rx="16" fill="#cfe3c9"/>
+  <text x="580" y="38" fill="#9a9183" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" text-anchor="start" letter-spacing="2">3</text>
+  <text x="580" y="80" fill="#1f1d1a" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="25" font-weight="600" text-anchor="start">Keep</text>
+  <text x="580" y="112" fill="#6b645a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" text-anchor="start">A person accepts. A solid line on </text>
+  <text x="580" y="130" fill="#6b645a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" text-anchor="start">the graph.</text>
+  <rect x="837" y="0" width="263" height="150" rx="16" fill="#f2d0d7"/>
+  <text x="859" y="38" fill="#9a9183" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="700" text-anchor="start" letter-spacing="2">4</text>
+  <text x="859" y="80" fill="#1f1d1a" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="25" font-weight="600" text-anchor="start">Drop</text>
+  <text x="859" y="112" fill="#6b645a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" text-anchor="start">A person rejects. It never enters.</text>
+</svg>

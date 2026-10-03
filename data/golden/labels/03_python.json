@@ -1,0 +1,10 @@
+{
+  "entities": [
+    {"name": "Python", "type": "TECHNOLOGY"},
+    {"name": "Ollama", "type": "PRODUCT"},
+    {"name": "Markdown", "type": "TECHNOLOGY"}
+  ],
+  "relations": [
+    {"source": "Python", "target": "Ollama", "type": "USES"}
+  ]
+}

@@ -1,0 +1,42 @@
+id: conll04
+version: 1
+title: CoNLL04 joint entity and relation extraction (Roth and Yih / SpERT split)
+types:
+  - id: PERSON
+    description: A named person or group of people.
+    aliases: [people, peop]
+    color: "#7dd3fc"
+  - id: ORGANIZATION
+    description: A named company, agency, institution, or other organization.
+    aliases: [org]
+    color: "#c4b5fd"
+  - id: LOCATION
+    description: A named city, country, region, building, or other place.
+    aliases: [loc]
+    color: "#fda4af"
+  - id: OTHER
+    description: A named entity that is not a person, organization, or location.
+    aliases: []
+    color: "#fcd34d"
+relations:
+  - id: WORKS_FOR
+    description: The person works for the organization.
+    domain: [PERSON]
+    range: [ORGANIZATION]
+  - id: KILL
+    description: The person killed the other person.
+    domain: [PERSON]
+    range: [PERSON]
+  - id: ORG_BASED_IN
+    description: The organization is based in the location.
+    domain: [ORGANIZATION]
+    range: [LOCATION]
+  - id: LIVES_IN
+    description: The person lives in the location.
+    domain: [PERSON]
+    range: [LOCATION]
+  - id: LOCATED_IN
+    description: The location is inside or part of the other location.
+    domain: [LOCATION]
+    range: [LOCATION]
+gazetteer: {}

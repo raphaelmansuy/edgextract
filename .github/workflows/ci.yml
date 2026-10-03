@@ -1,0 +1,25 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v5
+      - name: Install
+        run: uv sync --extra dev
+      - name: Lint
+        run: |
+          uv run ruff check src tests examples scripts
+          uv run ruff format --check src tests examples scripts
+      - name: Tests (no model needed)
+        run: uv run pytest -q --ignore=tests/test_live_systemone.py
+      - name: Requirement cross-references
+        run: uv run python scripts/check_xrefs.py
+      - name: Examples with the in-process fake model
+        run: make examples

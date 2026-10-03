@@ -1,0 +1,216 @@
+[
+  {
+    "tokens": [
+      "Newspaper",
+      "`",
+      "Explains",
+      "'",
+      "U.S.",
+      "Interests",
+      "Section",
+      "Events",
+      "FL1402001894",
+      "Havana",
+      "Radio",
+      "Reloj",
+      "Network",
+      "in",
+      "Spanish",
+      "2100",
+      "GMT",
+      "13",
+      "Feb",
+      "94"
+    ],
+    "entities": [
+      {
+        "type": "Loc",
+        "start": 4,
+        "end": 5
+      },
+      {
+        "type": "Loc",
+        "start": 9,
+        "end": 10
+      },
+      {
+        "type": "Org",
+        "start": 10,
+        "end": 13
+      },
+      {
+        "type": "Other",
+        "start": 15,
+        "end": 17
+      },
+      {
+        "type": "Other",
+        "start": 17,
+        "end": 20
+      }
+    ],
+    "relations": [
+      {
+        "type": "OrgBased_In",
+        "head": 2,
+        "tail": 1
+      }
+    ],
+    "orig_id": 3255
+  },
+  {
+    "tokens": [
+      "`",
+      "`",
+      "If",
+      "it",
+      "does",
+      "not",
+      "snow",
+      ",",
+      "and",
+      "a",
+      "lot",
+      ",",
+      "within",
+      "this",
+      "month",
+      "we",
+      "will",
+      "have",
+      "no",
+      "water",
+      "to",
+      "submerge",
+      "150",
+      ",",
+      "000",
+      "hectares",
+      "(",
+      "370",
+      ",",
+      "500",
+      "acres",
+      ")",
+      "of",
+      "rice",
+      ",",
+      "'",
+      "'",
+      "said",
+      "Bruno",
+      "Pusterla",
+      ",",
+      "a",
+      "top",
+      "official",
+      "of",
+      "the",
+      "Italian",
+      "Agricultural",
+      "Confederation",
+      "."
+    ],
+    "entities": [
+      {
+        "type": "Other",
+        "start": 22,
+        "end": 26
+      },
+      {
+        "type": "Other",
+        "start": 27,
+        "end": 31
+      },
+      {
+        "type": "Other",
+        "start": 33,
+        "end": 34
+      },
+      {
+        "type": "Peop",
+        "start": 38,
+        "end": 40
+      },
+      {
+        "type": "Org",
+        "start": 46,
+        "end": 49
+      }
+    ],
+    "relations": [
+      {
+        "type": "Work_For",
+        "head": 3,
+        "tail": 4
+      }
+    ],
+    "orig_id": 95
+  },
+  {
+    "tokens": [
+      "The",
+      "self-propelled",
+      "rig",
+      "Avco",
+      "5",
+      "was",
+      "headed",
+      "to",
+      "shore",
+      "with",
+      "14",
+      "people",
+      "aboard",
+      "early",
+      "Monday",
+      "when",
+      "it",
+      "capsized",
+      "about",
+      "20",
+      "miles",
+      "off",
+      "the",
+      "Louisiana",
+      "coast",
+      ",",
+      "near",
+      "Morgan",
+      "City",
+      ",",
+      "Lifa",
+      "said."
+    ],
+    "entities": [
+      {
+        "type": "Other",
+        "start": 19,
+        "end": 21
+      },
+      {
+        "type": "Loc",
+        "start": 23,
+        "end": 24
+      },
+      {
+        "type": "Loc",
+        "start": 27,
+        "end": 29
+      },
+      {
+        "type": "Peop",
+        "start": 30,
+        "end": 31
+      }
+    ],
+    "relations": [
+      {
+        "type": "Located_In",
+        "head": 2,
+        "tail": 1
+      }
+    ],
+    "orig_id": 2447
+  }
+]

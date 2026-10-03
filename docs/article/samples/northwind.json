@@ -1,0 +1,796 @@
+{
+  "entities": [
+    {
+      "name": "ACME_INC",
+      "entity_type": "COMPANY",
+      "description": "Acme Inc",
+      "importance": 1.0,
+      "source_spans": [
+        "Acme Inc"
+      ],
+      "source_chunk_ids": [
+        "13_northwind-chunk-0"
+      ],
+      "source_document_id": "13_northwind",
+      "display_name": "Acme Inc"
+    },
+    {
+      "name": "ADA_LOVELACE",
+      "entity_type": "PERSON",
+      "description": "Ada Lovelace",
+      "importance": 1.0,
+      "source_spans": [
+        "Ada Lovelace"
+      ],
+      "source_chunk_ids": [
+        "13_northwind-chunk-0"
+      ],
+      "source_document_id": "13_northwind",
+      "display_name": "Ada Lovelace"
+    },
+    {
+      "name": "BERLIN",
+      "entity_type": "LOCATION",
+      "description": "Berlin",
+      "importance": 1.0,
+      "source_spans": [
+        "Berlin"
+      ],
+      "source_chunk_ids": [
+        "13_northwind-chunk-0"
+      ],
+      "source_document_id": "13_northwind",
+      "display_name": "Berlin"
+    },
+    {
+      "name": "JANE_DOE",
+      "entity_type": "PERSON",
+      "description": "Jane Doe",
+      "importance": 1.0,
+      "source_spans": [
+        "Jane Doe"
+      ],
+      "source_chunk_ids": [
+        "13_northwind-chunk-0"
+      ],
+      "source_document_id": "13_northwind",
+      "display_name": "Jane Doe"
+    },
+    {
+      "name": "NORTHWIND",
+      "entity_type": "COMPANY",
+      "description": "Northwind",
+      "importance": 1.0,
+      "source_spans": [
+        "Northwind"
+      ],
+      "source_chunk_ids": [
+        "13_northwind-chunk-0"
+      ],
+      "source_document_id": "13_northwind",
+      "display_name": "Northwind"
+    },
+    {
+      "name": "PARIS",
+      "entity_type": "LOCATION",
+      "description": "Paris",
+      "importance": 1.0,
+      "source_spans": [
+        "Paris"
+      ],
+      "source_chunk_ids": [
+        "13_northwind-chunk-0"
+      ],
+      "source_document_id": "13_northwind",
+      "display_name": "Paris"
+    }
+  ],
+  "relationships": [
+    {
+      "source": "ADA_LOVELACE",
+      "target": "NORTHWIND",
+      "relation_type": "FOUNDED",
+      "description": "Ada Lovelace founded Northwind in Paris.",
+      "weight": 0.9772264612681254,
+      "keywords": [
+        "founded"
+      ],
+      "source_chunk_ids": [
+        "13_northwind-chunk-0"
+      ],
+      "source_document_id": "13_northwind"
+    },
+    {
+      "source": "NORTHWIND",
+      "target": "PARIS",
+      "relation_type": "HEADQUARTERED_IN",
+      "description": "Ada Lovelace founded Northwind in Paris.",
+      "weight": 0.9060841015309181,
+      "keywords": [
+        "headquartered in"
+      ],
+      "source_chunk_ids": [
+        "13_northwind-chunk-0"
+      ],
+      "source_document_id": "13_northwind"
+    },
+    {
+      "source": "ACME_INC",
+      "target": "NORTHWIND",
+      "relation_type": "ACQUIRED",
+      "description": "Acme Inc invested in Northwind.",
+      "weight": 0.9002278716453171,
+      "keywords": [
+        "acquired"
+      ],
+      "source_chunk_ids": [
+        "13_northwind-chunk-0"
+      ],
+      "source_document_id": "13_northwind"
+    },
+    {
+      "source": "ACME_INC",
+      "target": "NORTHWIND",
+      "relation_type": "INVESTED_IN",
+      "description": "Acme Inc invested in Northwind.",
+      "weight": 0.9912573255046334,
+      "keywords": [
+        "invested in"
+      ],
+      "source_chunk_ids": [
+        "13_northwind-chunk-0"
+      ],
+      "source_document_id": "13_northwind"
+    },
+    {
+      "source": "JANE_DOE",
+      "target": "ACME_INC",
+      "relation_type": "WORKS_FOR",
+      "description": "Jane Doe works for Acme Inc in Berlin.",
+      "weight": 0.9986273288764106,
+      "keywords": [
+        "works for"
+      ],
+      "source_chunk_ids": [
+        "13_northwind-chunk-0"
+      ],
+      "source_document_id": "13_northwind"
+    }
+  ],
+  "source_chunk_id": "13_northwind-chunk-0",
+  "metadata": {
+    "parser": "edgextract",
+    "ontology_id": "company_news",
+    "model": "tev1",
+    "gate_fitted": false,
+    "stats": {
+      "sentences": 4,
+      "mentions_proposed": 10,
+      "mentions_skipped": 0,
+      "pairs_considered": 13,
+      "pairs_truncated": 0,
+      "systemone_calls": 4,
+      "cache_hits": 0,
+      "input_tokens": 5975,
+      "output_tokens": 16,
+      "elapsed_ms": 9414
+    }
+  },
+  "input_tokens": 5975,
+  "output_tokens": 16,
+  "extraction_time_ms": 9414,
+  "review": [
+    {
+      "kind": "relation",
+      "source": "Ada Lovelace",
+      "target": "Northwind",
+      "type": "NONE",
+      "band": "REVIEW",
+      "prob": 0.3492257713219829,
+      "confidence": null,
+      "flipped": false,
+      "sentence_id": "13_northwind-s0"
+    },
+    {
+      "kind": "relation",
+      "source": "Northwind",
+      "target": "Acme Inc",
+      "type": "NONE",
+      "band": "REVIEW",
+      "prob": 0.2579388272033688,
+      "confidence": null,
+      "flipped": false,
+      "sentence_id": "13_northwind-s2"
+    },
+    {
+      "kind": "relation",
+      "source": "Acme Inc",
+      "target": "Berlin",
+      "type": "NONE",
+      "band": "REVIEW",
+      "prob": 0.5035571451856252,
+      "confidence": null,
+      "flipped": false,
+      "sentence_id": "13_northwind-s3"
+    }
+  ],
+  "rejected": [
+    {
+      "kind": "relation",
+      "source": "Ada Lovelace",
+      "target": "Northwind",
+      "type": "NONE",
+      "band": "REJECT",
+      "prob": 0.12315454471594893,
+      "confidence": null,
+      "flipped": false,
+      "sentence_id": "13_northwind-s0"
+    },
+    {
+      "kind": "relation",
+      "source": "Northwind",
+      "target": "Acme Inc",
+      "type": "NONE",
+      "band": "REJECT",
+      "prob": 0.06294697110482701,
+      "confidence": null,
+      "flipped": false,
+      "sentence_id": "13_northwind-s2"
+    },
+    {
+      "kind": "relation",
+      "source": "Jane Doe",
+      "target": "Acme Inc",
+      "type": "NONE",
+      "band": "REJECT",
+      "prob": 0.01234065763622054,
+      "confidence": null,
+      "flipped": false,
+      "sentence_id": "13_northwind-s3"
+    },
+    {
+      "kind": "relation",
+      "source": "Jane Doe",
+      "target": "Acme Inc",
+      "type": "NONE",
+      "band": "REJECT",
+      "prob": 0.018946243818786963,
+      "confidence": null,
+      "flipped": false,
+      "sentence_id": "13_northwind-s3"
+    }
+  ],
+  "mentions": [
+    {
+      "mention": {
+        "text": "Ada Lovelace",
+        "start": 28,
+        "end": 40,
+        "sentence_id": "13_northwind-s0",
+        "heading_path": [
+          "Northwind raises a round"
+        ],
+        "source": "gazetteer",
+        "skipped_reason": null
+      },
+      "entity_type": "PERSON",
+      "probabilities": {
+        "PERSON": 1.0
+      },
+      "confidence": 1.0,
+      "band": "ACCEPT",
+      "winner_prob": 1.0,
+      "flipped": false,
+      "question_id": "g0",
+      "decided_by": "ontology"
+    },
+    {
+      "mention": {
+        "text": "Northwind",
+        "start": 49,
+        "end": 58,
+        "sentence_id": "13_northwind-s0",
+        "heading_path": [
+          "Northwind raises a round"
+        ],
+        "source": "gazetteer",
+        "skipped_reason": null
+      },
+      "entity_type": "COMPANY",
+      "probabilities": {
+        "COMPANY": 1.0
+      },
+      "confidence": 1.0,
+      "band": "ACCEPT",
+      "winner_prob": 1.0,
+      "flipped": false,
+      "question_id": "g1",
+      "decided_by": "ontology"
+    },
+    {
+      "mention": {
+        "text": "Paris",
+        "start": 62,
+        "end": 67,
+        "sentence_id": "13_northwind-s0",
+        "heading_path": [
+          "Northwind raises a round"
+        ],
+        "source": "gazetteer",
+        "skipped_reason": null
+      },
+      "entity_type": "LOCATION",
+      "probabilities": {
+        "LOCATION": 1.0
+      },
+      "confidence": 1.0,
+      "band": "ACCEPT",
+      "winner_prob": 1.0,
+      "flipped": false,
+      "question_id": "g2",
+      "decided_by": "ontology"
+    },
+    {
+      "mention": {
+        "text": "Northwind",
+        "start": 69,
+        "end": 78,
+        "sentence_id": "13_northwind-s1",
+        "heading_path": [
+          "Northwind raises a round"
+        ],
+        "source": "gazetteer",
+        "skipped_reason": null
+      },
+      "entity_type": "COMPANY",
+      "probabilities": {
+        "COMPANY": 1.0
+      },
+      "confidence": 1.0,
+      "band": "ACCEPT",
+      "winner_prob": 1.0,
+      "flipped": false,
+      "question_id": "g0",
+      "decided_by": "ontology"
+    },
+    {
+      "mention": {
+        "text": "Paris",
+        "start": 99,
+        "end": 104,
+        "sentence_id": "13_northwind-s1",
+        "heading_path": [
+          "Northwind raises a round"
+        ],
+        "source": "gazetteer",
+        "skipped_reason": null
+      },
+      "entity_type": "LOCATION",
+      "probabilities": {
+        "LOCATION": 1.0
+      },
+      "confidence": 1.0,
+      "band": "ACCEPT",
+      "winner_prob": 1.0,
+      "flipped": false,
+      "question_id": "g1",
+      "decided_by": "ontology"
+    },
+    {
+      "mention": {
+        "text": "Acme Inc",
+        "start": 107,
+        "end": 115,
+        "sentence_id": "13_northwind-s2",
+        "heading_path": [
+          "Northwind raises a round"
+        ],
+        "source": "gazetteer",
+        "skipped_reason": null
+      },
+      "entity_type": "COMPANY",
+      "probabilities": {
+        "COMPANY": 1.0
+      },
+      "confidence": 1.0,
+      "band": "ACCEPT",
+      "winner_prob": 1.0,
+      "flipped": false,
+      "question_id": "g0",
+      "decided_by": "ontology"
+    },
+    {
+      "mention": {
+        "text": "Northwind",
+        "start": 128,
+        "end": 137,
+        "sentence_id": "13_northwind-s2",
+        "heading_path": [
+          "Northwind raises a round"
+        ],
+        "source": "gazetteer",
+        "skipped_reason": null
+      },
+      "entity_type": "COMPANY",
+      "probabilities": {
+        "COMPANY": 1.0
+      },
+      "confidence": 1.0,
+      "band": "ACCEPT",
+      "winner_prob": 1.0,
+      "flipped": false,
+      "question_id": "g1",
+      "decided_by": "ontology"
+    },
+    {
+      "mention": {
+        "text": "Jane Doe",
+        "start": 139,
+        "end": 147,
+        "sentence_id": "13_northwind-s3",
+        "heading_path": [
+          "Northwind raises a round"
+        ],
+        "source": "gazetteer",
+        "skipped_reason": null
+      },
+      "entity_type": "PERSON",
+      "probabilities": {
+        "PERSON": 1.0
+      },
+      "confidence": 1.0,
+      "band": "ACCEPT",
+      "winner_prob": 1.0,
+      "flipped": false,
+      "question_id": "g0",
+      "decided_by": "ontology"
+    },
+    {
+      "mention": {
+        "text": "Acme Inc",
+        "start": 158,
+        "end": 166,
+        "sentence_id": "13_northwind-s3",
+        "heading_path": [
+          "Northwind raises a round"
+        ],
+        "source": "gazetteer",
+        "skipped_reason": null
+      },
+      "entity_type": "COMPANY",
+      "probabilities": {
+        "COMPANY": 1.0
+      },
+      "confidence": 1.0,
+      "band": "ACCEPT",
+      "winner_prob": 1.0,
+      "flipped": false,
+      "question_id": "g1",
+      "decided_by": "ontology"
+    },
+    {
+      "mention": {
+        "text": "Berlin",
+        "start": 170,
+        "end": 176,
+        "sentence_id": "13_northwind-s3",
+        "heading_path": [
+          "Northwind raises a round"
+        ],
+        "source": "gazetteer",
+        "skipped_reason": null
+      },
+      "entity_type": "LOCATION",
+      "probabilities": {
+        "LOCATION": 1.0
+      },
+      "confidence": 1.0,
+      "band": "ACCEPT",
+      "winner_prob": 1.0,
+      "flipped": false,
+      "question_id": "g2",
+      "decided_by": "ontology"
+    }
+  ],
+  "relation_hits": [
+    {
+      "source_text": "Ada Lovelace",
+      "source_type": "PERSON",
+      "source_start": 28,
+      "source_end": 40,
+      "target_text": "Northwind",
+      "target_type": "COMPANY",
+      "target_start": 49,
+      "target_end": 58,
+      "relation_type": "FOUNDED",
+      "probabilities": {
+        "FOUNDED": 0.9620441021135424
+      },
+      "confidence": null,
+      "band": "ACCEPT",
+      "winner_prob": 0.9620441021135424,
+      "flipped": false,
+      "sentence_id": "13_northwind-s0",
+      "heading_path": [
+        "Northwind raises a round"
+      ],
+      "evidence": "Ada Lovelace founded Northwind in Paris."
+    },
+    {
+      "source_text": "Ada Lovelace",
+      "source_type": "PERSON",
+      "source_start": 28,
+      "source_end": 40,
+      "target_text": "Northwind",
+      "target_type": "COMPANY",
+      "target_start": 49,
+      "target_end": 58,
+      "relation_type": "NONE",
+      "probabilities": {
+        "NONE": 0.12315454471594893
+      },
+      "confidence": null,
+      "band": "REJECT",
+      "winner_prob": 0.12315454471594893,
+      "flipped": false,
+      "sentence_id": "13_northwind-s0",
+      "heading_path": [
+        "Northwind raises a round"
+      ],
+      "evidence": "Ada Lovelace founded Northwind in Paris."
+    },
+    {
+      "source_text": "Ada Lovelace",
+      "source_type": "PERSON",
+      "source_start": 28,
+      "source_end": 40,
+      "target_text": "Northwind",
+      "target_type": "COMPANY",
+      "target_start": 49,
+      "target_end": 58,
+      "relation_type": "NONE",
+      "probabilities": {
+        "NONE": 0.3492257713219829
+      },
+      "confidence": null,
+      "band": "REVIEW",
+      "winner_prob": 0.3492257713219829,
+      "flipped": false,
+      "sentence_id": "13_northwind-s0",
+      "heading_path": [
+        "Northwind raises a round"
+      ],
+      "evidence": "Ada Lovelace founded Northwind in Paris."
+    },
+    {
+      "source_text": "Northwind",
+      "source_type": "COMPANY",
+      "source_start": 49,
+      "source_end": 58,
+      "target_text": "Paris",
+      "target_type": "LOCATION",
+      "target_start": 62,
+      "target_end": 67,
+      "relation_type": "HEADQUARTERED_IN",
+      "probabilities": {
+        "HEADQUARTERED_IN": 0.8434735025515302
+      },
+      "confidence": null,
+      "band": "ACCEPT",
+      "winner_prob": 0.8434735025515302,
+      "flipped": false,
+      "sentence_id": "13_northwind-s0",
+      "heading_path": [
+        "Northwind raises a round"
+      ],
+      "evidence": "Ada Lovelace founded Northwind in Paris."
+    },
+    {
+      "source_text": "Northwind",
+      "source_type": "COMPANY",
+      "source_start": 69,
+      "source_end": 78,
+      "target_text": "Paris",
+      "target_type": "LOCATION",
+      "target_start": 99,
+      "target_end": 104,
+      "relation_type": "HEADQUARTERED_IN",
+      "probabilities": {
+        "HEADQUARTERED_IN": 0.9840792726189904
+      },
+      "confidence": null,
+      "band": "ACCEPT",
+      "winner_prob": 0.9840792726189904,
+      "flipped": false,
+      "sentence_id": "13_northwind-s1",
+      "heading_path": [
+        "Northwind raises a round"
+      ],
+      "evidence": "Northwind is headquartered in Paris."
+    },
+    {
+      "source_text": "Acme Inc",
+      "source_type": "COMPANY",
+      "source_start": 107,
+      "source_end": 115,
+      "target_text": "Northwind",
+      "target_type": "COMPANY",
+      "target_start": 128,
+      "target_end": 137,
+      "relation_type": "ACQUIRED",
+      "probabilities": {
+        "ACQUIRED": 0.8337131194088618
+      },
+      "confidence": null,
+      "band": "ACCEPT",
+      "winner_prob": 0.8337131194088618,
+      "flipped": false,
+      "sentence_id": "13_northwind-s2",
+      "heading_path": [
+        "Northwind raises a round"
+      ],
+      "evidence": "Acme Inc invested in Northwind."
+    },
+    {
+      "source_text": "Acme Inc",
+      "source_type": "COMPANY",
+      "source_start": 107,
+      "source_end": 115,
+      "target_text": "Northwind",
+      "target_type": "COMPANY",
+      "target_start": 128,
+      "target_end": 137,
+      "relation_type": "INVESTED_IN",
+      "probabilities": {
+        "INVESTED_IN": 0.9854288758410557
+      },
+      "confidence": null,
+      "band": "ACCEPT",
+      "winner_prob": 0.9854288758410557,
+      "flipped": false,
+      "sentence_id": "13_northwind-s2",
+      "heading_path": [
+        "Northwind raises a round"
+      ],
+      "evidence": "Acme Inc invested in Northwind."
+    },
+    {
+      "source_text": "Northwind",
+      "source_type": "COMPANY",
+      "source_start": 128,
+      "source_end": 137,
+      "target_text": "Acme Inc",
+      "target_type": "COMPANY",
+      "target_start": 107,
+      "target_end": 115,
+      "relation_type": "NONE",
+      "probabilities": {
+        "NONE": 0.06294697110482701
+      },
+      "confidence": null,
+      "band": "REJECT",
+      "winner_prob": 0.06294697110482701,
+      "flipped": false,
+      "sentence_id": "13_northwind-s2",
+      "heading_path": [
+        "Northwind raises a round"
+      ],
+      "evidence": "Acme Inc invested in Northwind."
+    },
+    {
+      "source_text": "Northwind",
+      "source_type": "COMPANY",
+      "source_start": 128,
+      "source_end": 137,
+      "target_text": "Acme Inc",
+      "target_type": "COMPANY",
+      "target_start": 107,
+      "target_end": 115,
+      "relation_type": "NONE",
+      "probabilities": {
+        "NONE": 0.2579388272033688
+      },
+      "confidence": null,
+      "band": "REVIEW",
+      "winner_prob": 0.2579388272033688,
+      "flipped": false,
+      "sentence_id": "13_northwind-s2",
+      "heading_path": [
+        "Northwind raises a round"
+      ],
+      "evidence": "Acme Inc invested in Northwind."
+    },
+    {
+      "source_text": "Jane Doe",
+      "source_type": "PERSON",
+      "source_start": 139,
+      "source_end": 147,
+      "target_text": "Acme Inc",
+      "target_type": "COMPANY",
+      "target_start": 158,
+      "target_end": 166,
+      "relation_type": "NONE",
+      "probabilities": {
+        "NONE": 0.01234065763622054
+      },
+      "confidence": null,
+      "band": "REJECT",
+      "winner_prob": 0.01234065763622054,
+      "flipped": false,
+      "sentence_id": "13_northwind-s3",
+      "heading_path": [
+        "Northwind raises a round"
+      ],
+      "evidence": "Jane Doe works for Acme Inc in Berlin."
+    },
+    {
+      "source_text": "Jane Doe",
+      "source_type": "PERSON",
+      "source_start": 139,
+      "source_end": 147,
+      "target_text": "Acme Inc",
+      "target_type": "COMPANY",
+      "target_start": 158,
+      "target_end": 166,
+      "relation_type": "WORKS_FOR",
+      "probabilities": {
+        "WORKS_FOR": 0.9977122147940177
+      },
+      "confidence": null,
+      "band": "ACCEPT",
+      "winner_prob": 0.9977122147940177,
+      "flipped": false,
+      "sentence_id": "13_northwind-s3",
+      "heading_path": [
+        "Northwind raises a round"
+      ],
+      "evidence": "Jane Doe works for Acme Inc in Berlin."
+    },
+    {
+      "source_text": "Jane Doe",
+      "source_type": "PERSON",
+      "source_start": 139,
+      "source_end": 147,
+      "target_text": "Acme Inc",
+      "target_type": "COMPANY",
+      "target_start": 158,
+      "target_end": 166,
+      "relation_type": "NONE",
+      "probabilities": {
+        "NONE": 0.018946243818786963
+      },
+      "confidence": null,
+      "band": "REJECT",
+      "winner_prob": 0.018946243818786963,
+      "flipped": false,
+      "sentence_id": "13_northwind-s3",
+      "heading_path": [
+        "Northwind raises a round"
+      ],
+      "evidence": "Jane Doe works for Acme Inc in Berlin."
+    },
+    {
+      "source_text": "Acme Inc",
+      "source_type": "COMPANY",
+      "source_start": 158,
+      "source_end": 166,
+      "target_text": "Berlin",
+      "target_type": "LOCATION",
+      "target_start": 170,
+      "target_end": 176,
+      "relation_type": "NONE",
+      "probabilities": {
+        "NONE": 0.5035571451856252
+      },
+      "confidence": null,
+      "band": "REVIEW",
+      "winner_prob": 0.5035571451856252,
+      "flipped": false,
+      "sentence_id": "13_northwind-s3",
+      "heading_path": [
+        "Northwind raises a round"
+      ],
+      "evidence": "Jane Doe works for Acme Inc in Berlin."
+    }
+  ]
+}

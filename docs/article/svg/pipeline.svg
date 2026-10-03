@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="600" viewBox="0 0 1100 600" role="img" aria-label="Six steps: split, spot names, name the kind, filter, check links, decide">
+  <rect width="1100" height="600" fill="#f7f3ec"/>
+  <rect x="0" y="0" width="262" height="78" rx="16" fill="#cfe2ee"/>
+  <rect x="272" y="0" width="828" height="78" rx="16" fill="#efe8da"/>
+  <text x="26" y="51.0" fill="#2b536f" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="38" font-weight="600" text-anchor="start">1</text>
+  <text x="66" y="47.0" fill="#2b536f" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="22" font-weight="600" text-anchor="start">Split</text>
+  <text x="298" y="35" fill="#1f1d1a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="16" font-weight="500" text-anchor="start">Cut the note into sentences.</text>
+  <text x="298" y="61" fill="#6b645a" font-family="Menlo, SF Mono, Consolas, monospace" font-size="13.5" font-weight="400" text-anchor="start">EdgeQuake depends on PostgreSQL.</text>
+  <rect x="928" y="14" width="99" height="26" rx="8" fill="#cfe2ee"/>
+  <text x="940" y="31.375" fill="#2b536f" font-family="Menlo, SF Mono, Consolas, monospace" font-size="12.5" font-weight="400" text-anchor="start">plain code</text>
+  <path d="M124.0 83.0 L131.0 91.0 L138.0 83.0" fill="none" stroke="#9a9183" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="0" y="96" width="262" height="78" rx="16" fill="#cfe2ee"/>
+  <rect x="272" y="96" width="828" height="78" rx="16" fill="#efe8da"/>
+  <text x="26" y="147.0" fill="#2b536f" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="38" font-weight="600" text-anchor="start">2</text>
+  <text x="66" y="143.0" fill="#2b536f" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="22" font-weight="600" text-anchor="start">Spot names</text>
+  <text x="298" y="131" fill="#1f1d1a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="16" font-weight="500" text-anchor="start">Find the names on your list, then clues in the markdown.</text>
+  <text x="298" y="157" fill="#6b645a" font-family="Menlo, SF Mono, Consolas, monospace" font-size="13.5" font-weight="400" text-anchor="start">EdgeQuake, PostgreSQL</text>
+  <rect x="928" y="110" width="99" height="26" rx="8" fill="#cfe2ee"/>
+  <text x="940" y="127.375" fill="#2b536f" font-family="Menlo, SF Mono, Consolas, monospace" font-size="12.5" font-weight="400" text-anchor="start">plain code</text>
+  <path d="M124.0 179.0 L131.0 187.0 L138.0 179.0" fill="none" stroke="#9a9183" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="0" y="192" width="262" height="78" rx="16" fill="#d9d6f3"/>
+  <rect x="272" y="192" width="828" height="78" rx="16" fill="#efe8da"/>
+  <text x="26" y="243.0" fill="#3d3a80" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="38" font-weight="600" text-anchor="start">3</text>
+  <text x="66" y="239.0" fill="#3d3a80" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="22" font-weight="600" text-anchor="start">Name the kind</text>
+  <text x="298" y="227" fill="#1f1d1a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="16" font-weight="500" text-anchor="start">Look up known names. Ask the model only about unknown ones.</text>
+  <text x="298" y="253" fill="#6b645a" font-family="Menlo, SF Mono, Consolas, monospace" font-size="13.5" font-weight="400" text-anchor="start">EdgeQuake = product,  PostgreSQL = technology</text>
+  <rect x="928" y="206" width="121" height="26" rx="8" fill="#d9d6f3"/>
+  <text x="940" y="223.375" fill="#3d3a80" font-family="Menlo, SF Mono, Consolas, monospace" font-size="12.5" font-weight="400" text-anchor="start">model answers</text>
+  <path d="M124.0 275.0 L131.0 283.0 L138.0 275.0" fill="none" stroke="#9a9183" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="0" y="288" width="262" height="78" rx="16" fill="#cfe2ee"/>
+  <rect x="272" y="288" width="828" height="78" rx="16" fill="#efe8da"/>
+  <text x="26" y="339.0" fill="#2b536f" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="38" font-weight="600" text-anchor="start">4</text>
+  <text x="66" y="335.0" fill="#2b536f" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="22" font-weight="600" text-anchor="start">Filter</text>
+  <text x="298" y="323" fill="#1f1d1a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="16" font-weight="500" text-anchor="start">Your list says which links are legal between two kinds.</text>
+  <text x="298" y="349" fill="#6b645a" font-family="Menlo, SF Mono, Consolas, monospace" font-size="13.5" font-weight="400" text-anchor="start">product -&gt; technology:  uses, depends on</text>
+  <rect x="928" y="302" width="99" height="26" rx="8" fill="#cfe2ee"/>
+  <text x="940" y="319.375" fill="#2b536f" font-family="Menlo, SF Mono, Consolas, monospace" font-size="12.5" font-weight="400" text-anchor="start">plain code</text>
+  <path d="M124.0 371.0 L131.0 379.0 L138.0 371.0" fill="none" stroke="#9a9183" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="0" y="384" width="262" height="78" rx="16" fill="#d9d6f3"/>
+  <rect x="272" y="384" width="828" height="78" rx="16" fill="#efe8da"/>
+  <text x="26" y="435.0" fill="#3d3a80" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="38" font-weight="600" text-anchor="start">5</text>
+  <text x="66" y="431.0" fill="#3d3a80" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="22" font-weight="600" text-anchor="start">Check links</text>
+  <text x="298" y="419" fill="#1f1d1a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="16" font-weight="500" text-anchor="start">One yes-or-no question for each legal link.</text>
+  <text x="298" y="445" fill="#6b645a" font-family="Menlo, SF Mono, Consolas, monospace" font-size="13.5" font-weight="400" text-anchor="start">uses 0.97     depends on 1.00</text>
+  <rect x="928" y="398" width="121" height="26" rx="8" fill="#d9d6f3"/>
+  <text x="940" y="415.375" fill="#3d3a80" font-family="Menlo, SF Mono, Consolas, monospace" font-size="12.5" font-weight="400" text-anchor="start">model answers</text>
+  <path d="M124.0 467.0 L131.0 475.0 L138.0 467.0" fill="none" stroke="#9a9183" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+  <rect x="0" y="480" width="262" height="78" rx="16" fill="#f5d4c1"/>
+  <rect x="272" y="480" width="828" height="78" rx="16" fill="#efe8da"/>
+  <text x="26" y="531.0" fill="#80401f" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="38" font-weight="600" text-anchor="start">6</text>
+  <text x="66" y="527.0" fill="#80401f" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="22" font-weight="600" text-anchor="start">Decide</text>
+  <text x="298" y="515" fill="#1f1d1a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="16" font-weight="500" text-anchor="start">Your cutoffs turn each number into keep, review, or drop.</text>
+  <text x="298" y="541" fill="#6b645a" font-family="Menlo, SF Mono, Consolas, monospace" font-size="13.5" font-weight="400" text-anchor="start">0.97 and 1.00 are both above 0.80  -&gt;  keep</text>
+  <rect x="928" y="494" width="91" height="26" rx="8" fill="#f5d4c1"/>
+  <text x="940" y="511.375" fill="#80401f" font-family="Menlo, SF Mono, Consolas, monospace" font-size="12.5" font-weight="400" text-anchor="start">your rule</text>
+  <text x="0" y="580" fill="#6b645a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="14" font-weight="400" text-anchor="start">Worked example: the sentence "EdgeQuake depends on PostgreSQL." goes through all six steps.</text>
+</svg>

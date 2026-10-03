@@ -1,0 +1,16 @@
+{
+  "entities": [
+    {"name": "Ollama", "type": "PRODUCT"},
+    {"name": "Nimble", "type": "PRODUCT"},
+    {"name": "Tev1", "type": "PRODUCT"},
+    {"name": "Clef", "type": "PRODUCT"},
+    {"name": "Clef Flash", "type": "PRODUCT"},
+    {"name": "TypeSafe", "type": "ORGANIZATION"},
+    {"name": "Jev", "type": "PRODUCT"},
+    {"name": "Paris", "type": "LOCATION"}
+  ],
+  "relations": [
+    {"source": "Ollama", "target": "Nimble", "type": "USES"},
+    {"source": "Jev", "target": "TypeSafe", "type": "CREATED_BY"}
+  ]
+}

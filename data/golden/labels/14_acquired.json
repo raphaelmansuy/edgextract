@@ -1,0 +1,12 @@
+{
+  "entities": [
+    {"name": "Acme Inc", "type": "COMPANY"},
+    {"name": "Northwind", "type": "COMPANY"},
+    {"name": "Ada Lovelace", "type": "PERSON"},
+    {"name": "Paris", "type": "LOCATION"}
+  ],
+  "relations": [
+    {"source": "Acme Inc", "target": "Northwind", "type": "ACQUIRED"},
+    {"source": "Ada Lovelace", "target": "Northwind", "type": "WORKS_FOR"}
+  ]
+}

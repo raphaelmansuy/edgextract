@@ -1,0 +1,19 @@
+{
+  "model": "tev1",
+  "answers": {
+    "label": {
+      "type": "choice",
+      "choice": "bug",
+      "probabilities": {
+        "billing": 0.06258526071519338,
+        "bug": 0.9160073159790056,
+        "account": 0.02140742330580086
+      },
+      "confidence": 0.6940771966670671
+    }
+  },
+  "usage": {
+    "input_tokens": 136,
+    "output_tokens": 1
+  }
+}

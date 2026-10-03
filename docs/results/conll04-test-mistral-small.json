@@ -1,0 +1,32 @@
+{
+  "split": "test",
+  "n_docs": 288,
+  "method": "llm-json",
+  "model": "mistral-small-latest",
+  "failures": 0,
+  "summary": {
+    "entities": {
+      "tp": 754.0,
+      "fp": 514.0,
+      "fn": 325.0,
+      "precision": 0.5946372239747634,
+      "recall": 0.6987951807228916,
+      "f1": 0.6425223689816787
+    },
+    "relations": {
+      "tp": 183.0,
+      "fp": 504.0,
+      "fn": 239.0,
+      "precision": 0.2663755458515284,
+      "recall": 0.43364928909952605,
+      "f1": 0.33002705139765554
+    },
+    "boundary_only": 34.0,
+    "direction_swaps": 3.0
+  },
+  "ceiling": {
+    "source": "SpERT (Eberts and Ulges, ECAI 2020), supervised on train",
+    "entity_f1": 0.8894,
+    "relation_f1": 0.7147
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "method": "closed",
+  "model": "tev1",
+  "seconds": {
+    "01_edgequake": 4.29,
+    "02_ollama": 1.61,
+    "03_python": 0.68,
+    "04_none": 0.01,
+    "05_negation": 0.9,
+    "06_fence": 0.01,
+    "07_event": 0.5,
+    "08_injection": 0.02,
+    "09_overlap": 0.6,
+    "10_pronouns": 0.6,
+    "11_selfloop": 1.73,
+    "12_hedge": 1.72,
+    "13_northwind": 2.06,
+    "14_acquired": 1.23
+  },
+  "tech_docs": {
+    "notes": 12,
+    "names": {
+      "tp": 42.0,
+      "fp": 1.0,
+      "fn": 2.0,
+      "precision": 0.9767441860465116,
+      "recall": 0.9545454545454546,
+      "f1": 0.9655172413793104
+    },
+    "links": {
+      "tp": 11.0,
+      "fp": 8.0,
+      "fn": 7.0,
+      "precision": 0.5789473684210527,
+      "recall": 0.6111111111111112,
+      "f1": 0.5945945945945946
+    }
+  },
+  "company_news": {
+    "notes": 2,
+    "names": {
+      "tp": 10.0,
+      "fp": 0.0,
+      "fn": 0.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1": 1.0
+    },
+    "links": {
+      "tp": 6.0,
+      "fp": 1.0,
+      "fn": 0.0,
+      "precision": 0.8571428571428571,
+      "recall": 1.0,
+      "f1": 0.923076923076923
+    }
+  }
+}

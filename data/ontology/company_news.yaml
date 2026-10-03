@@ -1,0 +1,44 @@
+id: company_news
+version: 1
+title: Company news
+types:
+  - id: PERSON
+    description: A named person (founder, executive, investor, reporter).
+    aliases: [founder, executive, investor]
+    color: "#7dd3fc"
+  - id: COMPANY
+    description: A named company, startup, fund, or other business.
+    aliases: [startup, firm, fund]
+    color: "#c4b5fd"
+  - id: LOCATION
+    description: A named city, country, region, or headquarters place.
+    aliases: [city, country, headquarters]
+    color: "#fda4af"
+relations:
+  - id: FOUNDED
+    description: The person founded the company.
+    domain: [PERSON]
+    range: [COMPANY]
+  - id: WORKS_FOR
+    description: The person works for the company.
+    domain: [PERSON]
+    range: [COMPANY]
+  - id: ACQUIRED
+    description: The company bought the other company.
+    domain: [COMPANY]
+    range: [COMPANY]
+  - id: INVESTED_IN
+    description: The company or person put money into the company.
+    domain: [COMPANY, PERSON]
+    range: [COMPANY]
+  - id: HEADQUARTERED_IN
+    description: The company is based in this place.
+    domain: [COMPANY]
+    range: [LOCATION]
+gazetteer:
+  Ada Lovelace: PERSON
+  Jane Doe: PERSON
+  Acme Inc: COMPANY
+  Northwind: COMPANY
+  Berlin: LOCATION
+  Paris: LOCATION

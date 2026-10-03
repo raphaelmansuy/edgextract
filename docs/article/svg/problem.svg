@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="300" viewBox="0 0 1100 300" role="img" aria-label="A note, and the same facts as a knowledge graph">
+  <rect width="1100" height="300" fill="#f7f3ec"/>
+  <rect x="0" y="0" width="450" height="300" rx="16" fill="#efe8da"/>
+  <text x="28" y="40" fill="#9a9183" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" text-anchor="start" letter-spacing="2">THE NOTE</text>
+  <text x="28" y="98" fill="#1f1d1a" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="19" font-weight="400" text-anchor="start">Jane Doe joined Acme Inc in Berlin.</text>
+  <text x="28" y="136" fill="#1f1d1a" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="19" font-weight="400" text-anchor="start">Acme Inc uses EdgeQuake.</text>
+  <text x="28" y="174" fill="#1f1d1a" font-family="Iowan Old Style, Georgia, Times New Roman, serif" font-size="19" font-weight="400" text-anchor="start">EdgeQuake depends on PostgreSQL.</text>
+  <rect x="28" y="214" width="394" height="1.2" rx="0" fill="#d9cfbb"/>
+  <text x="28" y="252" fill="#6b645a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="15" font-weight="400" text-anchor="start">Readable by a person.</text>
+  <text x="28" y="276" fill="#6b645a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="15" font-weight="400" text-anchor="start">Not something you can query.</text>
+  <rect x="466" y="0" width="634" height="300" rx="16" fill="#efe8da"/>
+  <text x="494" y="40" fill="#9a9183" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" text-anchor="start" letter-spacing="2">THE SAME FACTS, AS A GRAPH</text>
+  <line x1="576" y1="112" x2="796" y2="112" stroke="#9a9183" stroke-width="1.6"/>
+  <rect x="651.0" y="101.0" width="70" height="22" rx="7" fill="#f7f3ec"/>
+  <text x="686.0" y="116.0" fill="#6b645a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" text-anchor="middle">works at</text>
+  <line x1="576" y1="112" x2="576" y2="226" stroke="#9a9183" stroke-width="1.6"/>
+  <rect x="561.5" y="158.0" width="29" height="22" rx="7" fill="#f7f3ec"/>
+  <text x="576.0" y="173.0" fill="#6b645a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" text-anchor="middle">in</text>
+  <line x1="796" y1="112" x2="796" y2="226" stroke="#9a9183" stroke-width="1.6"/>
+  <rect x="774.5" y="158.0" width="43" height="22" rx="7" fill="#f7f3ec"/>
+  <text x="796.0" y="173.0" fill="#6b645a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" text-anchor="middle">uses</text>
+  <circle cx="576" cy="112" r="36" fill="#d9d6f3"/>
+  <text x="576" y="117" fill="#3d3a80" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="600" text-anchor="middle">Jane Doe</text>
+  <circle cx="796" cy="112" r="36" fill="#f5d4c1"/>
+  <text x="796" y="117" fill="#80401f" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="600" text-anchor="middle">Acme Inc</text>
+  <circle cx="576" cy="226" r="36" fill="#f2d0d7"/>
+  <text x="576" y="231" fill="#7f3446" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="13" font-weight="600" text-anchor="middle">Berlin</text>
+  <circle cx="796" cy="226" r="36" fill="#cfe3c9"/>
+  <text x="796" y="231" fill="#2f4d2a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="600" text-anchor="middle">EdgeQuake</text>
+  <line x1="832" y1="226" x2="966" y2="226" stroke="#9a9183" stroke-width="1.6"/>
+  <rect x="857.0" y="215.0" width="84" height="22" rx="7" fill="#f7f3ec"/>
+  <text x="899.0" y="230.0" fill="#6b645a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" text-anchor="middle">depends on</text>
+  <circle cx="996" cy="226" r="40" fill="#cfe2ee"/>
+  <text x="996" y="231" fill="#2b536f" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="600" text-anchor="middle">PostgreSQL</text>
+</svg>

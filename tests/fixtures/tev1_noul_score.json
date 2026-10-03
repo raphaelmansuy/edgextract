@@ -1,0 +1,28 @@
+{
+  "model": "tev1",
+  "answers": {
+    "refund": {
+      "type": "noul",
+      "noul": 0.9936281702091331
+    },
+    "urgency": {
+      "type": "score",
+      "score": 0.7662818300384378,
+      "legend": {
+        "0": "Routine: no time pressure",
+        "1": "Soon: a customer is inconvenienced",
+        "2": "Immediate: a critical service is unavailable"
+      },
+      "probabilities": {
+        "0": 0.2580641900379222,
+        "1": 0.7175897898857182,
+        "2": 0.02434602007635975
+      },
+      "confidence": 0.38271919755368977
+    }
+  },
+  "usage": {
+    "input_tokens": 395,
+    "output_tokens": 3
+  }
+}

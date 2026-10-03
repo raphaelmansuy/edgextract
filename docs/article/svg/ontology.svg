@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1100" height="380" viewBox="0 0 1100 380" role="img" aria-label="An ontology: kinds of name and the legal links between them">
+  <rect width="1100" height="380" fill="#f7f3ec"/>
+  <rect x="0" y="0" width="1100" height="380" rx="16" fill="#efe8da"/>
+  <line x1="206" y1="140" x2="364" y2="106" stroke="#9a9183" stroke-width="1.6"/>
+  <rect x="250.0" y="112.0" width="70" height="22" rx="7" fill="#f7f3ec"/>
+  <text x="285.0" y="127.0" fill="#6b645a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" text-anchor="middle">works at</text>
+  <line x1="436" y1="270" x2="604" y2="204" stroke="#9a9183" stroke-width="1.6"/>
+  <rect x="454.5" y="226.0" width="131" height="22" rx="7" fill="#f7f3ec"/>
+  <text x="520.0" y="241.0" fill="#6b645a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" text-anchor="middle">uses / depends on</text>
+  <line x1="436" y1="100" x2="844" y2="100" stroke="#9a9183" stroke-width="1.6"/>
+  <rect x="598.0" y="89.0" width="84" height="22" rx="7" fill="#f7f3ec"/>
+  <text x="640.0" y="104.0" fill="#6b645a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" text-anchor="middle">located in</text>
+  <line x1="880" y1="136" x2="880" y2="234" stroke="#9a9183" stroke-width="1.6"/>
+  <rect x="835.0" y="174.0" width="90" height="22" rx="7" fill="#f7f3ec"/>
+  <text x="880.0" y="189.0" fill="#6b645a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" text-anchor="middle">happened at</text>
+  <line x1="188" y1="184" x2="372" y2="250" stroke="#9a9183" stroke-width="1.6"/>
+  <rect x="258.5" y="206.0" width="43" height="22" rx="7" fill="#f7f3ec"/>
+  <text x="280.0" y="221.0" fill="#6b645a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="12" font-weight="400" text-anchor="middle">uses</text>
+  <circle cx="170" cy="150" r="42" fill="#d9d6f3"/>
+  <text x="170" y="155" fill="#3d3a80" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="14" font-weight="600" text-anchor="middle">person</text>
+  <circle cx="400" cy="100" r="42" fill="#f5d4c1"/>
+  <text x="400" y="105" fill="#80401f" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="14" font-weight="600" text-anchor="middle">org</text>
+  <circle cx="400" cy="270" r="42" fill="#cfe3c9"/>
+  <text x="400" y="275" fill="#2f4d2a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="14" font-weight="600" text-anchor="middle">product</text>
+  <circle cx="640" cy="190" r="42" fill="#cfe2ee"/>
+  <text x="640" y="195" fill="#2b536f" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="14" font-weight="600" text-anchor="middle">tech</text>
+  <circle cx="880" cy="100" r="42" fill="#f2d0d7"/>
+  <text x="880" y="105" fill="#7f3446" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="14" font-weight="600" text-anchor="middle">place</text>
+  <circle cx="880" cy="270" r="42" fill="#f1e2b5"/>
+  <text x="880" y="275" fill="#6f5210" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="14" font-weight="600" text-anchor="middle">event</text>
+  <text x="28" y="38" fill="#9a9183" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="11" font-weight="700" text-anchor="start" letter-spacing="2">THE LIST YOU WRITE: KINDS OF NAME, AND THE LINKS BETWEEN THEM</text>
+  <text x="28" y="350" fill="#6b645a" font-family="Inter, Helvetica Neue, Helvetica, Arial, sans-serif" font-size="15" font-weight="400" text-anchor="start">A link outside this list is never asked, so it can never appear.</text>
+</svg>
