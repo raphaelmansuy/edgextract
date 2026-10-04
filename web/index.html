@@ -9,8 +9,26 @@
     <!-- GitHub Pages cannot set COOP/COEP; this SW injects them (credentialless, like Vite). -->
     <script>
       window.coi = { coepCredentialless: () => true, quiet: true };
+      (function purgeHostedLoopbackOllama() {
+        try {
+          var h = location.hostname;
+          if (h === "localhost" || h === "127.0.0.1" || h === "[::1]") return;
+          var key = "edgextract.inference.v1";
+          var raw = localStorage.getItem(key);
+          if (raw) {
+            var p = JSON.parse(raw);
+            var host = String(p.hostUrl || "");
+            var loop = /127\.0\.0\.1|localhost|^$/i.test(host);
+            if (p.backend === "ollama" && loop) {
+              p.backend = "webgpu";
+              p.hostUrl = "";
+              localStorage.setItem(key, JSON.stringify(p));
+            }
+          }
+        } catch (e) { /* private mode */ }
+      })();
     </script>
-    <script src="./coi-serviceworker.js"></script>
+    <script src="./coi-serviceworker.js?v=2"></script>
   </head>
   <body>
     <div id="app">
@@ -96,7 +114,7 @@
             </div>
             <p class="note" id="backend-unavailable" data-testid="backend-unavailable" hidden></p>
             <div id="host-fields" data-testid="host-fields" hidden>
-              <label>Host URL <input id="host-url" data-testid="host-url" value="http://127.0.0.1:11434" placeholder="https://your-ollama-host" spellcheck="false" /></label>
+              <label>Host URL <input id="host-url" data-testid="host-url" value="" placeholder="https://your-ollama-host" spellcheck="false" /></label>
               <label>Model <input id="host-model" data-testid="host-model" value="tev1" spellcheck="false" /></label>
               <p class="note msg" id="ollama-status" data-testid="ollama-status"></p>
             </div>
@@ -228,7 +246,7 @@
         </label>
         <ul class="host-checks" id="ollama-checks" data-testid="ollama-checks"></ul>
         <div class="host-dialog-fix">
-          <p>On this Mac, in a terminal:</p>
+          <p id="ollama-dialog-fix-lead">To run Ollama:</p>
           <pre id="ollama-dialog-cmd" data-testid="ollama-dialog-cmd">ollama serve
 ollama pull tev1</pre>
         </div>

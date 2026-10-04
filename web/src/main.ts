@@ -211,6 +211,24 @@ type WebGpuUiState = "unavailable" | "idle" | "loading" | "ready" | "error";
 const backend = (): DecisionBackend =>
   ($<HTMLInputElement>("backend-webgpu").checked ? "webgpu" : "ollama");
 
+function hostedPage(): boolean {
+  return !originIsLocal(pageOrigin());
+}
+
+function ollamaUrlTyped(): string {
+  return $<HTMLInputElement>("host-url").value;
+}
+
+function ollamaReachableHere(): boolean {
+  return ollamaHostUsable(pageOrigin(), ollamaUrlTyped()).ok;
+}
+
+/** Auto-extract only when the chosen backend can actually answer. */
+function canAutoExtract(): boolean {
+  if (backend() === "webgpu") return webgpuReady();
+  return ollamaReachableHere();
+}
+
 let webgpuProbe: { ok: boolean; reason?: string } | undefined;
 let webgpuUi: WebGpuUiState = "idle";
 let webgpuMock = false;
@@ -445,6 +463,12 @@ function openOllamaDialog(probe: OllamaProbe, extraLead?: string): void {
       ? `CORS: Ollama must allow origin ${probe.origin} (localhost is allowed by default).`
       : `CORS: OLLAMA_ORIGINS=${probe.origin} before ollama serve. Hosted pages also need HTTPS (not 127.0.0.1).`
     : "";
+  const fixLead = $("ollama-dialog-fix-lead");
+  if (fixLead) {
+    fixLead.textContent = originIsLocal(probe.origin)
+      ? "On this Mac, in a terminal:"
+      : "This GitHub Pages demo cannot call 127.0.0.1. Use WebGPU, or a public HTTPS Ollama host:";
+  }
   $("ollama-dialog-cmd").textContent = originIsLocal(probe.origin)
     ? `ollama serve\nollama pull tev1`
     : `OLLAMA_ORIGINS=${probe.origin} ollama serve\nollama pull tev1\n# reverse-proxy this host with HTTPS; GitHub Pages cannot fetch http://`;
@@ -924,6 +948,18 @@ async function run(opts: RunOpts = {}): Promise<void> {
   paintProgress();
   try {
     if (backend() === "ollama") {
+      if (!ollamaReachableHere()) {
+        $<HTMLInputElement>("backend-webgpu").checked = true;
+        $<HTMLInputElement>("backend-webgpu").disabled = false;
+        saveInferencePrefs();
+        syncBackendUi();
+        $("run-note").textContent = hostedPage()
+          ? "This hosted page cannot reach 127.0.0.1. Load Tev1 (WebGPU), or paste a public HTTPS Ollama URL."
+          : "Ollama host is not reachable. Load Tev1, or fix the host URL.";
+        setPhase("idle");
+        showProgress(false);
+        return;
+      }
       const probe = await probeOllamaHost($<HTMLInputElement>("host-url").value);
       lastOllamaProbe = probe;
       if (!probe.ok) {
@@ -1038,6 +1074,12 @@ function fail(e: unknown): void {
     showError(`${err.message}\n\nNothing was invented: with no answer from the model, the graph stays empty.`, true);
   }
   if (unreachable && backend() === "ollama") {
+    if (!ollamaReachableHere()) {
+      $<HTMLInputElement>("backend-webgpu").checked = true;
+      saveInferencePrefs();
+      syncBackendUi();
+      return;
+    }
     if (lastOllamaProbe && !lastOllamaProbe.ok) openOllamaDialog(lastOllamaProbe);
     else {
       void probeOllamaHost($<HTMLInputElement>("host-url").value).then((probe) => {
@@ -1474,7 +1516,7 @@ async function validateYaml(): Promise<void> {
     msg.textContent = `✓ ${info.types.length} kinds · ${info.legal_pairs.length} legal links · ${info.listed_names} listed names`;
     paintKinds(info);
     refreshSuggestions();
-    runSoon();
+    if (canAutoExtract()) runSoon();
   } catch (e) {
     state.yamlValid = false;
     msg.className = "msg bad";
@@ -1506,7 +1548,7 @@ function selectSample(id: string): void {
   if (ontologyEl.value !== sample.ontology) selectOntology(sample.ontology);
   else {
     refreshSuggestions();
-    runSoon();
+    if (canAutoExtract()) runSoon();
   }
 }
 
@@ -1565,7 +1607,7 @@ async function loadDocument(file: File): Promise<void> {
   $("sample-blurb").textContent = "Your own document. Pick or write an ontology for it, then add the names it should know.";
   setTextMessage("");
   refreshSuggestions();
-  runSoon();
+  if (canAutoExtract()) runSoon();
 }
 
 async function loadOntologyFile(file: File): Promise<void> {
@@ -1910,9 +1952,12 @@ function useQueryHost(): void {
   const origin = pageOrigin();
   const hostEl = $<HTMLInputElement>("host-url");
 
-  if (!originIsLocal(origin) && ollamaHostUsable(origin, hostEl.value).ok === false) {
-    hostEl.value = "";
+  if (originIsLocal(origin) && !hostEl.value.trim()) {
+    hostEl.value = DEFAULT_OLLAMA_LOOPBACK;
+  }
+  if (hostedPage()) {
     hostEl.placeholder = "https://your-ollama-host";
+    if (!ollamaHostUsable(origin, hostEl.value).ok) hostEl.value = "";
   }
 
   const fromQuery =
@@ -1995,7 +2040,9 @@ async function boot(): Promise<void> {
     useQueryHost();
     if (webgpuMock) await engine.setWebGpuMock(true);
     webgpuProbe = await engine.probeWebGpu();
-    if (!webgpuMock && !isolated && webgpuProbe.ok) {
+    // Hosted Pages: the COI service worker reloads once. Do not treat "not yet
+    // isolated" as "use Ollama" — that used to auto-extract against 127.0.0.1.
+    if (!webgpuMock && !isolated && webgpuProbe.ok && originIsLocal(pageOrigin())) {
       webgpuProbe = {
         ok: false,
         reason:
@@ -2005,13 +2052,14 @@ async function boot(): Promise<void> {
     if (!webgpuProbe.ok) {
       $<HTMLInputElement>("backend-webgpu").disabled = true;
       webgpuUi = "unavailable";
-      const ollamaUrl = $<HTMLInputElement>("host-url").value;
-      const canOllama = ollamaHostUsable(pageOrigin(), ollamaUrl).ok;
-      if (backend() === "webgpu" && canOllama) {
+      if (backend() === "webgpu" && ollamaReachableHere()) {
         $<HTMLInputElement>("backend-ollama").checked = true;
       }
     } else {
       webgpuUi = "idle";
+      if (hostedPage() && backend() === "ollama" && !ollamaReachableHere()) {
+        $<HTMLInputElement>("backend-webgpu").checked = true;
+      }
     }
     saveInferencePrefs();
     if (backend() === "webgpu" && !webgpuMock && webgpuProbe?.ok) {

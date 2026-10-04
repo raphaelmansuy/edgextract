@@ -1,4 +1,5 @@
 /*! coi-serviceworker v0.1.7 - Guido Zuidhof and contributors, licensed under MIT */
+/* edgextract-coi-v2: no-store for HTML/JS so GitHub Pages deploys are not sticky */
 let coepCredentialless = false;
 if (typeof window === 'undefined') {
     self.addEventListener("install", () => self.skipWaiting());
@@ -27,13 +28,16 @@ if (typeof window === 'undefined') {
             return;
         }
 
+        const dest = r.destination;
+        const bypassHttpCache =
+          r.mode === "navigate" || dest === "document" || dest === "script" || dest === "";
         const request = (coepCredentialless && r.mode === "no-cors")
             ? new Request(r, {
                 credentials: "omit",
             })
             : r;
         event.respondWith(
-            fetch(request)
+            fetch(request, bypassHttpCache ? { cache: "no-store" } : undefined)
                 .then((response) => {
                     if (response.status === 0) {
                         return response;
