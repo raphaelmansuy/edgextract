@@ -102,9 +102,9 @@ demo-space-publish: demo-build
 crate-publish:
 	cargo publish -p edgextract --locked
 
-# npm @raphaelmansuy/edgextract (needs NPM_TOKEN). Demo wasm stays --target web.
+# npm @raphael.mansuy/edgextract (your npm login). Demo wasm stays --target web.
 wasm-npm-publish:
-	cd rust/edgextract-wasm && wasm-pack build --release --target bundler --scope raphaelmansuy --out-dir pkg --out-name edgextract
+	cd rust/edgextract-wasm && wasm-pack build --release --target bundler --scope raphael.mansuy --out-dir pkg --out-name edgextract
 	$(PYTHON) scripts/prepare_wasm_npm.py
 	cd rust/edgextract-wasm/pkg && npm publish --access public
 

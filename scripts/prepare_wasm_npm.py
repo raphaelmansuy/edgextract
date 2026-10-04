@@ -15,7 +15,7 @@ def main() -> int:
         print(f"missing {PKG} — run wasm-pack first", file=sys.stderr)
         return 1
     data = json.loads(PKG.read_text())
-    data["name"] = "@raphaelmansuy/edgextract"
+    data["name"] = "@raphael.mansuy/edgextract"
     data["repository"] = {
         "type": "git",
         "url": "git+https://github.com/raphaelmansuy/edgextract.git",

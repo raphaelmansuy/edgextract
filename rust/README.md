@@ -8,7 +8,7 @@ cargo add edgextract
 cargo install edgextract
 ```
 
-Browser WASM (npm, not crates.io): `npm i @raphaelmansuy/edgextract`. Demo: [GitHub Pages](https://raphaelmansuy.github.io/edgextract/) · [Hugging Face Space](https://raphaelmansuy-edgextract.static.hf.space/).
+Browser WASM (npm, not crates.io): `npm i @raphael.mansuy/edgextract`. Demo: [GitHub Pages](https://raphaelmansuy.github.io/edgextract/) · [Hugging Face Space](https://raphaelmansuy-edgextract.static.hf.space/).
 
 ## First principles
 
