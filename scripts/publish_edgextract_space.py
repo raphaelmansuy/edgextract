@@ -93,7 +93,7 @@ def main() -> int:
             ignore_patterns=[".DS_Store"],
         )
     print(f"done: https://huggingface.co/spaces/{args.repo}")
-    print(f"app:  https://{args.repo.replace('/', '-')}.hf.space")
+    print(f"app:  https://{args.repo.replace('/', '-')}.static.hf.space")
     return 0
 
 

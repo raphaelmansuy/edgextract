@@ -19,7 +19,7 @@ custom_headers:
 Turn markdown into a knowledge graph with an ontology you write and a cutoff you own.
 It runs **in this tab** (Rust → WebAssembly + Tev1 on WebGPU). Your text never goes to our server.
 
-**Open the Space on [*.hf.space](https://raphaelmansuy-edgextract.hf.space)** (not only the Hub iframe) so `SharedArrayBuffer` / WebGPU isolation works.
+**Open the Space on [*.hf.space](https://raphaelmansuy-edgextract.static.hf.space)** (not only the Hub iframe) so `SharedArrayBuffer` / WebGPU isolation works.
 
 - First **Load Tev1** downloads ~1&nbsp;GB from [`raphaelmansuy/tev1-0.8b-onnx-webgpu`](https://huggingface.co/raphaelmansuy/tev1-0.8b-onnx-webgpu) into the browser cache.
 - Chromium with WebGPU.
