@@ -1,13 +1,13 @@
 ---
 title: edgextract
 emoji: 🕸️
-colorFrom: slate
+colorFrom: gray
 colorTo: indigo
 sdk: static
 app_file: index.html
 pinned: false
 license: apache-2.0
-short_description: Markdown in, a knowledge graph out. Tev1 scores in the tab on WebGPU.
+short_description: Markdown in, a knowledge graph out. Tev1 on WebGPU.
 custom_headers:
   cross-origin-embedder-policy: credentialless
   cross-origin-opener-policy: same-origin
