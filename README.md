@@ -38,7 +38,7 @@ write_report("graph.html", text, result, ontology, title="My note")
 
 ## Try it in your browser
 
-**Hosted demo:** [https://raphaelmansuy.github.io/edgextract/](https://raphaelmansuy.github.io/edgextract/) — Chromium with WebGPU; first **Load Tev1** downloads ~1&nbsp;GB from Hugging Face into the browser cache (no server of ours sees your text). The hosted page **does not call `127.0.0.1:11434`**. Optional Ollama: `?backend=ollama&host=https://your-host` plus `OLLAMA_ORIGINS=https://raphaelmansuy.github.io` (HTTPS required; the browser blocks mixed-content `http://`).
+**Hosted demo:** [GitHub Pages](https://raphaelmansuy.github.io/edgextract/) · [Hugging Face Space](https://huggingface.co/spaces/raphaelmansuy/edgextract) ([direct app](https://raphaelmansuy-edgextract.hf.space)) — Chromium with WebGPU; first **Load Tev1** downloads ~1&nbsp;GB from Hugging Face into the browser cache (no server of ours sees your text). The hosted page **does not call `127.0.0.1:11434`**. Optional Ollama: `?backend=ollama&host=https://your-host` plus `OLLAMA_ORIGINS` (HTTPS required; the browser blocks mixed-content `http://`). Open the Space on `*.hf.space`, not only the Hub iframe.
 
 The Rust crate compiles to WebAssembly, and a small Vite + TypeScript page runs the whole pipeline in a tab. Your text goes only to the decision model you name (by default Tev1 on WebGPU in this tab; Ollama is one click away), never to a server of ours.
 

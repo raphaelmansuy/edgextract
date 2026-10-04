@@ -2,9 +2,9 @@
 
 The Rust crate compiled to WebAssembly, behind a small Vite + TypeScript page.
 
-**Live on GitHub Pages:** [https://raphaelmansuy.github.io/edgextract/](https://raphaelmansuy.github.io/edgextract/)
+**Live:** [GitHub Pages](https://raphaelmansuy.github.io/edgextract/) · [Hugging Face Space](https://huggingface.co/spaces/raphaelmansuy/edgextract) ([app](https://raphaelmansuy-edgextract.hf.space))
 
-Push to `master` deploys via [`.github/workflows/pages.yml`](../.github/workflows/pages.yml). The artifact is lean (no ONNX blobs); the default Hub id downloads ~1&nbsp;GB on first **Load Tev1**. A `coi-serviceworker` injects COOP/COEP because Pages cannot set those headers. Needs Chromium with WebGPU. Hosted visits stay on WebGPU: `127.0.0.1` Ollama is the visitor's machine, not GitHub Pages. A public HTTPS Ollama host works with `?host=https://…` and `OLLAMA_ORIGINS=https://raphaelmansuy.github.io`.
+Push to `master` deploys Pages via [`.github/workflows/pages.yml`](../.github/workflows/pages.yml) and, if `HF_TOKEN` is set, the static Space. The artifact is lean (no ONNX blobs); the default Hub id downloads ~1&nbsp;GB on first **Load Tev1**. GitHub Pages uses a `coi-serviceworker` for COOP/COEP; the Space sets those headers natively. Needs Chromium with WebGPU. Hosted visits stay on WebGPU: `127.0.0.1` Ollama is the visitor's machine. A public HTTPS Ollama host works with `?host=https://…` and `OLLAMA_ORIGINS`. `make demo-space-publish` uploads `web/dist` (write token: `hf auth login`).
 
 ```bash
 make demo          # from the repo root: build wasm, install, serve http://localhost:5273

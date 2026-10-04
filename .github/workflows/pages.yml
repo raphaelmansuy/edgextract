@@ -49,6 +49,10 @@ jobs:
       - uses: actions/upload-pages-artifact@v3
         with:
           path: web/dist
+      - uses: actions/upload-artifact@v4
+        with:
+          name: web-dist
+          path: web/dist
 
   deploy:
     needs: build
@@ -59,3 +63,26 @@ jobs:
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+
+  huggingface:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: web-dist
+          path: web/dist
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Publish Hugging Face Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          if [ -z "$HF_TOKEN" ]; then
+            echo "HF_TOKEN secret not set; skip Space publish"
+            exit 0
+          fi
+          pip install -q huggingface_hub
+          python scripts/publish_edgextract_space.py --src web/dist

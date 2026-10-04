@@ -3,7 +3,8 @@ PYTEST ?= uv run pytest
 
 .PHONY: sync test test-live lint fmt xref article examples probe fetch-conll04 rust-test \
 	wasm-setup wasm wasm-check web-install demo demo-build demo-preview demo-e2e demo-e2e-live demo-e2e-update demo-clean \
-	demo-webgpu-model demo-webgpu-publish demo-webgpu-export-tev1-probe demo-webgpu-export-tev1
+	demo-webgpu-model demo-webgpu-publish demo-webgpu-export-tev1-probe demo-webgpu-export-tev1 \
+	demo-space-publish
 
 fetch-conll04:
 	uv run python scripts/fetch_conll04.py
@@ -92,6 +93,10 @@ demo-webgpu-export-tev1-probe:
 
 demo-webgpu-export-tev1:
 	$(PYTHON) scripts/export_tev1_onnx.py --acknowledge-tev1-license-pending
+
+# Hugging Face Static Space (COOP/COEP headers). Needs a write token: hf auth login
+demo-space-publish: demo-build
+	$(PYTHON) scripts/publish_edgextract_space.py --src $(WEB)/dist
 
 demo-build: wasm web-install
 	cd $(WEB) && npm run build
