@@ -19,3 +19,4 @@ dist/
 docs/article/_build/
 htmlcov/
 /target/
+rust/edgextract-wasm/pkg/

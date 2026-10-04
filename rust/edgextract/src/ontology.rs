@@ -14,9 +14,9 @@ pub const MAX_RELATION_EDGES: usize = 100;
 pub const NOT_ENTITY: &str = "NOT_ENTITY";
 pub const NO_RELATION: &str = "NONE";
 
-const TECH_DOCS_YAML: &str = include_str!("../../../data/ontology/tech_docs.yaml");
-const COMPANY_NEWS_YAML: &str = include_str!("../../../data/ontology/company_news.yaml");
-const CONLL04_YAML: &str = include_str!("../../../data/ontology/conll04.yaml");
+const TECH_DOCS_YAML: &str = include_str!("../ontologies/tech_docs.yaml");
+const COMPANY_NEWS_YAML: &str = include_str!("../ontologies/company_news.yaml");
+const CONLL04_YAML: &str = include_str!("../ontologies/conll04.yaml");
 
 pub const STARTER_ONTOLOGY: &str = r###"# Kinds of name and the legal links between them.
 # Save this file and pass it with --ontology.

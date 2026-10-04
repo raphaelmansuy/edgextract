@@ -4,7 +4,7 @@ PYTEST ?= uv run pytest
 .PHONY: sync test test-live lint fmt xref article examples probe fetch-conll04 rust-test \
 	wasm-setup wasm wasm-check web-install demo demo-build demo-preview demo-e2e demo-e2e-live demo-e2e-update demo-clean \
 	demo-webgpu-model demo-webgpu-publish demo-webgpu-export-tev1-probe demo-webgpu-export-tev1 \
-	demo-space-publish
+	demo-space-publish crate-publish wasm-npm-publish
 
 fetch-conll04:
 	uv run python scripts/fetch_conll04.py
@@ -97,6 +97,15 @@ demo-webgpu-export-tev1:
 # Hugging Face Static Space (COOP/COEP headers). Needs a write token: hf auth login
 demo-space-publish: demo-build
 	$(PYTHON) scripts/publish_edgextract_space.py --src $(WEB)/dist
+
+# crates.io (needs CARGO_REGISTRY_TOKEN). Bundled YAML lives in rust/edgextract/ontologies/.
+crate-publish:
+	cargo publish -p edgextract --locked
+
+# npm @raphaelmansuy/edgextract (needs NPM_TOKEN). Demo wasm stays --target web.
+wasm-npm-publish:
+	wasm-pack build rust/edgextract-wasm --release --target bundler --scope raphaelmansuy --out-dir rust/edgextract-wasm/pkg --out-name edgextract
+	cd rust/edgextract-wasm/pkg && npm publish --access public
 
 demo-build: wasm web-install
 	cd $(WEB) && npm run build

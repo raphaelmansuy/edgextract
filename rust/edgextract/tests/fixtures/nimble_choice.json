@@ -1,0 +1,19 @@
+{
+  "model": "nimble",
+  "answers": {
+    "label": {
+      "type": "choice",
+      "choice": "bug",
+      "probabilities": {
+        "billing": 0.012542091683798098,
+        "bug": 0.9781298765221444,
+        "account": 0.009328031794057666
+      },
+      "confidence": 0.8906321458344455
+    }
+  },
+  "usage": {
+    "input_tokens": 174,
+    "output_tokens": 1
+  }
+}

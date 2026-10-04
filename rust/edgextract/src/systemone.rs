@@ -381,7 +381,7 @@ mod tests {
 
     #[test]
     fn live_choice_fixture() {
-        let raw = include_str!("../../../tests/fixtures/nimble_choice.json");
+        let raw = include_str!("../tests/fixtures/nimble_choice.json");
         let data: Value = serde_json::from_str(raw).unwrap();
         let resp = validate_response(&data, Some(&["label".into()])).unwrap();
         assert_eq!(resp.answers["label"]["choice"], "bug");
@@ -389,7 +389,7 @@ mod tests {
 
     #[test]
     fn live_noul_score_fixture() {
-        let raw = include_str!("../../../tests/fixtures/nimble_noul_score.json");
+        let raw = include_str!("../tests/fixtures/nimble_noul_score.json");
         let data: Value = serde_json::from_str(raw).unwrap();
         validate_response(&data, None).unwrap();
     }

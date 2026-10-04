@@ -55,6 +55,13 @@ def main() -> int:
             errors.append(f"{ident} not mentioned in tests/")
     if not reqs or not ecs:
         errors.append("no REQ or EC ids found in specs")
+    rust_ont = ROOT / "rust" / "edgextract" / "ontologies"
+    data_ont = ROOT / "data" / "ontology"
+    for name in ("tech_docs.yaml", "company_news.yaml", "conll04.yaml"):
+        src = (data_ont / name).read_bytes()
+        dst = (rust_ont / name).read_bytes()
+        if src != dst:
+            errors.append(f"{name} differs between data/ontology and rust/edgextract/ontologies")
     if errors:
         print("\n".join(errors))
         print(f"spec ids: {len(spec_ids)} test ids: {len(test_ids)}")

@@ -3,8 +3,9 @@ name = "edgextract-wasm"
 version = "0.1.0"
 edition = "2021"
 license = "Apache-2.0"
-description = "edgextract compiled to WebAssembly for the browser demo."
+description = "edgextract compiled to WebAssembly for the browser."
 authors = ["Raphael MANSUY"]
+repository = "https://github.com/raphaelmansuy/edgextract"
 publish = false
 
 [lib]

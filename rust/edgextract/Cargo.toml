@@ -5,8 +5,10 @@ edition = "2021"
 license = "Apache-2.0"
 description = "Turn markdown into a knowledge graph with an ontology you write and a cutoff you own."
 authors = ["Raphael MANSUY"]
-readme = "../../README.md"
+readme = "../README.md"
+homepage = "https://github.com/raphaelmansuy/edgextract"
 repository = "https://github.com/raphaelmansuy/edgextract"
+documentation = "https://docs.rs/edgextract"
 keywords = ["knowledge-graph", "information-extraction", "ontology", "ollama"]
 categories = ["text-processing", "science"]
 

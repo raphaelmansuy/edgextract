@@ -10,6 +10,10 @@ Your code proposes names. Your ontology says which kinds and links are legal. A 
 
 ## 60-second start
 
+Rust (native): `cargo add edgextract` or `cargo install edgextract`.
+
+Browser WASM: `npm i @raphaelmansuy/edgextract` (demo: [GitHub Pages](https://raphaelmansuy.github.io/edgextract/) · [Hugging Face Space](https://raphaelmansuy-edgextract.static.hf.space/)).
+
 ```bash
 git clone https://github.com/raphaelmansuy/edgextract && cd edgextract
 uv sync --all-extras

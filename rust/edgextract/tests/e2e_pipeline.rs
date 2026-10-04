@@ -10,12 +10,12 @@ use std::fs;
 use std::path::PathBuf;
 use std::sync::Arc;
 
-fn repo_root() -> PathBuf {
-    PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../..")
+fn crate_dir() -> PathBuf {
+    PathBuf::from(env!("CARGO_MANIFEST_DIR"))
 }
 
 fn golden(name: &str) -> String {
-    fs::read_to_string(repo_root().join("data/golden/docs").join(name)).unwrap()
+    fs::read_to_string(crate_dir().join("tests/golden").join(name)).unwrap()
 }
 
 #[test]
@@ -283,7 +283,7 @@ fn pipeline_with_fixed_encoder() {
     use std::time::Instant;
 
     let ontology = load_ontology_named("conll04").unwrap();
-    let path = repo_root().join("tests/fixtures/conll04_sample.json");
+    let path = crate_dir().join("tests/fixtures/conll04_sample.json");
     let raw = load_raw_split(&path).unwrap();
     let doc = convert_document(&raw[1], "sample").unwrap();
     let text = doc["text"].as_str().unwrap().to_string();

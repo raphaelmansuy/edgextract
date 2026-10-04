@@ -1,0 +1,76 @@
+id: tech_docs
+version: 1
+title: Software and technical documentation
+types:
+  - id: PERSON
+    description: A named human being (author, engineer, founder). Not a pronoun.
+    aliases: [engineer, author, founder]
+    color: "#7dd3fc"
+  - id: ORGANIZATION
+    description: A company, university, team, or other named group.
+    aliases: [company, team, lab]
+    color: "#c4b5fd"
+  - id: PRODUCT
+    description: A named software product, library, or service people ship.
+    aliases: [library, service, app]
+    color: "#86efac"
+  - id: TECHNOLOGY
+    description: A protocol, language, database, model, or technical standard.
+    aliases: [language, protocol, database, model]
+    color: "#fcd34d"
+  - id: LOCATION
+    description: A city, country, region, or named place.
+    aliases: [city, country]
+    color: "#fda4af"
+  - id: EVENT
+    description: A named conference, release, outage, or dated happening.
+    aliases: [conference, release, outage]
+    color: "#fdba74"
+relations:
+  - id: CREATED_BY
+    description: The product or technology was built by the person or organization.
+    domain: [PRODUCT, TECHNOLOGY]
+    range: [PERSON, ORGANIZATION]
+  - id: WORKS_AT
+    description: The person is employed by or belongs to the organization.
+    domain: [PERSON]
+    range: [ORGANIZATION]
+  - id: USES
+    description: The person, organization, or product uses the technology or product.
+    domain: [PERSON, ORGANIZATION, PRODUCT]
+    range: [TECHNOLOGY, PRODUCT]
+  - id: PART_OF
+    description: The source is a component or member of the target.
+    domain: [PRODUCT, TECHNOLOGY, PERSON, ORGANIZATION]
+    range: [PRODUCT, TECHNOLOGY, ORGANIZATION]
+  - id: LOCATED_IN
+    description: The organization, person, product, or event is in this place.
+    domain: [ORGANIZATION, PERSON, PRODUCT, EVENT]
+    range: [LOCATION]
+  - id: DEPENDS_ON
+    description: The product or technology requires the other to work.
+    domain: [PRODUCT, TECHNOLOGY]
+    range: [PRODUCT, TECHNOLOGY]
+  - id: HAPPENED_AT
+    description: The event took place at the organization or location.
+    domain: [EVENT]
+    range: [ORGANIZATION, LOCATION]
+gazetteer:
+  Jane Doe: PERSON
+  Ada Lovelace: PERSON
+  EdgeQuake: PRODUCT
+  Ollama: PRODUCT
+  PostgreSQL: TECHNOLOGY
+  Apache AGE: TECHNOLOGY
+  pgvector: TECHNOLOGY
+  Python: TECHNOLOGY
+  Markdown: TECHNOLOGY
+  Nimble: PRODUCT
+  Tev1: PRODUCT
+  Clef: PRODUCT
+  Clef Flash: PRODUCT
+  TypeSafe: ORGANIZATION
+  Acme Inc: ORGANIZATION
+  Berlin: LOCATION
+  Paris: LOCATION
+  GraphRAG Summit: EVENT

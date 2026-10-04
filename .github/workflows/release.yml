@@ -1,0 +1,44 @@
+# Publish edgextract to crates.io and @raphaelmansuy/edgextract to npm.
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+
+jobs:
+  crates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - name: Test
+        run: cargo test --workspace && make wasm-check
+      - name: Publish crates.io
+        env:
+          CARGO_REGISTRY_TOKEN: ${{ secrets.CARGO_REGISTRY_TOKEN }}
+        run: cargo publish -p edgextract --locked
+
+  npm:
+    runs-on: ubuntu-latest
+    needs: crates
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+      - name: Install wasm-pack
+        run: cargo install wasm-pack --locked
+      - name: Publish npm
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          wasm-pack build rust/edgextract-wasm --release --target bundler --scope raphaelmansuy --out-dir rust/edgextract-wasm/pkg --out-name edgextract
+          cd rust/edgextract-wasm/pkg && npm publish --access public

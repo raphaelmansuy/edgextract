@@ -209,8 +209,7 @@ mod tests {
 
     #[test]
     fn convert_fixture_domain_range() {
-        let path = Path::new(env!("CARGO_MANIFEST_DIR"))
-            .join("../../tests/fixtures/conll04_sample.json");
+        let path = Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/fixtures/conll04_sample.json");
         let raw = load_raw_split(path).unwrap();
         let docs = convert_split(&raw, "sample").unwrap();
         assert_eq!(docs.len(), 3);

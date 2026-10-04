@@ -2,6 +2,14 @@
 
 Closed-decision knowledge graph extraction. The Python package remains the reference; this crate is the same machine in Rust.
 
+```bash
+cargo add edgextract
+# CLI:
+cargo install edgextract
+```
+
+Browser WASM (npm, not crates.io): `npm i @raphaelmansuy/edgextract`. Demo: [GitHub Pages](https://raphaelmansuy.github.io/edgextract/) · [Hugging Face Space](https://raphaelmansuy-edgextract.static.hf.space/).
+
 ## First principles
 
 You declare the question and the legal answers first. Spans come from names the ontology lists, markdown cues, or an optional GLiNER proposer. GLiNER only proposes character spans; the decision model still assigns ontology types. Domain and range prune illegal pairs in code. A missing key, a choice not in the map, or a transport error produces no invented triple. Thresholds live in `GateConfig` (`fitted` starts false). Evidence is the source sentence. Work is per sentence. There is one client, one validator, and one gate.
