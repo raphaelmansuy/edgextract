@@ -9,7 +9,7 @@ readme = "../README.md"
 homepage = "https://github.com/raphaelmansuy/edgextract"
 repository = "https://github.com/raphaelmansuy/edgextract"
 documentation = "https://docs.rs/edgextract"
-keywords = ["knowledge-graph", "information-extraction", "ontology", "ollama"]
+keywords = ["knowledge-graph", "extraction", "ontology", "ollama"]
 categories = ["text-processing", "science"]
 
 [dependencies]
