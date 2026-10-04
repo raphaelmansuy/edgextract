@@ -1,0 +1,61 @@
+# Publish the Vite + wasm demo to GitHub Pages.
+# Live URL: https://raphaelmansuy.github.io/edgextract/
+name: Pages
+
+on:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - name: Install wasm-pack
+        run: cargo install wasm-pack --locked
+      - name: Build static demo (wasm + Vite)
+        run: |
+          make wasm
+          cd web && npm ci --ignore-scripts && npm run build
+      - name: Assert Pages artifact has no ONNX weight blobs
+        run: |
+          if find web/dist/models -type f \( -name '*.onnx' -o -name '*.onnx_data' -o -name '*.bin' -o -name '*.safetensors' \) 2>/dev/null | grep -q .; then
+            echo "dist/models still contains weight blobs; strip-model-weights failed" >&2
+            find web/dist/models -type f | head -50 >&2
+            exit 1
+          fi
+          test -f web/dist/coi-serviceworker.js
+          test -f web/dist/index.html
+          du -sh web/dist
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: web/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

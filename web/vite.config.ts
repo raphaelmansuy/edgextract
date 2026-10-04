@@ -62,11 +62,42 @@ function transformersNoCache(): Plugin {
   };
 }
 
+/**
+ * Keep `dist/models` lean for GitHub Pages / any static host.
+ * Local `make demo-webgpu-model` copies ~1 GB of ONNX into public/models; Vite would
+ * ship that into dist. Hub Load is the hosted path — only tiny metadata stays.
+ */
+const KEEP_MODEL_FILES = new Set([".gitkeep", "edgextract-tev1.json", "README.md"]);
+
+function stripModelWeights(): Plugin {
+  return {
+    name: "strip-model-weights",
+    closeBundle() {
+      const modelsRoot = path.resolve(import.meta.dirname, "dist/models");
+      if (!fs.existsSync(modelsRoot)) return;
+      const walk = (dir: string) => {
+        for (const name of fs.readdirSync(dir)) {
+          const full = path.join(dir, name);
+          const st = fs.statSync(full);
+          if (st.isDirectory()) {
+            walk(full);
+            if (fs.readdirSync(full).length === 0) fs.rmdirSync(full);
+            continue;
+          }
+          if (KEEP_MODEL_FILES.has(name)) continue;
+          fs.unlinkSync(full);
+        }
+      };
+      walk(modelsRoot);
+    },
+  };
+}
+
 // The demo is a static site: `vite build` output can be hosted anywhere.
 // `base: "./"` keeps asset URLs relative so it also works from a sub-path.
 export default defineConfig({
   base: "./",
-  plugins: [modelsStrict404(), transformersNoCache()],
+  plugins: [modelsStrict404(), transformersNoCache(), stripModelWeights()],
   server: {
     port: 5273,
     strictPort: true,

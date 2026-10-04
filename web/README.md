@@ -2,10 +2,14 @@
 
 The Rust crate compiled to WebAssembly, behind a small Vite + TypeScript page.
 
+**Live on GitHub Pages:** [https://raphaelmansuy.github.io/edgextract/](https://raphaelmansuy.github.io/edgextract/)
+
+Push to `master` deploys via [`.github/workflows/pages.yml`](../.github/workflows/pages.yml). The artifact is lean (no ONNX blobs); the default Hub id downloads ~1&nbsp;GB on first **Load Tev1**. A `coi-serviceworker` injects COOP/COEP because Pages cannot set those headers. Needs Chromium with WebGPU.
+
 ```bash
 make demo          # from the repo root: build wasm, install, serve http://localhost:5273
 make demo-e2e      # build, then run the Playwright end-to-end and screenshot tests
-make demo-build    # static site in web/dist (host it anywhere)
+make demo-build    # static site in web/dist (host it anywhere; weights stripped from dist/models)
 ```
 
 You need `rustup`, `wasm-pack` (`cargo install wasm-pack`), and Node 20+. `make wasm-setup` adds the wasm target.

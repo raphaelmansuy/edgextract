@@ -4,11 +4,18 @@ import {
   DEFAULT_TEV1_MODEL_ID,
   TEV1_WEBGPU_DTYPE,
   fingerprintGraph,
+  localModelUrl,
+  localModelsBase,
 } from "./runtime";
 
 describe("WebGPU Tev1 graph", () => {
   it("defaults to the published Tev1 ONNX Hub id", () => {
     expect(DEFAULT_TEV1_MODEL_ID).toBe("raphaelmansuy/tev1-0.8b-onnx-webgpu");
+  });
+
+  it("resolves local model paths under Vite BASE_URL", () => {
+    expect(localModelsBase()).toMatch(/models\/$/);
+    expect(localModelUrl("tev1-0.8b-onnx")).toBe(`${localModelsBase()}tev1-0.8b-onnx`);
   });
 
   it("pins Hub Cache Storage to the fused LinearAttention commit", () => {

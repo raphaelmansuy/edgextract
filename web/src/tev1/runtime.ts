@@ -31,9 +31,25 @@ import {
  * Default WebGPU graph on the Hugging Face Hub: Together Tev1-0.8B ONNX
  * (weight-transplant into the onnx-community Qwen3.5-ONNX-OPT topology).
  * See `docs/THIRD_PARTY_NOTICES.md` — fine-tune license acknowledged at export.
- * A short local id (no `/`) resolves under `/models/<id>/`.
+ * A short local id (no `/`) resolves under `{BASE_URL}models/<id>/`.
  */
 export const DEFAULT_TEV1_MODEL_ID = "raphaelmansuy/tev1-0.8b-onnx-webgpu";
+
+/**
+ * Local ONNX root for Transformers.js (`env.localModelPath`).
+ * Uses Vite `BASE_URL` so project Pages (`/edgextract/`) and `./` both work.
+ */
+export function localModelsBase(): string {
+  const base = import.meta.env.BASE_URL || "/";
+  const root = base.endsWith("/") ? base : `${base}/`;
+  return `${root}models/`;
+}
+
+/** Absolute-or-relative URL for a short local model id folder. */
+export function localModelUrl(modelId: string): string {
+  const id = modelId.replace(/^\/+|\/+$/g, "");
+  return `${localModelsBase()}${id}`;
+}
 
 /**
  * Pin Hub Cache Storage to the fused LinearAttention commit. Publishing a new
@@ -373,7 +389,7 @@ export class Tev1Runtime {
     env.allowLocalModels = !hub;
     env.allowRemoteModels = true;
     env.useBrowserCache = true;
-    env.localModelPath = "/models/";
+    env.localModelPath = localModelsBase();
 
     // Drop poisoned Cache Storage (SPA HTML cached under /models/org/name, or
     // an unfused graph at revision=main) before Hub downloads.

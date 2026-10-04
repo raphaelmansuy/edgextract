@@ -38,6 +38,8 @@ write_report("graph.html", text, result, ontology, title="My note")
 
 ## Try it in your browser
 
+**Hosted demo:** [https://raphaelmansuy.github.io/edgextract/](https://raphaelmansuy.github.io/edgextract/) — Chromium with WebGPU; first **Load Tev1** downloads ~1&nbsp;GB from Hugging Face into the browser cache (no server of ours sees your text).
+
 The Rust crate compiles to WebAssembly, and a small Vite + TypeScript page runs the whole pipeline in a tab. Your text goes only to the decision model you name (by default Tev1 on WebGPU in this tab; Ollama is one click away), never to a server of ours.
 
 ```bash
@@ -50,6 +52,7 @@ make demo                # builds the wasm, then serves http://localhost:5273
 # WebGPU default loads raphaelmansuy/tev1-0.8b-onnx-webgpu (~1 GB, browser cache).
 # Optional: make demo-webgpu-model / make demo-webgpu-publish / make demo-webgpu-export-tev1
 # Attribution: docs/THIRD_PARTY_NOTICES.md
+# GitHub Pages: push to master runs .github/workflows/pages.yml (lean dist, Hub weights).
 ```
 
 ![The browser demo reading four sentences of company news](docs/img/demo/01-northwind.png)

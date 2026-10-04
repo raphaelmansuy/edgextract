@@ -16,7 +16,12 @@ import type {
   RunOutput,
   RunRequest,
 } from "./types";
-import { DEFAULT_TEV1_HUB_REVISION, DEFAULT_TEV1_MODEL_ID, isHubModelId } from "./tev1/runtime";
+import {
+  DEFAULT_TEV1_HUB_REVISION,
+  DEFAULT_TEV1_MODEL_ID,
+  isHubModelId,
+  localModelUrl,
+} from "./tev1/runtime";
 
 // ---------------------------------------------------------------- helpers
 
@@ -484,7 +489,7 @@ async function probeWebGpuWeights(modelId: string): Promise<boolean> {
       return true;
     }
   }
-  const base = `/models/${id.replace(/^\/+|\/+$/g, "")}`;
+  const base = localModelUrl(id);
   // config.json is required by Transformers.js; edgextract-tev1.json alone is not enough.
   // Reject HTML (Vite SPA fallback) and plain 404 bodies.
   try {
@@ -640,7 +645,7 @@ async function loadWebGpuWeights(): Promise<void> {
     if (!webgpuWeightsPresent) {
       webgpuError = isHubModelId(modelId)
         ? `Cannot reach ${modelId} on Hugging Face (need config.json). Or switch to Ollama host.`
-        : `No ONNX graph at /models/${modelId}/ (need config.json). Run make demo-webgpu-model, or use the Hub id ${DEFAULT_TEV1_MODEL_ID}.`;
+        : `No ONNX graph at ${localModelUrl(modelId)}/ (need config.json). Run make demo-webgpu-model, or use the Hub id ${DEFAULT_TEV1_MODEL_ID}.`;
       setWebGpuState("error");
       ($("webgpu-advanced") as HTMLDetailsElement).open = true;
       $("run-note").textContent = "WebGPU weights missing. Fix the model id, or switch to Ollama.";

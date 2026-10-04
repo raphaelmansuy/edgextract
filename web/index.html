@@ -6,6 +6,11 @@
     <title>edgextract · knowledge graphs in your browser</title>
     <meta name="description" content="edgextract compiled to WebAssembly: markdown in, a knowledge graph out, with an ontology you write and a cutoff you own. Your text goes only to the decision model you name." />
     <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='9' cy='22' r='5' fill='%237dd3fc'/%3E%3Ccircle cx='23' cy='10' r='5' fill='%23c4b5fd'/%3E%3Cpath d='M12 19L20 13' stroke='%23e2e8f0' stroke-width='2'/%3E%3C/svg%3E" />
+    <!-- GitHub Pages cannot set COOP/COEP; this SW injects them (credentialless, like Vite). -->
+    <script>
+      window.coi = { coepCredentialless: () => true, quiet: true };
+    </script>
+    <script src="./coi-serviceworker.js"></script>
   </head>
   <body>
     <div id="app">
@@ -114,7 +119,7 @@
               <details class="webgpu-advanced" id="webgpu-advanced">
                 <summary>Model location</summary>
                 <label>ONNX model id <input id="webgpu-model" data-testid="webgpu-model" value="raphaelmansuy/tev1-0.8b-onnx-webgpu" spellcheck="false" /></label>
-                <p class="note" id="webgpu-hint" data-testid="webgpu-hint">Default: Hub id <code>raphaelmansuy/tev1-0.8b-onnx-webgpu</code> (Together Tev1 ONNX, ~1&nbsp;GB, browser cache). Short ids load from <code>/models/&lt;id&gt;/</code> after <code>make demo-webgpu-model</code>. Ollama <code>tev1</code> remains the Metal/CUDA ceiling.</p>
+                <p class="note" id="webgpu-hint" data-testid="webgpu-hint">Default: Hub id <code>raphaelmansuy/tev1-0.8b-onnx-webgpu</code> (Together Tev1 ONNX, ~1&nbsp;GB, browser cache). Short ids load from <code>models/&lt;id&gt;/</code> after <code>make demo-webgpu-model</code> (local demo only). Ollama <code>tev1</code> remains the Metal/CUDA ceiling.</p>
               </details>
             </div>
           </div>
