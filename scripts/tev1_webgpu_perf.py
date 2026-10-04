@@ -28,10 +28,7 @@ ROOT = Path(__file__).resolve().parents[1]
 # Packed POST matching the parity fixture (2 noul questions, shared state).
 PACKED = {
     "model": "tev1",
-    "state": (
-        "Ada Lovelace founded Northwind in Paris.\n"
-        "Only the source sentence may be used."
-    ),
+    "state": ("Ada Lovelace founded Northwind in Paris.\nOnly the source sentence may be used."),
     "questions": {
         "founded": {
             "type": "noul",

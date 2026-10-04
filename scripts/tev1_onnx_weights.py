@@ -9,7 +9,7 @@ WebGPU prefills launch-bound.
 
 from __future__ import annotations
 
-from typing import Iterable
+from collections.abc import Iterable
 
 
 def tev1_to_onnx_candidates(tev_key: str) -> list[str]:

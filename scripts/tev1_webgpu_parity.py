@@ -25,10 +25,7 @@ NORTHWIND = (ROOT / "data/golden/docs/13_northwind.md").read_text()
 # One noul the extractor would ask about a kept link on this note.
 SAMPLE = {
     "model": "tev1:0.8b",
-    "state": (
-        "Ada Lovelace founded Northwind in Paris.\n"
-        "Only the source sentence may be used."
-    ),
+    "state": ("Ada Lovelace founded Northwind in Paris.\nOnly the source sentence may be used."),
     "questions": {
         "founded": {
             "type": "noul",

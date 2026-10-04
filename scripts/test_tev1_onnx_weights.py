@@ -10,7 +10,6 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from tev1_onnx_weights import derived_onnx_targets, resolve_tev1_to_onnx, tev1_to_onnx_candidates
 
-
 ONNX_SAMPLE = {
     "model.embed_tokens.weight",
     "model.layers.0.input_layernorm.weight",

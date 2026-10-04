@@ -295,10 +295,10 @@ def probe_toolchain() -> int:
         errors.append(f"cannot load Tev1/Qwen configs: {e}")
 
     try:
-        import onnx  # noqa: F401
         import numpy  # noqa: F401
-        from safetensors import safe_open  # noqa: F401
+        import onnx  # noqa: F401
         from huggingface_hub import hf_hub_download  # noqa: F401
+        from safetensors import safe_open  # noqa: F401
 
         print("onnx + numpy + safetensors + huggingface_hub ok")
     except ImportError as e:
@@ -322,16 +322,15 @@ def probe_toolchain() -> int:
     return 0
 
 
-def _numpy_from_proto(tensor) -> "Any":
-    import numpy as np
+def _numpy_from_proto(tensor) -> Any:
     from onnx import numpy_helper
 
     return numpy_helper.to_array(tensor)
 
 
 def _proto_from_numpy(name: str, array, dtype_hint=None):
-    from onnx import numpy_helper
     import numpy as np
+    from onnx import numpy_helper
 
     arr = np.asarray(array)
     if dtype_hint is not None:
@@ -362,7 +361,6 @@ def transplant_tev1_into_onnx_template(
     work: Path,
 ) -> dict[str, Any]:
     """Copy fp16 ONNX topology from onnx-community; overwrite LM weights from Tev1."""
-    import numpy as np
     import onnx
     from huggingface_hub import hf_hub_download, snapshot_download
     from onnx.external_data_helper import convert_model_to_external_data
@@ -465,7 +463,10 @@ def transplant_tev1_into_onnx_template(
                     stats["derived"] += 1
 
         # Tied lm_head from embed_tokens when present on this session.
-        if "lm_head.MatMul.weight" in name_to_init and "model.language_model.embed_tokens.weight" in tev_tensors:
+        if (
+            "lm_head.MatMul.weight" in name_to_init
+            and "model.language_model.embed_tokens.weight" in tev_tensors
+        ):
             emb = tev_tensors["model.language_model.embed_tokens.weight"]
             dest = _numpy_from_proto(name_to_init["lm_head.MatMul.weight"])
             src = emb.T if emb.T.shape == dest.shape else emb
@@ -518,9 +519,7 @@ def transplant_tev1_into_onnx_template(
     for onnx_name, _ in sessions:
         m = onnx.load(str(onnx_out / onnx_name), load_external_data=False)
         onnx_union |= {t.name for t in m.graph.initializer}
-    stats["unmapped_tev1"] = [
-        k for k in tev_tensors if resolve_tev1_to_onnx(k, onnx_union) is None
-    ]
+    stats["unmapped_tev1"] = [k for k in tev_tensors if resolve_tev1_to_onnx(k, onnx_union) is None]
     stats["mapped_tev1"] = len(tev_tensors) - len(stats["unmapped_tev1"])
     print(
         f"transplant stats: replaced={stats['replaced']} derived={stats['derived']} "
@@ -530,9 +529,7 @@ def transplant_tev1_into_onnx_template(
     if stats["unmapped_tev1"]:
         print("unmapped Tev1 keys:", stats["unmapped_tev1"][:12], file=sys.stderr)
     if stats["replaced"] < 100:
-        raise RuntimeError(
-            f"transplant replaced too few tensors ({stats['replaced']}) — aborting"
-        )
+        raise RuntimeError(f"transplant replaced too few tensors ({stats['replaced']}) — aborting")
     return stats
 
 
@@ -606,8 +603,8 @@ def maybe_quantize_fp16_to_q4f16(out: Path) -> None:
         return
     try:
         from onnxruntime.quantization.matmul_nbits_quantizer import (  # type: ignore
-            MatMulNBitsQuantizer,
             DefaultWeightOnlyQuantConfig,
+            MatMulNBitsQuantizer,
         )
     except Exception:
         (out / "QUANTIZE.md").write_text(
@@ -652,7 +649,9 @@ def maybe_quantize_fp16_to_q4f16(out: Path) -> None:
 
 
 def main() -> int:
-    p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    p = argparse.ArgumentParser(
+        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
+    )
     p.add_argument("--model", default=TEV1_DEFAULT)
     p.add_argument("--out", type=Path, default=Path("web/public/models/tev1-0.8b-onnx"))
     p.add_argument("--template", default=ONNX_TEMPLATE, help="onnx-community topology donor")
@@ -718,9 +717,7 @@ def main() -> int:
                     args.model, out, opset=args.opset, work=work
                 )
         else:
-            strategy, model_type = export_via_optimum(
-                args.model, out, opset=args.opset, work=work
-            )
+            strategy, model_type = export_via_optimum(args.model, out, opset=args.opset, work=work)
     finally:
         if own_work and work.exists():
             shutil.rmtree(work, ignore_errors=True)
