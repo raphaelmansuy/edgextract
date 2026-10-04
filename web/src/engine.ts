@@ -26,6 +26,11 @@ export interface CallEvent {
   state: "start" | "end";
   n: number;
   ms?: number;
+  /** Mean GPU prefill time inside a packed System One POST (WebGPU). */
+  prefillMs?: number;
+  questions?: number;
+  forwards?: number;
+  packPath?: string;
 }
 
 export interface RunHandlers {
@@ -57,7 +62,19 @@ export class EngineClient {
     this.worker.onmessage = (ev: MessageEvent<WorkerOut>) => {
       const m = ev.data;
       if ("kind" in m && m.kind === "call") {
-        this.onCall({ state: m.state, n: m.n, ms: m.ms });
+        this.onCall({
+          state: m.state,
+          n: m.n,
+          ms: m.ms,
+          prefillMs: m.prefillMs,
+          questions: m.questions,
+          forwards: m.forwards,
+          packPath: m.packPath,
+        });
+        return;
+      }
+      if ("kind" in m && m.kind === "webgpu-progress") {
+        this.onWebGpuProgress(m.message, m.frac);
         return;
       }
       const p = this.pending.get(m.id);
@@ -85,7 +102,15 @@ export class EngineClient {
     });
   }
 
-  init(): Promise<{ ontologies: OntologyFile[]; starter: string; version: string }> {
+  /** Fired while WebGPU Tev1 weights download, shaders compile, or GPU warms. */
+  onWebGpuProgress: (message: string, frac?: number) => void = () => {};
+
+  init(): Promise<{
+    ontologies: OntologyFile[];
+    starter: string;
+    version: string;
+    crossOriginIsolated: boolean;
+  }> {
     return this.send({ kind: "init" });
   }
 
@@ -110,5 +135,23 @@ export class EngineClient {
 
   clearCache(): Promise<null> {
     return this.send({ kind: "clear" });
+  }
+
+  probeWebGpu(): Promise<{ ok: boolean; reason?: string }> {
+    return this.send({ kind: "webgpu-probe" });
+  }
+
+  /** Enable the staged mock loader (`?webgpuMock=1`) for CI / UX demos. */
+  setWebGpuMock(enabled: boolean): Promise<null> {
+    return this.send({ kind: "webgpu-mock", enabled });
+  }
+
+  loadWebGpu(modelId: string): Promise<{ modelId: string; fingerprint?: unknown }> {
+    return this.send({ kind: "webgpu-load", modelId });
+  }
+
+  /** Fingerprint + length sweep on the loaded Tev1 WebGPU runtime. */
+  benchWebGpu(): Promise<unknown> {
+    return this.send({ kind: "webgpu-bench" });
   }
 }

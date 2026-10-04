@@ -420,9 +420,173 @@ test.describe("the decision model host", () => {
   test("there is no rule-based mode to choose: the model is the only extractor", async ({ page }) => {
     await openDemo(page);
     await expect(page.getByTestId("mode-standin")).toHaveCount(0);
+    await expect(page.getByTestId("backend-ollama")).toBeChecked(); // suite forces Ollama stand-in
     await expect(page.getByTestId("host-url")).toBeVisible();
     await expect(page.getByTestId("host-model")).toBeVisible();
+    await expect(page.getByTestId("webgpu-fields")).toBeHidden();
+    await expect(page.getByTestId("backend-switch")).toBeVisible();
     await expect(page.locator("body")).not.toContainText("Rule-based");
+  });
+
+  test("WebGPU is selected by default when available", async ({ page }) => {
+    await page.goto("/?webgpuMock=1");
+    await page.evaluate(() => localStorage.removeItem("edgextract.inference.v1"));
+    await page.reload();
+    await page.waitForFunction(() => document.body.dataset.ready === "true");
+    await expect(page.getByTestId("backend-webgpu")).toBeChecked();
+    await expect(page.getByTestId("webgpu-fields")).toBeVisible();
+    await expect(page.getByTestId("host-fields")).toBeHidden();
+    await expect(page.getByTestId("webgpu-load")).toBeVisible();
+    // Header primary action is Load Tev1 until weights are ready (not a disabled Extract).
+    await expect(page.getByTestId("run")).toBeEnabled();
+    await expect(page.getByTestId("run")).toHaveText(/Load Tev1/);
+    await expect(page.getByTestId("run-note")).toContainText(/Load Tev1/);
+  });
+
+  test("default WebGPU model id is the Hub graph", async ({ page }) => {
+    await page.goto("/?webgpuMock=1");
+    await page.evaluate(() => localStorage.removeItem("edgextract.inference.v1"));
+    await page.reload();
+    await page.waitForFunction(() => document.body.dataset.ready === "true");
+    await expect(page.getByTestId("webgpu-model")).toHaveValue("raphaelmansuy/tev1-0.8b-onnx-webgpu");
+    await expect(page.getByTestId("mode-note")).toContainText("raphaelmansuy/tev1-0.8b-onnx-webgpu");
+  });
+
+  test("local /models config.json is JSON when present, else a real 404 (not SPA HTML)", async ({ page }) => {
+    const res = await page.request.get("/models/tev1-0.8b-onnx/config.json");
+    if (res.ok()) {
+      expect(res.headers()["content-type"] || "").toMatch(/json/i);
+      const body = await res.text();
+      expect(body.trimStart().startsWith("<!")).toBe(false);
+      const cfg = JSON.parse(body);
+      expect(cfg).toHaveProperty("model_type");
+      // Required so ORT Web mounts sibling *.onnx_data (else MountedFiles error).
+      expect(cfg["transformers.js_config"]?.use_external_data_format?.embed_tokens).toBeGreaterThan(0);
+      return;
+    }
+    expect(res.status()).toBe(404);
+    const body = await res.text();
+    expect(body.trimStart().startsWith("<!")).toBe(false);
+  });
+
+  test("Hub default idle shows Load (not missing-weights)", async ({ page }) => {
+    await page.goto("/?webgpuMock=1");
+    await page.evaluate(() => localStorage.removeItem("edgextract.inference.v1"));
+    await page.reload();
+    await page.waitForFunction(() => document.body.dataset.ready === "true");
+    await expect(page.getByTestId("backend-webgpu")).toBeChecked();
+    await expect(page.getByTestId("webgpu-fields")).toBeVisible();
+    await expect(page.getByTestId("webgpu-load")).toBeVisible();
+    await expect(page.getByTestId("run")).toHaveText(/Load Tev1/);
+    await expect(page.getByTestId("webgpu-status")).not.toContainText(/No ONNX|weights missing|Cannot reach/i);
+    await expect(page.getByTestId("webgpu-status")).toContainText(/Load Tev1|Mock loader|Hugging Face|downloads/i);
+  });
+
+  test("missing local ONNX id fails closed on Load", async ({ page }) => {
+    await page.goto("/");
+    await page.evaluate(() => {
+      localStorage.setItem(
+        "edgextract.inference.v1",
+        JSON.stringify({
+          backend: "webgpu",
+          hostUrl: "http://localhost:11434",
+          hostModel: "tev1",
+          webgpuModel: "missing-local-onnx",
+        }),
+      );
+    });
+    await page.reload();
+    await page.waitForFunction(() => document.body.dataset.ready === "true");
+    if (await page.getByTestId("backend-webgpu").isDisabled()) {
+      test.skip(true, "WebGPU unavailable without mock");
+    }
+    await expect(page.getByTestId("webgpu-model")).toHaveValue("missing-local-onnx");
+    await page.getByTestId("run").click();
+    await expect(page.getByTestId("webgpu-fields")).toHaveAttribute("data-webgpu-state", "error");
+    await expect(page.getByTestId("webgpu-status")).toContainText(/No ONNX|\/models\/|demo-webgpu-model|Hub id|Ollama/i);
+    await expect(page.getByTestId("run")).toHaveText(/Load Tev1|Try Load/);
+  });
+
+  test("remembers the selected inference backend in localStorage", async ({ page }) => {
+    await page.goto("/?webgpuMock=1");
+    await page.evaluate(() => localStorage.removeItem("edgextract.inference.v1"));
+    await page.reload();
+    await page.waitForFunction(() => document.body.dataset.ready === "true");
+    await page.locator('label.backend-seg-opt:has([data-testid="backend-ollama"])').click();
+    await expect(page.getByTestId("backend-ollama")).toBeChecked();
+    await page.getByTestId("host-model").fill("tev1:0.8b");
+    await expect
+      .poll(async () =>
+        page.evaluate(() => {
+          const raw = localStorage.getItem("edgextract.inference.v1");
+          return raw ? (JSON.parse(raw) as { backend: string; hostModel: string }).backend : "";
+        }),
+      )
+      .toBe("ollama");
+    await page.reload();
+    await page.waitForFunction(() => document.body.dataset.ready === "true");
+    // No backend= in the URL — localStorage must win over the WebGPU HTML default.
+    await expect(page.getByTestId("backend-ollama")).toBeChecked();
+    await expect(page.getByTestId("host-model")).toHaveValue("tev1:0.8b");
+    await expect(page.getByTestId("host-fields")).toBeVisible();
+  });
+
+  test("unavailable WebGPU leaves Ollama working", async ({ page }) => {
+    await openDemo(page);
+    if (!(await page.getByTestId("backend-webgpu").isDisabled())) {
+      test.skip(true, "WebGPU is available in this browser; unavailable path not exercised");
+    }
+    await expect(page.getByTestId("backend-ollama")).toBeChecked();
+    await expect(page.getByTestId("backend-unavailable")).toBeVisible();
+    await expect(page.getByTestId("host-fields")).toBeVisible();
+    expect(kept(await edges(page))).toContain("ADA_LOVELACE FOUNDED NORTHWIND");
+  });
+
+  test("WebGPU mock load shows progress then ready, and Extract stays fail-closed", async ({ page }) => {
+    await openDemo(page, {
+      host: HOST,
+      model: "test-double",
+      backend: "webgpu",
+      webgpuMock: true,
+      waitForRun: false,
+    });
+    await expect(page.getByTestId("backend-webgpu")).toBeChecked();
+    await expect(page.getByTestId("backend-webgpu")).toBeEnabled();
+    await expect(page.getByTestId("webgpu-fields")).toBeVisible();
+    await expect(page.getByTestId("host-fields")).toBeHidden();
+    await expect(page.getByTestId("run")).toHaveText(/Load Tev1/);
+    await expect(page.getByTestId("run")).toBeEnabled();
+
+    // Header primary action loads Tev1 (same as step-3 button).
+    await page.getByTestId("run").click();
+    await expect(page.getByTestId("webgpu-progress-wrap")).toBeVisible();
+    await expect(page.getByTestId("webgpu-stages")).toBeVisible();
+    // Warm is a first-class stage (cache → compile → warm → go).
+    await expect(page.getByTestId("webgpu-progress-wrap")).toHaveAttribute("data-phase", "warm", {
+      timeout: 15_000,
+    });
+    await expect(page.getByTestId("webgpu-progress-label")).toContainText(/Warming|warm/i);
+    await expect(page.getByTestId("webgpu-fields")).toHaveAttribute("data-webgpu-state", "ready", {
+      timeout: 15_000,
+    });
+    await expect(page.getByTestId("webgpu-ready")).toBeVisible();
+    await expect(page.getByTestId("webgpu-ready")).toContainText(/warmed|ready/i);
+    await expect(page.getByTestId("webgpu-status")).toContainText(/warm/i);
+    await expect(page.getByTestId("run")).toHaveText("Extract graph");
+    await expect(page.getByTestId("run")).toBeEnabled();
+    await shot(page.locator(".controls"), "12-webgpu-ready");
+
+    await afterRun(page, () => page.getByTestId("run").click());
+    await expect(page.getByTestId("error")).toBeVisible();
+    await expect(page.getByTestId("error")).toContainText("mock loader");
+    expect(await edges(page)).toEqual([]);
+
+    // The segmented control paints a <span> over the radio; click the label.
+    await page.locator('label.backend-seg-opt:has([data-testid="backend-ollama"])').click();
+    await expect(page.getByTestId("backend-ollama")).toBeChecked();
+    await expect(page.getByTestId("host-fields")).toBeVisible();
+    await expect(page.getByTestId("webgpu-fields")).toBeHidden();
+    await expect(page.getByTestId("run-note")).toContainText("Backend changed");
   });
 
   test("an unreachable host fails closed: an error and an empty graph, never a guess", async ({ page }) => {
@@ -430,12 +594,15 @@ test.describe("the decision model host", () => {
     await expect(page.getByTestId("error")).toBeVisible();
     await expect(page.getByTestId("error")).toContainText("cannot reach");
     await expect(page.getByTestId("error")).toContainText("Nothing was invented");
+    await expect(page.getByTestId("ollama-dialog")).toBeVisible();
+    await expect(page.getByTestId("ollama-checks")).toContainText(/did not answer|could not fetch|No HTTP/i);
+    await expect(page.getByTestId("ollama-dialog-cmd")).toContainText("ollama serve");
     expect(await edges(page)).toEqual([]);
     expect(await nodeNames(page)).toEqual([]);
     await shot(page, "11-host-down");
-    // Point it at a host that answers and everything returns.
-    await page.getByTestId("host-url").fill(HOST);
-    await afterRun(page, () => page.getByTestId("run").click());
+    // Point it at a host that answers and retry from the diagnostic dialog.
+    await page.getByTestId("ollama-dialog-url").fill(HOST);
+    await afterRun(page, () => page.getByTestId("ollama-dialog-retry").click());
     await expect(page.getByTestId("error")).toBeHidden();
     expect(await stat(page, "links")).toBe(4);
   });

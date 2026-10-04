@@ -17,7 +17,7 @@
         </div>
         <p class="tagline">
           Turn markdown into a knowledge graph with an ontology you write and a cutoff you own.
-          <strong>It runs in this tab. Your text goes only to the decision model you name, by default your own Ollama.</strong>
+          <strong>It runs in this tab. Your text goes only to the decision model you name, by default Tev1 on WebGPU in this tab.</strong>
         </p>
         <div class="status" aria-live="polite">
           <span class="dot" id="wasm-dot"></span>
@@ -78,10 +78,44 @@
 
           <div class="block">
             <h2><span class="step">3</span> The decision model</h2>
-            <p class="note" id="mode-note" data-testid="mode-note">Every name and every link is a closed question sent to <code>POST /v1/systemone</code> on the host below, straight from this tab. The model answers; your cutoff decides. If it cannot answer, the graph stays empty. Start Ollama with <code>OLLAMA_ORIGINS</code> allowing this page.</p>
-            <div id="host-fields">
-              <label>Host URL <input id="host-url" data-testid="host-url" value="http://localhost:11434" spellcheck="false" /></label>
+            <p class="note" id="mode-note" data-testid="mode-note">Every name and every link is a closed question. Same contract for both backends: the model answers; your cutoff decides. If it cannot answer, the graph stays empty.</p>
+            <div class="backend-seg" id="backend-switch" data-testid="backend-switch" role="radiogroup" aria-label="Decision backend">
+              <label class="backend-seg-opt">
+                <input type="radio" name="backend" id="backend-webgpu" data-testid="backend-webgpu" value="webgpu" checked />
+                <span>WebGPU in this tab</span>
+              </label>
+              <label class="backend-seg-opt">
+                <input type="radio" name="backend" id="backend-ollama" data-testid="backend-ollama" value="ollama" />
+                <span>Ollama host</span>
+              </label>
+            </div>
+            <p class="note" id="backend-unavailable" data-testid="backend-unavailable" hidden></p>
+            <div id="host-fields" data-testid="host-fields" hidden>
+              <label>Host URL <input id="host-url" data-testid="host-url" value="http://127.0.0.1:11434" spellcheck="false" /></label>
               <label>Model <input id="host-model" data-testid="host-model" value="tev1" spellcheck="false" /></label>
+              <p class="note msg" id="ollama-status" data-testid="ollama-status"></p>
+            </div>
+            <div id="webgpu-fields" data-testid="webgpu-fields" data-webgpu-state="idle">
+              <div class="webgpu-actions">
+                <button type="button" class="btn primary-btn" id="webgpu-load" data-testid="webgpu-load">Load Tev1</button>
+                <span class="webgpu-ready" id="webgpu-ready" data-testid="webgpu-ready" hidden>WebGPU ready · warmed</span>
+              </div>
+              <div class="webgpu-progress-wrap" id="webgpu-progress-wrap" data-testid="webgpu-progress-wrap" data-phase="download" hidden>
+                <ol class="webgpu-stages" id="webgpu-stages" data-testid="webgpu-stages" aria-label="Load stages">
+                  <li data-stage="download">Cache</li>
+                  <li data-stage="compile">Compile</li>
+                  <li data-stage="warm">Warm</li>
+                  <li data-stage="ready">Go</li>
+                </ol>
+                <progress id="webgpu-progress" data-testid="webgpu-progress" max="100" value="0"></progress>
+                <p class="note webgpu-progress-label" id="webgpu-progress-label" data-testid="webgpu-progress-label">Starting…</p>
+              </div>
+              <p class="note msg" id="webgpu-status" data-testid="webgpu-status">Load Tev1 before Extract. Weights stay on this device; Load also warms the GPU.</p>
+              <details class="webgpu-advanced" id="webgpu-advanced">
+                <summary>Model location</summary>
+                <label>ONNX model id <input id="webgpu-model" data-testid="webgpu-model" value="raphaelmansuy/tev1-0.8b-onnx-webgpu" spellcheck="false" /></label>
+                <p class="note" id="webgpu-hint" data-testid="webgpu-hint">Default: Hub id <code>raphaelmansuy/tev1-0.8b-onnx-webgpu</code> (Together Tev1 ONNX, ~1&nbsp;GB, browser cache). Short ids load from <code>/models/&lt;id&gt;/</code> after <code>make demo-webgpu-model</code>. Ollama <code>tev1</code> remains the Metal/CUDA ceiling.</p>
+              </details>
             </div>
           </div>
 
@@ -176,6 +210,32 @@
         <a href="https://github.com/raphaelmansuy/edgextract">GitHub</a>
       </footer>
     </div>
+
+    <dialog class="host-dialog" id="ollama-dialog" data-testid="ollama-dialog">
+      <form method="dialog" class="host-dialog-card">
+        <p class="host-dialog-kicker">Decision host</p>
+        <h2 id="ollama-dialog-title">Can't reach Ollama</h2>
+        <p class="host-dialog-lead" id="ollama-dialog-lead">
+          This tab asked the model and got no answer, so the graph stays empty — nothing was invented.
+        </p>
+        <label class="host-dialog-url">Host URL
+          <input id="ollama-dialog-url" data-testid="ollama-dialog-url" spellcheck="false" />
+        </label>
+        <ul class="host-checks" id="ollama-checks" data-testid="ollama-checks"></ul>
+        <div class="host-dialog-fix">
+          <p>On this Mac, in a terminal:</p>
+          <pre id="ollama-dialog-cmd" data-testid="ollama-dialog-cmd">ollama serve
+ollama pull tev1</pre>
+        </div>
+        <p class="host-dialog-origin note" id="ollama-dialog-origin"></p>
+        <div class="host-dialog-actions">
+          <button type="submit" class="primary" id="ollama-dialog-retry" data-testid="ollama-dialog-retry" value="retry">Try again</button>
+          <button type="submit" class="ghost" id="ollama-dialog-webgpu" data-testid="ollama-dialog-webgpu" value="webgpu">Use WebGPU</button>
+          <button type="button" class="ghost" id="ollama-dialog-copy" data-testid="ollama-dialog-copy">Copy details</button>
+          <button type="submit" class="linkish" value="dismiss">Dismiss</button>
+        </div>
+      </form>
+    </dialog>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

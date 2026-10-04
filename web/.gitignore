@@ -2,3 +2,8 @@ node_modules/
 dist/
 test-results/
 playwright-report/
+# Exported Tev1 ONNX weight blobs (see scripts/export_tev1_onnx.py)
+public/models/**
+!public/models/.gitkeep
+!public/models/tev1-0.8b-onnx/
+!public/models/tev1-0.8b-onnx/edgextract-tev1.json

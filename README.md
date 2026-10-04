@@ -38,7 +38,7 @@ write_report("graph.html", text, result, ontology, title="My note")
 
 ## Try it in your browser
 
-The Rust crate compiles to WebAssembly, and a small Vite + TypeScript page runs the whole pipeline in a tab. Your text goes only to the decision model you name (by default your own Ollama), never to a server of ours.
+The Rust crate compiles to WebAssembly, and a small Vite + TypeScript page runs the whole pipeline in a tab. Your text goes only to the decision model you name (by default Tev1 on WebGPU in this tab; Ollama is one click away), never to a server of ours.
 
 ```bash
 ollama pull tev1                  # Ollama already accepts pages served from localhost;
@@ -46,7 +46,10 @@ ollama pull tev1                  # Ollama already accepts pages served from loc
 ```
 
 ```bash
-make demo        # builds the wasm, then serves http://localhost:5273
+make demo                # builds the wasm, then serves http://localhost:5273
+# WebGPU default loads raphaelmansuy/tev1-0.8b-onnx-webgpu (~1 GB, browser cache).
+# Optional: make demo-webgpu-model / make demo-webgpu-publish / make demo-webgpu-export-tev1
+# Attribution: docs/THIRD_PARTY_NOTICES.md
 ```
 
 ![The browser demo reading four sentences of company news](docs/img/demo/01-northwind.png)
@@ -55,7 +58,7 @@ make demo        # builds the wasm, then serves http://localhost:5273
 - **Bring any ontology.** Pick one of seven samples (company news, tech docs, research papers, film, medicine, history, CoNLL04), start from a template, upload your own YAML, and edit it with live validation.
 - **Names no list knows are still read.** Every capitalized name in your text is put to the model as a closed question ("is this a name this ontology can hold?"), then typed. You can also pin names to an ontology with one click.
 - **Own the cutoff.** Two sliders move what is kept, sent to review, or dropped. The decision cache means moving them asks the model nothing new.
-- **The model does the extracting.** The page asks an Ollama / SystemOne host (default `http://localhost:11434`, model `tev1`; Ollama must allow the page's origin via `OLLAMA_ORIGINS`). There is no rule-based mode in the page. If the host cannot answer, the graph stays empty.
+- **The model does the extracting.** Step 3 defaults to **WebGPU** in the tab: the header button is **Load Tev1** until weights are ready, then **Extract graph**. The default graph is [`raphaelmansuy/tev1-0.8b-onnx-webgpu`](https://huggingface.co/raphaelmansuy/tev1-0.8b-onnx-webgpu) (Together Tev1 ONNX; attribution in [`docs/THIRD_PARTY_NOTICES.md`](docs/THIRD_PARTY_NOTICES.md)). **Ollama** is the other option (`http://localhost:11434`, model `tev1`; set `OLLAMA_ORIGINS`) and remains the Metal/CUDA speed ceiling. Same closed-question JSON either way. There is no rule-based mode in the page. If the backend cannot answer, the graph stays empty.
 
 `make demo-e2e` runs the Playwright suite against a deterministic test double of the host (34 tests, with screenshots in [`docs/img/demo`](docs/img/demo)). Details in [`web/README.md`](web/README.md).
 

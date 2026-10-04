@@ -24,19 +24,58 @@ export const DOUBLE = "http://127.0.0.1:11435";
 /** The same double, but each answer takes 150 ms, so a long read is long enough to watch. */
 export const SLOW = "http://127.0.0.1:11436";
 
+export interface OpenDemoOpts {
+  host?: string;
+  model?: string;
+  backend?: "ollama" | "webgpu";
+  /** Staged WebGPU download UX without real ONNX (`?webgpuMock=1`). */
+  webgpuMock?: boolean;
+  /** Wait for the first auto-extraction (default true unless backend is webgpu). */
+  waitForRun?: boolean;
+}
+
 /**
  * Open the demo and wait for the first extraction to finish. The page always asks a
  * decision-model host; by default the suite points it at the test double.
  */
-export async function openDemo(page: Page, host: string = DOUBLE, model = "test-double"): Promise<string[]> {
+export async function openDemo(
+  page: Page,
+  hostOrOpts: string | OpenDemoOpts = DOUBLE,
+  model = "test-double",
+): Promise<string[]> {
+  // Page default is WebGPU; the suite talks to the Ollama stand-in unless a test asks otherwise.
+  const opts: OpenDemoOpts =
+    typeof hostOrOpts === "string"
+      ? { host: hostOrOpts, model, backend: "ollama", waitForRun: true }
+      : {
+          host: DOUBLE,
+          model: "test-double",
+          backend: "ollama",
+          waitForRun: true,
+          ...hostOrOpts,
+          waitForRun:
+            hostOrOpts.waitForRun ??
+            (hostOrOpts.backend === "webgpu" || hostOrOpts.webgpuMock ? false : true),
+        };
+
   const problems: string[] = [];
   page.on("pageerror", (e) => problems.push(`pageerror: ${e.message}`));
   page.on("console", (m) => {
     if (m.type() === "error") problems.push(`console.error: ${m.text()}`);
   });
-  await page.goto(`/?host=${encodeURIComponent(host)}&model=${encodeURIComponent(model)}`);
-  await page.waitForFunction(() => Number(document.body.dataset.runs ?? 0) >= 1);
-  await settled(page);
+
+  const q = new URLSearchParams();
+  if (opts.host) q.set("host", opts.host);
+  if (opts.model) q.set("model", opts.model);
+  if (opts.backend) q.set("backend", opts.backend);
+  if (opts.webgpuMock) q.set("webgpuMock", "1");
+
+  await page.goto(`/?${q.toString()}`);
+  await page.waitForFunction(() => document.body.dataset.ready === "true");
+  if (opts.waitForRun !== false) {
+    await page.waitForFunction(() => Number(document.body.dataset.runs ?? 0) >= 1);
+    await settled(page);
+  }
   return problems;
 }
 

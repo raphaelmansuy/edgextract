@@ -1,0 +1,81 @@
+{
+  "gpu": {
+    "ok": true,
+    "reason": "adapter"
+  },
+  "at": "2026-10-04T05:17:58.049Z",
+  "tev1-0.8b-onnx": {
+    "load_ms": 28147,
+    "fingerprint": {
+      "kind": "fused-opt",
+      "past_conv0_last_dim": 3
+    },
+    "cold_extract_ms": 626,
+    "warm_extract_ms": 19,
+    "cold_detail": "1 model call · 1 fwd · batch · 0.0 s/call · 0:00 elapsed",
+    "warm_detail": "0 model calls · 1 fwd · batch · 0.6 s/call · 0:00 elapsed",
+    "bench": {
+      "fingerprint": {
+        "past_conv0_last_dim": 3,
+        "kind": "fused-opt",
+        "revision": null
+      },
+      "warm_ms": 306,
+      "length_sweep": [
+        {
+          "tokens": 32,
+          "ms": 194
+        },
+        {
+          "tokens": 128,
+          "ms": 77
+        },
+        {
+          "tokens": 256,
+          "ms": 117
+        }
+      ],
+      "ms_per_token": -0.34375,
+      "pad_logit_max_abs_delta": 0.02734375,
+      "pad_safe": true,
+      "recommendation": "batch"
+    }
+  },
+  "raphaelmansuy/tev1-0.8b-onnx-webgpu": {
+    "load_ms": 66861,
+    "fingerprint": {
+      "kind": "fused-opt",
+      "past_conv0_last_dim": 3
+    },
+    "cold_extract_ms": 464,
+    "warm_extract_ms": 18,
+    "cold_detail": "1 model call · 1 fwd · batch · 0.0 s/call · 0:00 elapsed",
+    "warm_detail": "0 model calls · 1 fwd · batch · 0.4 s/call · 0:00 elapsed",
+    "bench": {
+      "fingerprint": {
+        "past_conv0_last_dim": 3,
+        "kind": "fused-opt",
+        "revision": "26a904f1d138eddc711f9f116e045bffc1924dbd"
+      },
+      "warm_ms": 312,
+      "length_sweep": [
+        {
+          "tokens": 32,
+          "ms": 34
+        },
+        {
+          "tokens": 128,
+          "ms": 46
+        },
+        {
+          "tokens": 256,
+          "ms": 66
+        }
+      ],
+      "ms_per_token": 0.14285714285714285,
+      "pad_logit_max_abs_delta": 0.02734375,
+      "pad_safe": true,
+      "recommendation": "batch"
+    }
+  }
+}

@@ -6,7 +6,9 @@ import { addToGazetteer, suggestNames } from "./names";
 import { DEMO_ONTOLOGIES, ONTOLOGY_BLURBS } from "./ontologies";
 import { SAMPLES } from "./samples";
 import type {
+  DecisionBackend,
   Flagged,
+  HostConfig,
   Plan,
   Progress,
   OntologyFile,
@@ -14,6 +16,7 @@ import type {
   RunOutput,
   RunRequest,
 } from "./types";
+import { DEFAULT_TEV1_HUB_REVISION, DEFAULT_TEV1_MODEL_ID, isHubModelId } from "./tev1/runtime";
 
 // ---------------------------------------------------------------- helpers
 
@@ -68,6 +71,8 @@ const state = {
 };
 
 const engine = new EngineClient();
+/** Perf harness (`e2e/webgpu-perf.spec.ts`) calls `benchWebGpu` through this handle. */
+(window as unknown as { __edgextractEngine: EngineClient }).__edgextractEngine = engine;
 const graph = new GraphView($("graph") as unknown as SVGSVGElement, {
   onHover: (e) => showEvidence(e),
   onSelect: (e) => {
@@ -111,6 +116,7 @@ function setPhase(next: Phase): void {
   phase = next;
   document.body.dataset.phase = next;
   $("run").setAttribute("aria-busy", String(next === "preparing" || next === "running" || next === "stopping"));
+  syncExtractGate();
 }
 
 /** Above this many forecast model calls the page asks before reading. */
@@ -130,12 +136,57 @@ const read = {
   startedAt: 0,
   startSection: 0,
   waitingSince: 0,
+  /** Calls that have started but not ended yet (honest “in flight” while waiting). */
+  inFlight: 0,
+  /** Questions inside the packed System One POST currently in flight. */
+  packQuestions: 0,
+  /** Last completed pack path (sequential / single / prefix). */
+  packPath: "" as string,
+  /** Forwards reported at the end of the last pack. */
+  packForwards: 0,
   /** Model calls answered since the last section finished (the section's own count lags). */
   live: 0,
   progress: null as Progress | null,
   /** A newer request arrived while one was running: do it next, once. */
   again: null as RunOpts | null,
 };
+
+type WebGpuLoadPhase = "download" | "compile" | "warm" | "ready";
+
+function webGpuPhaseFromMessage(message: string): WebGpuLoadPhase {
+  if (/^Ready\b/i.test(message)) return "ready";
+  if (/^Warming\b/i.test(message)) return "warm";
+  if (/^Compiling\b/i.test(message)) return "compile";
+  return "download";
+}
+
+function paintWebGpuStages(phase: WebGpuLoadPhase): void {
+  const wrap = $("webgpu-progress-wrap");
+  wrap.dataset.phase = phase;
+  const order: WebGpuLoadPhase[] = ["download", "compile", "warm", "ready"];
+  const activeIdx = order.indexOf(phase);
+  for (const li of wrap.querySelectorAll<HTMLElement>(".webgpu-stages [data-stage]")) {
+    const stage = li.dataset.stage as WebGpuLoadPhase;
+    const idx = order.indexOf(stage);
+    li.dataset.active = stage === phase ? "true" : "false";
+    li.dataset.done = idx >= 0 && idx < activeIdx ? "true" : "false";
+  }
+}
+
+/** Friendlier progress copy — especially for the warm beat. */
+function polishWebGpuProgress(message: string, phase: WebGpuLoadPhase): string {
+  if (phase === "warm") {
+    if (/first prefill/i.test(message)) {
+      return "Warming WebGPU — one practice question so Extract starts hot";
+    }
+    if (/waking GPU|weights cached/i.test(message)) {
+      return "Warming WebGPU — weights are in, waking the GPU…";
+    }
+    return message.replace(/^Warming WebGPU/, "Warming WebGPU");
+  }
+  if (phase === "ready") return "Ready — cached & GPU warmed";
+  return message;
+}
 
 interface RunOpts {
   /** Re-read cached answers after a cutoff moved; asks the model nothing new. */
@@ -144,7 +195,491 @@ interface RunOpts {
   consent?: boolean;
 }
 
-const host = (): { baseUrl: string } => ({ baseUrl: $<HTMLInputElement>("host-url").value.trim() });
+type WebGpuUiState = "unavailable" | "idle" | "loading" | "ready" | "error";
+
+const backend = (): DecisionBackend =>
+  ($<HTMLInputElement>("backend-webgpu").checked ? "webgpu" : "ollama");
+
+let webgpuProbe: { ok: boolean; reason?: string } | undefined;
+let webgpuUi: WebGpuUiState = "idle";
+let webgpuMock = false;
+let webgpuError: string | null = null;
+
+const webgpuModelId = (): string =>
+  $<HTMLInputElement>("webgpu-model").value.trim() || DEFAULT_TEV1_MODEL_ID;
+
+/** `localhost` often tries IPv6 (::1) first and hangs ~60s if Ollama only binds IPv4. */
+function ipv4Loopback(url: string): string {
+  const raw = url.trim() || "http://127.0.0.1:11434";
+  try {
+    const u = new URL(raw);
+    if (u.hostname === "localhost") u.hostname = "127.0.0.1";
+    return u.toString().replace(/\/+$/, "");
+  } catch {
+    return raw.replace(/\/+$/, "").replace(/^http:\/\/localhost\b/i, "http://127.0.0.1");
+  }
+}
+
+type CheckState = "true" | "false" | "unknown";
+
+interface HostCheck {
+  ok: CheckState;
+  label: string;
+  hint?: string;
+}
+
+interface OllamaProbe {
+  ok: boolean;
+  typedUrl: string;
+  base: string;
+  origin: string;
+  detail: string;
+  checks: HostCheck[];
+  copyText: string;
+}
+
+function pageOrigin(): string {
+  try {
+    return location.origin;
+  } catch {
+    return "";
+  }
+}
+
+async function probeOllamaHost(baseUrl: string): Promise<OllamaProbe> {
+  const typedUrl = (baseUrl || "").trim() || "http://127.0.0.1:11434";
+  const origin = pageOrigin();
+  const checks: HostCheck[] = [];
+  let parsed: URL | null = null;
+  try {
+    parsed = new URL(typedUrl);
+    checks.push({ ok: "true", label: "Host URL is valid", hint: typedUrl });
+  } catch {
+    checks.push({ ok: "false", label: "Host URL is not a valid http(s) address", hint: typedUrl });
+    const fail: OllamaProbe = {
+      ok: false,
+      typedUrl,
+      base: typedUrl,
+      origin,
+      detail: `cannot reach ${typedUrl}: invalid URL`,
+      checks,
+      copyText: "",
+    };
+    fail.copyText = formatOllamaCopy(fail);
+    return fail;
+  }
+
+  const base = ipv4Loopback(typedUrl);
+  const rewrote = parsed.hostname === "localhost";
+  checks.push(
+    rewrote
+      ? {
+          ok: "true",
+          label: "Using IPv4 127.0.0.1 instead of localhost",
+          hint: "Avoids a long hang when Ollama only listens on IPv4.",
+        }
+      : { ok: "true", label: `Target ${parsed.hostname}:${parsed.port || "11434"}` },
+  );
+
+  try {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 2500);
+    const res = await fetch(base, { method: "GET", signal: ctrl.signal, cache: "no-store" });
+    clearTimeout(timer);
+    if (res.status === 0) {
+      checks.push({
+        ok: "false",
+        label: "No HTTP response from the host",
+        hint: "Start Ollama, then Try again.",
+      });
+      const fail: OllamaProbe = {
+        ok: false,
+        typedUrl,
+        base,
+        origin,
+        detail: `cannot reach ${base}`,
+        checks,
+        copyText: "",
+      };
+      fail.copyText = formatOllamaCopy(fail);
+      return fail;
+    }
+    const text = await res.text().catch(() => "");
+    const looksOllama = /ollama is running/i.test(text);
+    checks.push({
+      ok: "true",
+      label: `Host answered HTTP ${res.status}`,
+      hint: looksOllama
+        ? "This looks like Ollama."
+        : res.status === 404
+          ? "Port is open (a test double answers 404 on GET /)."
+          : text.slice(0, 80) || undefined,
+    });
+    if (origin && origin.startsWith("http")) {
+      checks.push({
+        ok: "true",
+        label: `This page origin ${origin} can talk to the host`,
+        hint: looksOllama ? undefined : "CORS succeeded; POST /v1/systemone is next.",
+      });
+    }
+    const ok: OllamaProbe = {
+      ok: true,
+      typedUrl,
+      base,
+      origin,
+      detail: "ok",
+      checks,
+      copyText: "",
+    };
+    ok.copyText = formatOllamaCopy(ok);
+    return ok;
+  } catch (e) {
+    const aborted = e instanceof DOMException && e.name === "AbortError";
+    const msg = aborted ? "timed out after 2.5s" : (e as Error).message || "connection failed";
+    checks.push({
+      ok: "false",
+      label: aborted ? "Host did not answer in 2.5 seconds" : "Browser could not fetch the host",
+      hint: aborted
+        ? "Ollama is probably not running, or localhost is stalling on IPv6."
+        : "Usual causes: Ollama is down, CORS blocked this origin, or the port is wrong.",
+    });
+    checks.push({
+      ok: origin.includes("localhost") || origin.includes("127.0.0.1") ? "unknown" : "false",
+      label: `Page origin is ${origin || "unknown"}`,
+      hint: "Ollama allows localhost by default. For another origin: OLLAMA_ORIGINS before `ollama serve`.",
+    });
+    const fail: OllamaProbe = {
+      ok: false,
+      typedUrl,
+      base,
+      origin,
+      detail: `cannot reach ${base}: ${msg}`,
+      checks,
+      copyText: "",
+    };
+    fail.copyText = formatOllamaCopy(fail);
+    return fail;
+  }
+}
+
+function formatOllamaCopy(p: OllamaProbe): string {
+  const lines = [
+    `edgextract Ollama diagnostic`,
+    `typed: ${p.typedUrl}`,
+    `used:  ${p.base}`,
+    `origin: ${p.origin}`,
+    `ok: ${p.ok}`,
+    `detail: ${p.detail}`,
+    ...p.checks.map((c) => `- [${c.ok}] ${c.label}${c.hint ? ` — ${c.hint}` : ""}`),
+    `fix: ollama serve && ollama pull tev1`,
+  ];
+  return lines.join("\n");
+}
+
+function fillOllamaChecks(checks: HostCheck[]): void {
+  const ul = $("ollama-checks");
+  ul.replaceChildren();
+  for (const c of checks) {
+    const li = document.createElement("li");
+    li.dataset.ok = c.ok;
+    const mark = document.createElement("span");
+    mark.className = "mark";
+    mark.textContent = c.ok === "true" ? "✓" : c.ok === "false" ? "✕" : "?";
+    const body = document.createElement("span");
+    body.textContent = c.label;
+    if (c.hint) {
+      const hint = document.createElement("span");
+      hint.className = "hint";
+      hint.textContent = c.hint;
+      body.appendChild(hint);
+    }
+    li.append(mark, body);
+    ul.appendChild(li);
+  }
+}
+
+let lastOllamaProbe: OllamaProbe | null = null;
+
+function closeOllamaDialog(): void {
+  const dlg = $("ollama-dialog") as HTMLDialogElement;
+  if (dlg.open) dlg.close("dismiss");
+}
+
+function openOllamaDialog(probe: OllamaProbe, extraLead?: string): void {
+  lastOllamaProbe = probe;
+  fillOllamaChecks(probe.checks);
+  $("ollama-dialog-lead").textContent =
+    extraLead ||
+    `This tab asked ${probe.base} and got no answer, so the graph stays empty — nothing was invented.`;
+  $("ollama-dialog-origin").textContent = probe.origin
+    ? `CORS: Ollama must allow origin ${probe.origin} (localhost is allowed by default).`
+    : "";
+  $("ollama-dialog-cmd").textContent = `ollama serve\nollama pull tev1`;
+  $<HTMLInputElement>("ollama-dialog-url").value =
+    $<HTMLInputElement>("host-url").value.trim() || probe.typedUrl;
+  const dlg = $("ollama-dialog") as HTMLDialogElement;
+  if (!dlg.open) dlg.showModal();
+}
+
+const host = (): HostConfig => {
+  if (backend() === "webgpu") {
+    return {
+      backend: "webgpu",
+      baseUrl: "",
+      model: webgpuModelId(),
+    };
+  }
+  return {
+    backend: "ollama",
+    baseUrl: ipv4Loopback($<HTMLInputElement>("host-url").value),
+    model: $<HTMLInputElement>("host-model").value.trim() || "tev1",
+  };
+};
+
+async function paintOllamaStatus(): Promise<void> {
+  const el = $("ollama-status");
+  if (backend() !== "ollama") return;
+  el.textContent = "Checking Ollama…";
+  el.classList.remove("bad");
+  const r = await probeOllamaHost($<HTMLInputElement>("host-url").value);
+  if (backend() !== "ollama") return;
+  if (r.ok) {
+    el.textContent = `Ollama is up at ${r.base}. Extract should answer in seconds, not a minute.`;
+    el.classList.remove("bad");
+  } else {
+    el.textContent = r.detail + ". Open details if Extract fails.";
+    el.classList.add("bad");
+  }
+}
+
+function webgpuReady(): boolean {
+  return webgpuUi === "ready";
+}
+
+/** True when Hub/local graph looks reachable (not only our metadata stub). */
+let webgpuWeightsPresent: boolean | null = null;
+
+async function probeWebGpuWeights(modelId: string): Promise<boolean> {
+  const id = modelId.trim() || DEFAULT_TEV1_MODEL_ID;
+  // Hub ids: Transformers.js downloads from Hugging Face (browser cache).
+  if (isHubModelId(id)) {
+    try {
+      // Match the pinned revision Load uses so Cache Storage and probe agree.
+      const rev = DEFAULT_TEV1_HUB_REVISION;
+      const res = await fetch(
+        `https://huggingface.co/${id}/resolve/${encodeURIComponent(rev)}/config.json`,
+        {
+          method: "GET",
+          cache: "no-store",
+          mode: "cors",
+        },
+      );
+      if (!res.ok) return false;
+      const text = await res.text();
+      if (text.trimStart().startsWith("<!")) return false;
+      JSON.parse(text);
+      return true;
+    } catch {
+      // Offline / CORS: still allow Load — Transformers.js will surface a real error.
+      return true;
+    }
+  }
+  const base = `/models/${id.replace(/^\/+|\/+$/g, "")}`;
+  // config.json is required by Transformers.js; edgextract-tev1.json alone is not enough.
+  // Reject HTML (Vite SPA fallback) and plain 404 bodies.
+  try {
+    const res = await fetch(`${base}/config.json`, { method: "GET", cache: "no-store" });
+    if (!res.ok) return false;
+    const ctype = res.headers.get("content-type") || "";
+    if (!ctype.includes("json") && !ctype.includes("text/plain")) {
+      void res.body?.cancel();
+      return false;
+    }
+    const text = await res.text();
+    if (text.trimStart().startsWith("<!")) return false;
+    JSON.parse(text);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function focusWebGpuLoad(): void {
+  const btn = $<HTMLButtonElement>("webgpu-load");
+  btn.scrollIntoView({ block: "nearest", behavior: "smooth" });
+  btn.focus();
+}
+
+function setWebGpuState(next: WebGpuUiState): void {
+  webgpuUi = next;
+  const panel = $("webgpu-fields");
+  panel.dataset.webgpuState = next;
+  document.body.dataset.webgpuState = next;
+
+  const loadBtn = $<HTMLButtonElement>("webgpu-load");
+  const progressWrap = $("webgpu-progress-wrap");
+  const readyBadge = $("webgpu-ready");
+  const status = $("webgpu-status");
+  const modelId = webgpuModelId();
+
+  progressWrap.hidden = next !== "loading";
+  readyBadge.hidden = next !== "ready";
+  if (next === "ready") readyBadge.textContent = `WebGPU ready · warmed`;
+  if (next === "loading") paintWebGpuStages("download");
+
+  loadBtn.disabled = next === "loading" || next === "unavailable";
+  loadBtn.textContent =
+    next === "ready" ? "Reload" : next === "error" ? "Try again" : next === "loading" ? "Loading…" : "Load Tev1";
+
+  status.classList.toggle("bad", next === "error");
+  if (next === "idle") {
+    if (webgpuMock) {
+      status.textContent =
+        "Mock loader on — press Load Tev1 to preview cache → compile → warm (scoring stays fail-closed).";
+    } else if (webgpuWeightsPresent === false) {
+      status.textContent = isHubModelId(modelId)
+        ? `Cannot reach ${modelId} on Hugging Face. Check the network, or switch to Ollama.`
+        : "No local ONNX graph. Use the Hub id (default), run make demo-webgpu-model, or switch to Ollama.";
+      status.classList.add("bad");
+      ($("webgpu-advanced") as HTMLDetailsElement).open = true;
+    } else {
+      status.textContent = isHubModelId(modelId)
+        ? `Press Load Tev1 — downloads ${modelId} into this browser’s cache (skipped when cached), then warms the GPU.`
+        : "Press Load Tev1 (header or here): load weights, warm WebGPU, then Extract graph.";
+    }
+  } else if (next === "error") {
+    status.textContent = webgpuError || "WebGPU load failed.";
+  } else if (next === "ready") {
+    status.textContent = webgpuMock
+      ? "Mock ready (cache → compile → warm). Extract stays fail-closed until real ONNX weights are present."
+      : "Cached & GPU warmed. Extract should start answering immediately — no silent cold start.";
+  } else if (next === "unavailable") {
+    status.textContent = webgpuProbe?.reason || "WebGPU is not available.";
+  } else if (next === "loading") {
+    status.textContent = isHubModelId(modelId)
+      ? `Loading ${modelId}: cache → compile → warm…`
+      : "Loading on this device: cache → compile → warm…";
+  }
+
+  syncExtractGate();
+}
+
+function syncExtractGate(): void {
+  const runBtn = $<HTMLButtonElement>("run");
+  const note = $("run-note");
+  const blocked = backend() === "webgpu" && !webgpuReady();
+  if (blocked) {
+    // Keep the primary header action usable: it becomes Load Tev1 (step 3 can be below the fold).
+    runBtn.removeAttribute("disabled");
+    runBtn.dataset.action = "load-tev1";
+    runBtn.textContent =
+      webgpuUi === "loading" ? "Loading Tev1…" : webgpuUi === "error" ? "Try Load Tev1" : "Load Tev1";
+    runBtn.title = "Download Tev1 weights into this tab, then Extract graph.";
+    runBtn.disabled = webgpuUi === "loading" || webgpuUi === "unavailable";
+    if (!busy()) {
+      if (webgpuWeightsPresent === false || webgpuUi === "error") {
+        note.textContent =
+          webgpuError || "WebGPU load failed. Fix the model id in step 3, or switch to Ollama.";
+      } else {
+        note.textContent = "Press Load Tev1 (this button), then Extract graph.";
+      }
+    }
+  } else if (!busy()) {
+    runBtn.dataset.action = "extract";
+    runBtn.textContent = "Extract graph";
+    runBtn.removeAttribute("disabled");
+    runBtn.disabled = false;
+    runBtn.title = "";
+  }
+}
+
+function syncBackendUi(): void {
+  const mode = backend();
+  $("host-fields").hidden = mode !== "ollama";
+  $("webgpu-fields").hidden = mode !== "webgpu";
+  const note = $("mode-note");
+  const unavailable = $("backend-unavailable");
+  const gpuBlocked = !!(webgpuProbe && !webgpuProbe.ok);
+
+  if (gpuBlocked) {
+    unavailable.hidden = false;
+    unavailable.textContent = `WebGPU unavailable: ${webgpuProbe!.reason || "no adapter"}. Ollama still works.`;
+  } else {
+    unavailable.hidden = true;
+    unavailable.textContent = "";
+  }
+
+  if (mode === "ollama") {
+    note.innerHTML =
+      `Every name and every link is a closed question sent to <code>POST /v1/systemone</code> on the host below. ` +
+      `Native Ollama is much faster than in-tab WebGPU. If the host is down you get a diagnostic, not a minute of waiting.`;
+    void paintOllamaStatus();
+  } else {
+    note.innerHTML =
+      `Every name and every link is a closed question scored in this tab (WebGPU). ` +
+      `Default graph: <code>${DEFAULT_TEV1_MODEL_ID}</code> — Together Tev1 ONNX (WebGPU). ` +
+      `Same System One JSON as Ollama; your cutoff decides. Load first — selecting WebGPU does not start the download.`;
+    if (webgpuUi === "unavailable") setWebGpuState("unavailable");
+    else if (webgpuUi !== "ready" && webgpuUi !== "loading" && webgpuUi !== "error") {
+      setWebGpuState("idle");
+    } else {
+      setWebGpuState(webgpuUi);
+    }
+  }
+  syncExtractGate();
+}
+
+async function loadWebGpuWeights(): Promise<void> {
+  if (backend() !== "webgpu") return;
+  if (webgpuUi === "unavailable" || webgpuUi === "loading") return;
+  const modelId = webgpuModelId();
+  webgpuError = null;
+  focusWebGpuLoad();
+  if (!webgpuMock) {
+    webgpuWeightsPresent = await probeWebGpuWeights(modelId);
+    if (!webgpuWeightsPresent) {
+      webgpuError = isHubModelId(modelId)
+        ? `Cannot reach ${modelId} on Hugging Face (need config.json). Or switch to Ollama host.`
+        : `No ONNX graph at /models/${modelId}/ (need config.json). Run make demo-webgpu-model, or use the Hub id ${DEFAULT_TEV1_MODEL_ID}.`;
+      setWebGpuState("error");
+      ($("webgpu-advanced") as HTMLDetailsElement).open = true;
+      $("run-note").textContent = "WebGPU weights missing. Fix the model id, or switch to Ollama.";
+      return;
+    }
+  }
+  setWebGpuState("loading");
+  const bar = $<HTMLProgressElement>("webgpu-progress");
+  const label = $("webgpu-progress-label");
+  bar.value = 0;
+  bar.dataset.peak = "0";
+  paintWebGpuStages("download");
+  label.textContent = "Starting…";
+  try {
+    const loaded = await engine.loadWebGpu(modelId);
+    const fp = (loaded as { fingerprint?: { kind?: string; past_conv0_last_dim?: number } })
+      .fingerprint;
+    if (fp?.kind) {
+      document.body.dataset.webgpuGraph = fp.kind;
+      if (fp.past_conv0_last_dim != null) {
+        document.body.dataset.webgpuPastConv = String(fp.past_conv0_last_dim);
+      }
+    }
+    paintWebGpuStages("ready");
+    setWebGpuState("ready");
+    $("run-note").textContent = fp?.kind
+      ? `GPU warmed (${fp.kind}). Press Extract graph — answers should start right away.`
+      : "GPU warmed. Press Extract graph — answers should start right away.";
+  } catch (e) {
+    const msg = (e as Error).message || String(e);
+    webgpuError = /404|not found|Failed to fetch|NetworkError/i.test(msg)
+      ? `${msg} — check ${modelId} on Hugging Face, or use a local id under /models/, or Ollama.`
+      : msg;
+    setWebGpuState("error");
+    ($("webgpu-advanced") as HTMLDetailsElement).open = true;
+    $("run-note").textContent = "WebGPU load failed. Fix step 3, or switch to Ollama host.";
+  }
+}
+
 const busy = (): boolean => phase === "preparing" || phase === "running" || phase === "stopping";
 
 function fmtDuration(ms: number): string {
@@ -164,6 +699,7 @@ function showError(message: string | null, retry = false): void {
   box.hidden = message == null;
   $("error-text").textContent = message ?? "";
   $("retry").hidden = !retry;
+  if (message == null) closeOllamaDialog();
 }
 
 function showNotice(text: string | null, action = "Continue reading"): void {
@@ -207,8 +743,27 @@ function paintProgress(): void {
   }
   const parts: string[] = [];
   if (p) {
-    const calls = p.calls + read.live;
-    parts.push(`${calls} model call${calls === 1 ? "" : "s"}`);
+    const done = p.calls + read.live;
+    parts.push(`${done} model call${done === 1 ? "" : "s"}`);
+    if (read.inFlight > 0) {
+      parts.push(`${read.inFlight} in flight`);
+      if (read.packQuestions > 1) {
+        // Engine worker is blocked on Atomics.wait — estimate which forward we're on.
+        const waitMs = read.waitingSince ? performance.now() - read.waitingSince : 0;
+        const est =
+          read.msPerCall > 0
+            ? Math.min(read.packQuestions, Math.max(1, Math.ceil(waitMs / read.msPerCall)))
+            : 1;
+        parts.push(`q ${est}/${read.packQuestions}`);
+      } else if (read.packQuestions === 1) {
+        parts.push("1 question");
+      }
+    } else if (read.packForwards > 0 && read.packPath) {
+      parts.push(`${read.packForwards} fwd · ${read.packPath}`);
+    }
+    if (read.learned) {
+      parts.push(`${(read.msPerCall / 1000).toFixed(1)} s/call`);
+    }
   }
   if (phase !== "preparing") parts.push(`${clock(elapsed)} elapsed`);
   if (multi && p.section - read.startSection >= 2 && elapsed > 3000) {
@@ -216,8 +771,13 @@ function paintProgress(): void {
     parts.push(`about ${fmtDuration(perSection * (p.sections - p.section))} left`);
   }
   $("progress-detail").textContent = parts.join(" · ");
+  const waitS = read.waitingSince
+    ? Math.round((performance.now() - read.waitingSince) / 1000)
+    : 0;
   $("progress-wait").textContent = read.waitingSince
-    ? `waiting for the model… ${Math.round((performance.now() - read.waitingSince) / 1000)} s`
+    ? `waiting for the model… ${waitS} s` +
+      (read.packQuestions > 1 ? ` · ${read.packQuestions} questions in this POST` : "") +
+      (read.learned ? ` · ${(read.msPerCall / 1000).toFixed(1)} s/fwd` : "")
     : "";
 }
 
@@ -228,14 +788,25 @@ setInterval(() => {
 engine.onCall = (e) => {
   if (e.state === "start") {
     read.waitingSince = performance.now();
+    read.inFlight = 1;
+    read.packQuestions = e.questions ?? 1;
+    read.packForwards = 0;
+    read.packPath = "";
+    if (!$("progress").hidden) paintProgress();
   } else {
     read.waitingSince = 0;
+    read.inFlight = 0;
     read.live++;
+    read.packQuestions = e.questions ?? read.packQuestions;
+    read.packForwards = e.forwards ?? e.questions ?? 0;
+    read.packPath = e.packPath ?? "";
     if (e.ms != null) {
-      // A running average, so the forecast learns this host's real speed.
-      read.msPerCall = read.learned ? read.msPerCall * 0.7 + e.ms * 0.3 : e.ms;
+      // Packed WebGPU POSTs also send mean prefill ms so the bar is honest vs Ollama.
+      const sample = e.prefillMs ?? e.ms;
+      read.msPerCall = read.learned ? read.msPerCall * 0.7 + sample * 0.3 : sample;
       read.learned = true;
     }
+    if (!$("progress").hidden) paintProgress();
   }
 };
 
@@ -270,7 +841,7 @@ function request(): RunRequest {
     text: textEl.value,
     ontology_yaml: yamlEl.value,
     document_id: SAMPLES.find((s) => s.id === state.sample)?.id ?? "note",
-    model: $<HTMLInputElement>("host-model").value.trim() || "tev1",
+    model: host().model,
     // A document's names are rarely all on a list: let the model judge every capitalized run.
     discover_names: true,
     // The same two numbers gate yes/no links and name checks.
@@ -285,6 +856,11 @@ function showGraphOnSmallScreens(): void {
 
 async function run(opts: RunOpts = {}): Promise<void> {
   if (!state.yamlValid) return;
+  if (backend() === "webgpu" && !webgpuReady()) {
+    syncExtractGate();
+    focusWebGpuLoad();
+    return;
+  }
   if (busy()) {
     // One reading at a time. Remember the newest wish and stop what is running.
     read.again = opts;
@@ -299,11 +875,21 @@ async function run(opts: RunOpts = {}): Promise<void> {
   read.progress = null;
   read.startedAt = performance.now();
   read.waitingSince = 0;
+  read.inFlight = 0;
   showGraphOnSmallScreens();
   setPhase("preparing");
   showProgress(true);
   paintProgress();
   try {
+    if (backend() === "ollama") {
+      const probe = await probeOllamaHost($<HTMLInputElement>("host-url").value);
+      lastOllamaProbe = probe;
+      if (!probe.ok) {
+        throw new Error(
+          `${probe.detail}. Start Ollama (\`ollama serve\`) and pull \`tev1\`, or switch to WebGPU.`,
+        );
+      }
+    }
     const req = request();
     // After a partial read, moving a cutoff re-reads only what was read, from the cache.
     if (opts.regate && read.covered > 0 && read.covered < read.total) req.max_sections = read.covered;
@@ -311,6 +897,7 @@ async function run(opts: RunOpts = {}): Promise<void> {
     read.total = plan.total_sections;
     read.progress = plan.progress;
     read.live = 0;
+    read.inFlight = 0;
     if (read.again) return;
     if (!opts.consent && !opts.regate && plan.forecast.estimated_calls > AUTO_CALLS) {
       setPhase("planned");
@@ -351,6 +938,7 @@ async function readDocument(limit?: number): Promise<void> {
       onProgress: (p, out) => {
         read.progress = p;
         read.live = 0;
+        read.inFlight = 0;
         paintProgress();
         if (out) show(out);
       },
@@ -391,6 +979,7 @@ function fail(e: unknown): void {
   const err = e as EngineError;
   const partial = err.partial;
   setPhase("error");
+  const unreachable = /cannot reach/i.test(err.message || "");
   if (partial && partial.progress.section > 0) {
     // Keep what was read: a failure at section 40 must not erase sections 1 to 39.
     show(partial);
@@ -405,6 +994,15 @@ function fail(e: unknown): void {
     state.last = null;
     paintEmpty();
     showError(`${err.message}\n\nNothing was invented: with no answer from the model, the graph stays empty.`, true);
+  }
+  if (unreachable && backend() === "ollama") {
+    if (lastOllamaProbe && !lastOllamaProbe.ok) openOllamaDialog(lastOllamaProbe);
+    else {
+      void probeOllamaHost($<HTMLInputElement>("host-url").value).then((probe) => {
+        lastOllamaProbe = probe;
+        if (!probe.ok) openOllamaDialog(probe);
+      });
+    }
   }
 }
 
@@ -1081,7 +1679,14 @@ function wire(): void {
   keepEl.addEventListener("input", onCut("keep"));
   dropEl.addEventListener("input", onCut("drop"));
 
-  $("run").addEventListener("click", () => void run({ consent: false }));
+  $("run").addEventListener("click", () => {
+    const action = $<HTMLButtonElement>("run").dataset.action || "extract";
+    if (action === "load-tev1") {
+      void loadWebGpuWeights();
+      return;
+    }
+    void run({ consent: false });
+  });
   $("stop").addEventListener("click", stopReading);
   $("continue").addEventListener("click", () => void resume());
   $("retry").addEventListener("click", () => void resume());
@@ -1097,13 +1702,57 @@ function wire(): void {
   document.querySelectorAll<HTMLButtonElement>("#views [data-view]").forEach((b) => {
     b.addEventListener("click", () => showView(b.dataset.view as "inputs" | "graph" | "results"));
   });
-  // Cached answers belong to one (host, model) pair; a new target starts clean.
+  // Cached answers belong to one (backend, host, model) triple; a new target starts clean.
+  const clearForTarget = (why: string) => {
+    void engine.clearCache();
+    $("run-note").textContent = why;
+  };
   for (const id of ["host-url", "host-model"]) {
     $(id).addEventListener("input", () => {
-      void engine.clearCache();
-      $("run-note").textContent = "Host changed. Press Extract graph to ask it.";
+      saveInferencePrefs();
+      clearForTarget("Model target changed. Press Extract graph to ask it.");
+      if (id === "host-url") {
+        closeOllamaDialog();
+        void paintOllamaStatus();
+      }
     });
   }
+  $<HTMLInputElement>("webgpu-model").addEventListener("input", () => {
+    if (webgpuUi === "ready") setWebGpuState("idle");
+    saveInferencePrefs();
+    clearForTarget("Model target changed. Load Tev1 again, then Extract.");
+  });
+  for (const id of ["backend-ollama", "backend-webgpu"]) {
+    $(id).addEventListener("change", () => {
+      void (async () => {
+        saveInferencePrefs();
+        void engine.clearCache();
+        if (backend() === "webgpu" && !webgpuMock && webgpuProbe?.ok) {
+          webgpuWeightsPresent = await probeWebGpuWeights(webgpuModelId());
+        }
+        syncBackendUi();
+        if (backend() === "webgpu" && !webgpuReady()) {
+          // Keep the idle/error run-note from setWebGpuState / syncExtractGate.
+          if (!$("run-note").textContent?.trim()) syncExtractGate();
+          requestAnimationFrame(() => focusWebGpuLoad());
+        } else {
+          $("run-note").textContent = "Backend changed. Press Extract graph to ask it.";
+          if (backend() === "ollama") void paintOllamaStatus();
+        }
+      })();
+    });
+  }
+  $("webgpu-load").addEventListener("click", () => void loadWebGpuWeights());
+  $("run-note").addEventListener("click", (ev) => {
+    const t = (ev.target as HTMLElement).closest("#run-note-load");
+    if (!t) return;
+    if (backend() !== "webgpu") {
+      $<HTMLInputElement>("backend-webgpu").checked = true;
+      saveInferencePrefs();
+      syncBackendUi();
+    }
+    void loadWebGpuWeights();
+  });
 
   document.querySelectorAll<HTMLButtonElement>(".tabs [data-tab]").forEach((b) => {
     b.addEventListener("click", () => setTab(b.dataset.tab as Tab));
@@ -1123,6 +1772,34 @@ function wire(): void {
     URL.revokeObjectURL(a.href);
   });
 
+  const ollamaDlg = $("ollama-dialog") as HTMLDialogElement;
+  ollamaDlg.addEventListener("close", () => {
+    const how = ollamaDlg.returnValue;
+    const typed = $<HTMLInputElement>("ollama-dialog-url").value.trim();
+    if (typed) {
+      $<HTMLInputElement>("host-url").value = typed;
+      saveInferencePrefs();
+    }
+    if (how === "retry") void resume();
+    if (how === "webgpu") {
+      $<HTMLInputElement>("backend-webgpu").checked = true;
+      saveInferencePrefs();
+      void engine.clearCache();
+      syncBackendUi();
+      $("run-note").textContent = "Switched to WebGPU. Load Tev1, then Extract graph.";
+    }
+  });
+  $("ollama-dialog-copy").addEventListener("click", async () => {
+    const text = lastOllamaProbe?.copyText ?? $("error-text").textContent ?? "";
+    try {
+      await navigator.clipboard.writeText(text);
+      $("ollama-dialog-copy").textContent = "Copied";
+      setTimeout(() => ($("ollama-dialog-copy").textContent = "Copy details"), 1200);
+    } catch {
+      $("ollama-dialog-copy").textContent = "Copy failed";
+    }
+  });
+
   new ResizeObserver(() => graph.refit()).observe($("graph"));
 }
 
@@ -1136,21 +1813,123 @@ async function wasmSize(): Promise<string> {
   }
 }
 
-/** `?host=http://…&model=…` pre-fills the decision model, so a link can point at any host. */
+const INFERENCE_STORE = "edgextract.inference.v1";
+
+interface InferencePrefs {
+  backend: DecisionBackend;
+  hostUrl?: string;
+  hostModel?: string;
+  webgpuModel?: string;
+}
+
+function readInferencePrefs(): InferencePrefs | null {
+  try {
+    const raw = localStorage.getItem(INFERENCE_STORE);
+    if (!raw) return null;
+    const data = JSON.parse(raw) as Partial<InferencePrefs>;
+    if (data.backend !== "ollama" && data.backend !== "webgpu") return null;
+    return {
+      backend: data.backend,
+      hostUrl: typeof data.hostUrl === "string" ? data.hostUrl : undefined,
+      hostModel: typeof data.hostModel === "string" ? data.hostModel : undefined,
+      webgpuModel: typeof data.webgpuModel === "string" ? data.webgpuModel : undefined,
+    };
+  } catch {
+    return null;
+  }
+}
+
+function saveInferencePrefs(): void {
+  try {
+    const prefs: InferencePrefs = {
+      backend: backend(),
+      hostUrl: $<HTMLInputElement>("host-url").value.trim(),
+      hostModel: $<HTMLInputElement>("host-model").value.trim(),
+      webgpuModel: $<HTMLInputElement>("webgpu-model").value.trim(),
+    };
+    localStorage.setItem(INFERENCE_STORE, JSON.stringify(prefs));
+  } catch {
+    /* private mode / quota — preference is best-effort */
+  }
+}
+
+/**
+ * Restore inference target: URL query wins, then localStorage, then WebGPU default.
+ * `?host=` without `backend=` still means Ollama (deep link to a host).
+ */
 function useQueryHost(): void {
   const q = new URLSearchParams(location.search);
-  const host = q.get("host");
+  const hostUrl = q.get("host");
   const model = q.get("model");
-  if (host) $<HTMLInputElement>("host-url").value = host;
-  if (model) $<HTMLInputElement>("host-model").value = model;
+  const be = q.get("backend");
+  webgpuMock = q.get("webgpuMock") === "1" || q.get("webgpuMock") === "true";
+  const saved = readInferencePrefs();
+
+  const fromQuery =
+    be === "ollama" || be === "webgpu"
+      ? be
+      : hostUrl
+        ? "ollama"
+        : null;
+  const chosen: DecisionBackend = fromQuery ?? saved?.backend ?? "webgpu";
+
+  if (chosen === "ollama") {
+    $<HTMLInputElement>("backend-ollama").checked = true;
+    $<HTMLInputElement>("host-url").value =
+      hostUrl || saved?.hostUrl || $<HTMLInputElement>("host-url").value;
+    $<HTMLInputElement>("host-model").value =
+      (be === "ollama" || hostUrl ? model : null) ||
+      saved?.hostModel ||
+      $<HTMLInputElement>("host-model").value;
+  } else {
+    $<HTMLInputElement>("backend-webgpu").checked = true;
+    {
+      const savedGpu = saved?.webgpuModel;
+      // Migrate the pre-Tev1 Qwen stand-in Hub id to the Tev1 ONNX Hub graph.
+      const migrated =
+        !savedGpu || savedGpu === "raphaelmansuy/qwen3.5-0.8b-onnx-webgpu"
+          ? DEFAULT_TEV1_MODEL_ID
+          : savedGpu;
+      $<HTMLInputElement>("webgpu-model").value =
+        (be === "webgpu" || (!hostUrl && model) ? model : null) ||
+        migrated ||
+        $<HTMLInputElement>("webgpu-model").value;
+    }
+    if (saved?.hostUrl) $<HTMLInputElement>("host-url").value = saved.hostUrl;
+    if (saved?.hostModel) $<HTMLInputElement>("host-model").value = saved.hostModel;
+  }
+  saveInferencePrefs();
 }
 
 async function boot(): Promise<void> {
   wire();
   paintBands();
   setTab("document");
+  engine.onWebGpuProgress = (message, frac) => {
+    if (webgpuUi !== "loading") return;
+    const bar = $<HTMLProgressElement>("webgpu-progress");
+    const label = $("webgpu-progress-label");
+    const phase = webGpuPhaseFromMessage(message);
+    paintWebGpuStages(phase);
+    const polished = polishWebGpuProgress(message, phase);
+    if (frac != null) {
+      // Belt-and-suspenders: never let the UI bar jump backward.
+      const pct = Math.round(Math.max(0, Math.min(1, frac)) * 100);
+      const peak = Math.max(Number(bar.dataset.peak || "0"), pct);
+      bar.dataset.peak = String(peak);
+      bar.value = peak;
+      label.textContent = `${polished} · ${peak}%`;
+    } else {
+      label.textContent = polished;
+    }
+    // Keep the status line in sync on the warm beat — that's the new visible moment.
+    if (phase === "warm") {
+      $("webgpu-status").textContent = "Weights are in — warming WebGPU so Extract isn’t a cold start…";
+      $("run-note").textContent = "Almost there — waking the GPU…";
+    }
+  };
   try {
-    const { ontologies, starter, version } = await engine.init();
+    const { ontologies, starter, version, crossOriginIsolated: isolated } = await engine.init();
     state.starter = starter;
     state.ontologies = [...ontologies, ...DEMO_ONTOLOGIES];
     renderOntologyOptions(SAMPLES[0].ontology);
@@ -1159,8 +1938,35 @@ async function boot(): Promise<void> {
     $("wasm-dot").classList.add("ok");
     document.body.dataset.ready = "true";
     useQueryHost();
+    if (webgpuMock) await engine.setWebGpuMock(true);
+    webgpuProbe = await engine.probeWebGpu();
+    if (!webgpuMock && !isolated && webgpuProbe.ok) {
+      webgpuProbe = {
+        ok: false,
+        reason:
+          "WebGPU Tev1 needs COOP/COEP isolation for the sync bridge. Hard-reload after starting the demo server.",
+      };
+    }
+    if (!webgpuProbe.ok) {
+      $<HTMLInputElement>("backend-webgpu").disabled = true;
+      webgpuUi = "unavailable";
+      if (backend() === "webgpu") {
+        $<HTMLInputElement>("backend-ollama").checked = true;
+      }
+    } else {
+      webgpuUi = "idle";
+    }
+    saveInferencePrefs();
+    if (backend() === "webgpu" && !webgpuMock && webgpuProbe?.ok) {
+      webgpuWeightsPresent = await probeWebGpuWeights(webgpuModelId());
+    }
+    syncBackendUi();
     selectOntology(SAMPLES[0].ontology);
     selectSample(SAMPLES[0].id);
+    if (backend() === "webgpu" && webgpuUi === "idle") {
+      // Keep Load Tev1 in view: the left column scrolls and step 1 is tall.
+      requestAnimationFrame(() => focusWebGpuLoad());
+    }
   } catch (e) {
     $("wasm-status").textContent = "engine failed to load";
     showError((e as Error).message);

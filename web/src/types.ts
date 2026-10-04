@@ -145,8 +145,15 @@ export interface RunRequest {
   max_sections?: number;
 }
 
+/** Where closed questions are answered. */
+export type DecisionBackend = "ollama" | "webgpu";
+
 export interface HostConfig {
+  backend: DecisionBackend;
+  /** Ollama (or stand-in) base URL. Ignored for WebGPU. */
   baseUrl: string;
+  /** Model name for Ollama, or ONNX model id for WebGPU. */
+  model: string;
 }
 
 export type WorkerIn =
@@ -155,10 +162,25 @@ export type WorkerIn =
   | { id: number; kind: "prepare"; request: RunRequest; host: HostConfig }
   | { id: number; kind: "run"; limit?: number }
   | { id: number; kind: "stop" }
-  | { id: number; kind: "clear" };
+  | { id: number; kind: "clear" }
+  | { id: number; kind: "webgpu-probe" }
+  | { id: number; kind: "webgpu-mock"; enabled: boolean }
+  | { id: number; kind: "webgpu-load"; modelId: string }
+  | { id: number; kind: "webgpu-bench" };
 
 export type WorkerOut =
   | { id: number; ok: true; data: unknown }
   | { id: number; ok: false; error: string; partial?: RunOutput }
   | { id: number; kind: "progress"; progress: Progress; output: RunOutput | null }
-  | { id: 0; kind: "call"; state: "start" | "end"; n: number; ms?: number };
+  | {
+      id: 0;
+      kind: "call";
+      state: "start" | "end";
+      n: number;
+      ms?: number;
+      prefillMs?: number;
+      questions?: number;
+      forwards?: number;
+      packPath?: string;
+    }
+  | { id: 0; kind: "webgpu-progress"; message: string; frac?: number };

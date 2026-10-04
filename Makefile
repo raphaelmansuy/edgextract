@@ -2,7 +2,8 @@ PYTHON ?= uv run python
 PYTEST ?= uv run pytest
 
 .PHONY: sync test test-live lint fmt xref article examples probe fetch-conll04 rust-test \
-	wasm-setup wasm wasm-check web-install demo demo-build demo-preview demo-e2e demo-e2e-live demo-e2e-update demo-clean
+	wasm-setup wasm wasm-check web-install demo demo-build demo-preview demo-e2e demo-e2e-live demo-e2e-update demo-clean \
+	demo-webgpu-model demo-webgpu-publish demo-webgpu-export-tev1-probe demo-webgpu-export-tev1
 
 fetch-conll04:
 	uv run python scripts/fetch_conll04.py
@@ -69,10 +70,28 @@ wasm:
 	wasm-pack build rust/edgextract-wasm --release --target web --out-dir $(WASM_OUT) --out-name edgextract
 
 web-install:
-	cd $(WEB) && npm install
+	# --ignore-scripts: @huggingface/transformers pulls sharp for Node; the demo is browser-only.
+	cd $(WEB) && npm install --ignore-scripts
 
 demo: wasm web-install
 	cd $(WEB) && npm run dev -- --open
+
+# Optional local cache (~1 GB Tev1 ONNX) under web/public/models/tev1-0.8b-onnx (gitignored).
+# The demo default is the Hub id raphaelmansuy/tev1-0.8b-onnx-webgpu.
+demo-webgpu-model:
+	$(PYTHON) scripts/fetch_tev1_webgpu_model.py
+
+# Publish the local slice to Hugging Face (requires: hf auth login).
+demo-webgpu-publish:
+	$(PYTHON) scripts/publish_tev1_webgpu_model.py
+
+# Real Tev1 ONNX: weight transplant into the fused ONNX-OPT topology.
+# See docs/THIRD_PARTY_NOTICES.md (fine-tune license still pending on HF).
+demo-webgpu-export-tev1-probe:
+	$(PYTHON) scripts/export_tev1_onnx.py --probe
+
+demo-webgpu-export-tev1:
+	$(PYTHON) scripts/export_tev1_onnx.py --acknowledge-tev1-license-pending
 
 demo-build: wasm web-install
 	cd $(WEB) && npm run build

@@ -1,0 +1,66 @@
+{
+  "ollama": {
+    "host": "http://127.0.0.1:11434",
+    "model": "tev1",
+    "questions": 2,
+    "runs_ms": [
+      132.7,
+      131.8,
+      133.8
+    ],
+    "mean_ms": 132.8,
+    "median_ms": 132.7,
+    "mean_ms_per_question": 66.4,
+    "answers": {
+      "founded": {
+        "type": "noul",
+        "noul": 0.9978964387332864
+      },
+      "acquired": {
+        "type": "noul",
+        "noul": 0.003755124646393563
+      }
+    }
+  },
+  "webgpu": {
+    "model": "tev1-0.8b-onnx",
+    "hub": "raphaelmansuy/tev1-0.8b-onnx-webgpu",
+    "hub_revision": "26a904f1d138eddc711f9f116e045bffc1924dbd",
+    "graph": "fused-opt (LinearAttention + CausalConvWithState, past_conv0_last_dim=3)",
+    "pack_path": "batch",
+    "pad_safe": true,
+    "pad_logit_max_abs_delta": 0.02734375,
+    "local": {
+      "load_ms": 28147,
+      "cold_extract_ms": 626,
+      "warm_extract_ms": 19,
+      "progress_detail": "1 model call · 1 fwd · batch · 0.0 s/call · 0:00 elapsed"
+    },
+    "hub_run": {
+      "load_ms": 66861,
+      "cold_extract_ms": 464,
+      "warm_extract_ms": 18,
+      "progress_detail": "1 model call · 1 fwd · batch · 0.0 s/call · 0:00 elapsed"
+    },
+    "ms_per_token_hub": 0.14,
+    "at": "2026-10-04T05:17:58.049Z",
+    "prior_unfused": {
+      "extract_wall_ms": 48736,
+      "mean_ms_per_call": 3600,
+      "progress_detail": "1 model call · 3.6 s/call · 0:48 elapsed"
+    },
+    "prior_fused_sequential": {
+      "cold_extract_ms": 787,
+      "forwards": 13,
+      "pack_path": "sequential",
+      "progress_detail": "1 model call · 13 fwd · sequential · 0.1 s/call · 0:00 elapsed"
+    }
+  },
+  "notes": [
+    "Ollama times are one packed POST /v1/systemone (native Metal).",
+    "WebGPU times are Playwright Chromium; local /models and Hub share the fused q4f16 graph.",
+    "Left-pad batching is score-safe (pad logit max |Δ| ≈ 0.027); one forward scores a packed System One POST.",
+    "Hub Load must not probe /models/{org}/{name} (SPA HTML → JSON parse). allowLocalModels=false + modelsStrict404 on vite preview.",
+    "Unfused community topology was ~3.6 s/call; fused OPT + batch is ~0.5 s cold extract wall for Northwind."
+  ]
+}

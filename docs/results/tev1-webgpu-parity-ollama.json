@@ -1,0 +1,23 @@
+{
+  "host": "http://localhost:11434",
+  "model": "tev1",
+  "northwind_chars": 178,
+  "answers": {
+    "founded": {
+      "type": "noul",
+      "noul": 0.9978964387332864
+    },
+    "acquired": {
+      "type": "noul",
+      "noul": 0.003755124646393563
+    }
+  },
+  "bands": {
+    "founded": "ACCEPT",
+    "acquired": "REJECT"
+  },
+  "expect": {
+    "founded": "ACCEPT",
+    "acquired": "REJECT"
+  }
+}
