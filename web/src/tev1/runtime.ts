@@ -143,6 +143,48 @@ export function isHubModelId(modelId: string): boolean {
   return modelId.includes("/") && !modelId.startsWith(".") && !modelId.startsWith("/");
 }
 
+/**
+ * Transformers.js stores Hub files under the remote resolve URL
+ * (`{model}/resolve/{revision}/…`). A matching entry cannot be SPA HTML at
+ * `/models/…` or an unfused graph at `/resolve/main/`.
+ */
+export function hubCacheUrlMatchesRevision(url: string, revision: string): boolean {
+  return revision.length > 0 && url.includes(`/resolve/${revision}/`);
+}
+
+/** Minimal Cache Storage shape so tests can inject a fake (no browser). */
+export type HubCacheBucket = {
+  keys: () => Promise<readonly { url: string }[]>;
+  delete: (request: { url: string }) => Promise<boolean>;
+};
+
+export type HubCacheStorage = {
+  keys: () => Promise<string[]>;
+  open: (name: string) => Promise<HubCacheBucket>;
+};
+
+/**
+ * Drop Cache Storage *requests* that are not the pinned Hub revision.
+ * Leaves the cache name in place so a hit on the pinned URL still works.
+ */
+export async function evictHubCacheExceptRevision(
+  revision: string,
+  storage: HubCacheStorage,
+): Promise<void> {
+  const names = await storage.keys();
+  await Promise.all(
+    names.map(async (name) => {
+      const cache = await storage.open(name);
+      const requests = await cache.keys();
+      await Promise.all(
+        requests.map((req) =>
+          hubCacheUrlMatchesRevision(req.url, revision) ? Promise.resolve(false) : cache.delete(req),
+        ),
+      );
+    }),
+  );
+}
+
 export type LoadProgress = (msg: string, frac?: number) => void;
 
 export interface Tev1RuntimeStatus {
@@ -391,12 +433,21 @@ export class Tev1Runtime {
     env.useBrowserCache = true;
     env.localModelPath = localModelsBase();
 
-    // Drop poisoned Cache Storage (SPA HTML cached under /models/org/name, or
-    // an unfused graph at revision=main) before Hub downloads.
+    // Drop poisoned Cache Storage requests (SPA HTML under /models/org/name,
+    // or graphs at other revisions including main). Keep the pinned resolve
+    // URL so useBrowserCache can hit ~950 MB on the next Load.
     if (hub && typeof caches !== "undefined") {
       try {
-        const keys = await caches.keys();
-        await Promise.all(keys.map((k) => caches.delete(k)));
+        await evictHubCacheExceptRevision(DEFAULT_TEV1_HUB_REVISION, {
+          keys: () => caches.keys(),
+          open: async (name) => {
+            const cache = await caches.open(name);
+            return {
+              keys: async () => (await cache.keys()).map((req) => ({ url: req.url })),
+              delete: ({ url }) => cache.delete(url),
+            };
+          },
+        });
       } catch {
         /* private mode / blocked Cache API */
       }
