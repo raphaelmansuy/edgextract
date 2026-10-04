@@ -4,7 +4,7 @@ The Rust crate compiled to WebAssembly, behind a small Vite + TypeScript page.
 
 **Live on GitHub Pages:** [https://raphaelmansuy.github.io/edgextract/](https://raphaelmansuy.github.io/edgextract/)
 
-Push to `master` deploys via [`.github/workflows/pages.yml`](../.github/workflows/pages.yml). The artifact is lean (no ONNX blobs); the default Hub id downloads ~1&nbsp;GB on first **Load Tev1**. A `coi-serviceworker` injects COOP/COEP because Pages cannot set those headers. Needs Chromium with WebGPU.
+Push to `master` deploys via [`.github/workflows/pages.yml`](../.github/workflows/pages.yml). The artifact is lean (no ONNX blobs); the default Hub id downloads ~1&nbsp;GB on first **Load Tev1**. A `coi-serviceworker` injects COOP/COEP because Pages cannot set those headers. Needs Chromium with WebGPU. Hosted visits stay on WebGPU: `127.0.0.1` Ollama is the visitor's machine, not GitHub Pages. A public HTTPS Ollama host works with `?host=https://…` and `OLLAMA_ORIGINS=https://raphaelmansuy.github.io`.
 
 ```bash
 make demo          # from the repo root: build wasm, install, serve http://localhost:5273

@@ -66,7 +66,12 @@ async function mockLoad(modelId: string): Promise<void> {
 
 /** Prefer IPv4 loopback — `localhost` often tries ::1 first and hangs for ~60s. */
 function ollamaBase(url: string): string {
-  const raw = url.trim() || "http://127.0.0.1:11434";
+  const raw = url.trim();
+  if (!raw) {
+    throw new Error(
+      "Ollama host URL is empty. Use WebGPU, or enter a reachable host (not 127.0.0.1 on GitHub Pages).",
+    );
+  }
   try {
     const u = new URL(raw);
     if (u.hostname === "localhost") u.hostname = "127.0.0.1";

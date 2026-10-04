@@ -22,6 +22,12 @@ import {
   isHubModelId,
   localModelUrl,
 } from "./tev1/runtime";
+import {
+  DEFAULT_OLLAMA_LOOPBACK,
+  defaultOllamaHost,
+  ollamaHostUsable,
+  originIsLocal,
+} from "./ollama-host";
 
 // ---------------------------------------------------------------- helpers
 
@@ -215,7 +221,7 @@ const webgpuModelId = (): string =>
 
 /** `localhost` often tries IPv6 (::1) first and hangs ~60s if Ollama only binds IPv4. */
 function ipv4Loopback(url: string): string {
-  const raw = url.trim() || "http://127.0.0.1:11434";
+  const raw = url.trim() || DEFAULT_OLLAMA_LOOPBACK;
   try {
     const u = new URL(raw);
     if (u.hostname === "localhost") u.hostname = "127.0.0.1";
@@ -252,9 +258,24 @@ function pageOrigin(): string {
 }
 
 async function probeOllamaHost(baseUrl: string): Promise<OllamaProbe> {
-  const typedUrl = (baseUrl || "").trim() || "http://127.0.0.1:11434";
   const origin = pageOrigin();
+  const typedUrl = (baseUrl || "").trim() || defaultOllamaHost(origin);
   const checks: HostCheck[] = [];
+  const usable = ollamaHostUsable(origin, typedUrl);
+  if (!usable.ok) {
+    checks.push({ ok: "false", label: usable.reason });
+    const fail: OllamaProbe = {
+      ok: false,
+      typedUrl: typedUrl || DEFAULT_OLLAMA_LOOPBACK,
+      base: typedUrl || DEFAULT_OLLAMA_LOOPBACK,
+      origin,
+      detail: usable.reason,
+      checks,
+      copyText: "",
+    };
+    fail.copyText = formatOllamaCopy(fail);
+    return fail;
+  }
   let parsed: URL | null = null;
   try {
     parsed = new URL(typedUrl);
@@ -377,6 +398,9 @@ function formatOllamaCopy(p: OllamaProbe): string {
     `detail: ${p.detail}`,
     ...p.checks.map((c) => `- [${c.ok}] ${c.label}${c.hint ? ` — ${c.hint}` : ""}`),
     `fix: ollama serve && ollama pull tev1`,
+    originIsLocal(p.origin)
+      ? `local page: ${DEFAULT_OLLAMA_LOOPBACK} is fine`
+      : `hosted page: HTTPS Ollama + OLLAMA_ORIGINS=${p.origin || "(this origin)"}`,
   ];
   return lines.join("\n");
 }
@@ -417,9 +441,13 @@ function openOllamaDialog(probe: OllamaProbe, extraLead?: string): void {
     extraLead ||
     `This tab asked ${probe.base} and got no answer, so the graph stays empty — nothing was invented.`;
   $("ollama-dialog-origin").textContent = probe.origin
-    ? `CORS: Ollama must allow origin ${probe.origin} (localhost is allowed by default).`
+    ? originIsLocal(probe.origin)
+      ? `CORS: Ollama must allow origin ${probe.origin} (localhost is allowed by default).`
+      : `CORS: OLLAMA_ORIGINS=${probe.origin} before ollama serve. Hosted pages also need HTTPS (not 127.0.0.1).`
     : "";
-  $("ollama-dialog-cmd").textContent = `ollama serve\nollama pull tev1`;
+  $("ollama-dialog-cmd").textContent = originIsLocal(probe.origin)
+    ? `ollama serve\nollama pull tev1`
+    : `OLLAMA_ORIGINS=${probe.origin} ollama serve\nollama pull tev1\n# reverse-proxy this host with HTTPS; GitHub Pages cannot fetch http://`;
   $<HTMLInputElement>("ollama-dialog-url").value =
     $<HTMLInputElement>("host-url").value.trim() || probe.typedUrl;
   const dlg = $("ollama-dialog") as HTMLDialogElement;
@@ -436,7 +464,10 @@ const host = (): HostConfig => {
   }
   return {
     backend: "ollama",
-    baseUrl: ipv4Loopback($<HTMLInputElement>("host-url").value),
+    baseUrl: (() => {
+      const typed = $<HTMLInputElement>("host-url").value.trim();
+      return typed ? ipv4Loopback(typed) : defaultOllamaHost(pageOrigin());
+    })(),
     model: $<HTMLInputElement>("host-model").value.trim() || "tev1",
   };
 };
@@ -608,16 +639,22 @@ function syncBackendUi(): void {
 
   if (gpuBlocked) {
     unavailable.hidden = false;
-    unavailable.textContent = `WebGPU unavailable: ${webgpuProbe!.reason || "no adapter"}. Ollama still works.`;
+    unavailable.textContent = gpuBlocked
+      ? originIsLocal(pageOrigin())
+        ? `WebGPU unavailable: ${webgpuProbe!.reason || "no adapter"}. Ollama still works.`
+        : `WebGPU unavailable: ${webgpuProbe!.reason || "no adapter"}. This hosted page cannot use 127.0.0.1 Ollama — stay on WebGPU after a hard-reload, or paste a public HTTPS Ollama URL.`
+      : "";
   } else {
     unavailable.hidden = true;
     unavailable.textContent = "";
   }
 
   if (mode === "ollama") {
-    note.innerHTML =
-      `Every name and every link is a closed question sent to <code>POST /v1/systemone</code> on the host below. ` +
-      `Native Ollama is much faster than in-tab WebGPU. If the host is down you get a diagnostic, not a minute of waiting.`;
+    note.innerHTML = originIsLocal(pageOrigin())
+      ? `Every name and every link is a closed question sent to <code>POST /v1/systemone</code> on the host below. ` +
+        `Native Ollama is much faster than in-tab WebGPU. If the host is down you get a diagnostic, not a minute of waiting.`
+      : `Every name and every link is a closed question sent to a <strong>public HTTPS</strong> Ollama host (<code>POST /v1/systemone</code>). ` +
+        `<code>127.0.0.1</code> is this visitor's machine, not GitHub Pages. Set <code>OLLAMA_ORIGINS</code> to this origin, or switch back to WebGPU.`;
     void paintOllamaStatus();
   } else {
     note.innerHTML =
@@ -891,7 +928,7 @@ async function run(opts: RunOpts = {}): Promise<void> {
       lastOllamaProbe = probe;
       if (!probe.ok) {
         throw new Error(
-          `${probe.detail}. Start Ollama (\`ollama serve\`) and pull \`tev1\`, or switch to WebGPU.`,
+          `${probe.detail}. ${originIsLocal(pageOrigin()) ? "Start Ollama (`ollama serve`) and pull `tev1`" : "Use WebGPU, or a public HTTPS Ollama URL with OLLAMA_ORIGINS set to this origin"}.`,
         );
       }
     }
@@ -1860,7 +1897,8 @@ function saveInferencePrefs(): void {
 
 /**
  * Restore inference target: URL query wins, then localStorage, then WebGPU default.
- * `?host=` without `backend=` still means Ollama (deep link to a host).
+ * `?host=` without `backend=` means Ollama only when that host is reachable from this origin.
+ * GitHub Pages never restores loopback Ollama (it cannot reach the visitor's 127.0.0.1).
  */
 function useQueryHost(): void {
   const q = new URLSearchParams(location.search);
@@ -1869,6 +1907,13 @@ function useQueryHost(): void {
   const be = q.get("backend");
   webgpuMock = q.get("webgpuMock") === "1" || q.get("webgpuMock") === "true";
   const saved = readInferencePrefs();
+  const origin = pageOrigin();
+  const hostEl = $<HTMLInputElement>("host-url");
+
+  if (!originIsLocal(origin) && ollamaHostUsable(origin, hostEl.value).ok === false) {
+    hostEl.value = "";
+    hostEl.placeholder = "https://your-ollama-host";
+  }
 
   const fromQuery =
     be === "ollama" || be === "webgpu"
@@ -1876,12 +1921,15 @@ function useQueryHost(): void {
       : hostUrl
         ? "ollama"
         : null;
-  const chosen: DecisionBackend = fromQuery ?? saved?.backend ?? "webgpu";
+  let chosen: DecisionBackend = fromQuery ?? saved?.backend ?? "webgpu";
+  const ollamaCandidate = hostUrl || saved?.hostUrl || hostEl.value;
+  if (chosen === "ollama" && !ollamaHostUsable(origin, ollamaCandidate).ok) {
+    chosen = "webgpu";
+  }
 
   if (chosen === "ollama") {
     $<HTMLInputElement>("backend-ollama").checked = true;
-    $<HTMLInputElement>("host-url").value =
-      hostUrl || saved?.hostUrl || $<HTMLInputElement>("host-url").value;
+    hostEl.value = hostUrl || saved?.hostUrl || hostEl.value;
     $<HTMLInputElement>("host-model").value =
       (be === "ollama" || hostUrl ? model : null) ||
       saved?.hostModel ||
@@ -1900,7 +1948,9 @@ function useQueryHost(): void {
         migrated ||
         $<HTMLInputElement>("webgpu-model").value;
     }
-    if (saved?.hostUrl) $<HTMLInputElement>("host-url").value = saved.hostUrl;
+    if (saved?.hostUrl && ollamaHostUsable(origin, saved.hostUrl).ok) {
+      hostEl.value = saved.hostUrl;
+    }
     if (saved?.hostModel) $<HTMLInputElement>("host-model").value = saved.hostModel;
   }
   saveInferencePrefs();
@@ -1955,7 +2005,9 @@ async function boot(): Promise<void> {
     if (!webgpuProbe.ok) {
       $<HTMLInputElement>("backend-webgpu").disabled = true;
       webgpuUi = "unavailable";
-      if (backend() === "webgpu") {
+      const ollamaUrl = $<HTMLInputElement>("host-url").value;
+      const canOllama = ollamaHostUsable(pageOrigin(), ollamaUrl).ok;
+      if (backend() === "webgpu" && canOllama) {
         $<HTMLInputElement>("backend-ollama").checked = true;
       }
     } else {
