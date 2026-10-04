@@ -7,6 +7,9 @@ on:
       - "v*.*.*"
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   crates:
     runs-on: ubuntu-latest
@@ -25,6 +28,9 @@ jobs:
   npm:
     runs-on: ubuntu-latest
     needs: crates
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - uses: actions/checkout@v4
       - uses: dtolnay/rust-toolchain@stable
@@ -32,13 +38,13 @@ jobs:
           targets: wasm32-unknown-unknown
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
-          registry-url: https://registry.npmjs.org
-      - name: Install wasm-pack
-        run: cargo install wasm-pack --locked
-      - name: Publish npm
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          node-version: "24"
+          package-manager-cache: false
+      - name: Install wasm-pack and a current npm
+        run: |
+          cargo install wasm-pack --locked
+          npm install -g npm@11.6.2
+      - name: Publish npm via GitHub OIDC (trusted publisher)
         run: |
           cd rust/edgextract-wasm && wasm-pack build --release --target bundler --scope raphaelmansuy --out-dir pkg --out-name edgextract
           python3 scripts/prepare_wasm_npm.py
