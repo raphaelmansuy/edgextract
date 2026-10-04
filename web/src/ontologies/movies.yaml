@@ -1,0 +1,48 @@
+id: movies
+version: 1
+title: Film and cinema
+types:
+  - id: PERSON
+    description: A named actor, director, or producer.
+    aliases: [actor, director]
+    color: "#7dd3fc"
+  - id: FILM
+    description: A named film.
+    aliases: [film, movie]
+    color: "#fda4af"
+  - id: STUDIO
+    description: A named film studio or production company.
+    aliases: [studio]
+    color: "#c4b5fd"
+  - id: PLACE
+    description: A named city, country, or location.
+    aliases: [city, country]
+    color: "#86efac"
+relations:
+  - id: DIRECTED
+    description: The person directed the film.
+    domain: [PERSON]
+    range: [FILM]
+  - id: STARRED_IN
+    description: The person acted in the film.
+    domain: [PERSON]
+    range: [FILM]
+  - id: PRODUCED_BY
+    description: The film was made by the studio.
+    domain: [FILM]
+    range: [STUDIO]
+  - id: SET_IN
+    description: The film takes place in this location.
+    domain: [FILM]
+    range: [PLACE]
+  - id: BORN_IN
+    description: The person was born in this place.
+    domain: [PERSON]
+    range: [PLACE]
+gazetteer:
+  Christopher Nolan: PERSON
+  Cillian Murphy: PERSON
+  Oppenheimer: FILM
+  Universal Pictures: STUDIO
+  Los Alamos: PLACE
+  Cork: PLACE

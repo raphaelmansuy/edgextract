@@ -18,3 +18,4 @@ data/benchmarks/
 dist/
 docs/article/_build/
 htmlcov/
+/target/

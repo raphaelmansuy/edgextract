@@ -23,3 +23,39 @@ jobs:
         run: uv run python scripts/check_xrefs.py
       - name: Examples with the in-process fake model
         run: make examples
+
+  rust:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - name: Tests (no model needed)
+        run: cargo test --workspace
+      - name: Core crate still builds for the browser
+        run: make wasm-check
+
+  demo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install wasm-pack
+        run: cargo install wasm-pack --locked
+      - name: Browser for Playwright
+        run: cd web && npm install && npx playwright install --with-deps chromium
+      - name: Browser demo, end to end (wasm build, Playwright, screenshots)
+        run: make demo-e2e
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: demo-screenshots-and-report
+          path: |
+            docs/img/demo
+            web/playwright-report

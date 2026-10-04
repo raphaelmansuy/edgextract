@@ -1,0 +1,61 @@
+[package]
+name = "edgextract"
+version = "0.1.0"
+edition = "2021"
+license = "Apache-2.0"
+description = "Turn markdown into a knowledge graph with an ontology you write and a cutoff you own."
+authors = ["Raphael MANSUY"]
+readme = "../../README.md"
+repository = "https://github.com/raphaelmansuy/edgextract"
+keywords = ["knowledge-graph", "information-extraction", "ontology", "ollama"]
+categories = ["text-processing", "science"]
+
+[dependencies]
+clap = { version = "4.5", features = ["derive"], optional = true }
+hex = "0.4"
+indexmap = { version = "2.7", features = ["serde"] }
+regex = "1.11"
+rusqlite = { version = "0.32", features = ["bundled"], optional = true }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+serde_yaml = "0.9"
+sha2 = "0.10"
+thiserror = "2.0"
+tiny_http = { version = "0.12", optional = true }
+unicode-normalization = "0.1"
+reqwest = { version = "0.12", default-features = false, features = ["blocking", "json", "rustls-tls"], optional = true }
+uuid = { version = "1.11", features = ["v4"], optional = true }
+gliner-rs = { version = "0.2", optional = true }
+candle-core = { version = "0.11", optional = true }
+web-time = "1.1.0"
+
+[features]
+# `native` = everything that needs an OS: HTTP client, SQLite cache, CLI, fake server.
+# Build with `--no-default-features` for wasm32 (see ../edgextract-wasm).
+default = ["native"]
+native = ["dep:clap", "dep:reqwest", "dep:rusqlite", "dep:tiny_http", "dep:uuid"]
+spans = ["dep:gliner-rs", "dep:candle-core"]
+
+[dev-dependencies]
+tempfile = "3.14"
+
+[lib]
+name = "edgextract"
+path = "src/lib.rs"
+
+[[bin]]
+name = "edgextract"
+path = "src/main.rs"
+required-features = ["native"]
+
+[[test]]
+name = "e2e_pipeline"
+required-features = ["native"]
+
+[[test]]
+name = "live_systemone"
+required-features = ["native"]
+
+[[example]]
+name = "bench_golden"
+required-features = ["native"]

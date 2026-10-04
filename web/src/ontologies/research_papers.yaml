@@ -1,0 +1,59 @@
+id: research_papers
+version: 1
+title: Research papers
+types:
+  - id: PERSON
+    description: A named researcher or author.
+    aliases: [author, researcher]
+    color: "#7dd3fc"
+  - id: ORGANIZATION
+    description: A named university, lab, or company.
+    aliases: [university, lab]
+    color: "#c4b5fd"
+  - id: PAPER
+    description: A named paper or article.
+    aliases: [paper, article]
+    color: "#fda4af"
+  - id: METHOD
+    description: A named model, method, or algorithm.
+    aliases: [model, method, algorithm]
+    color: "#86efac"
+  - id: DATASET
+    description: A named dataset or benchmark.
+    aliases: [dataset, benchmark]
+    color: "#fcd34d"
+relations:
+  - id: AUTHORED
+    description: The person wrote the paper.
+    domain: [PERSON]
+    range: [PAPER]
+  - id: WORKS_AT
+    description: The person works at the organization.
+    domain: [PERSON]
+    range: [ORGANIZATION]
+  - id: PROPOSES
+    description: The paper introduces the method.
+    domain: [PAPER]
+    range: [METHOD]
+  - id: EVALUATED_ON
+    description: The method was tested on the dataset.
+    domain: [METHOD]
+    range: [DATASET]
+  - id: OUTPERFORMS
+    description: The first method scores higher than the second.
+    domain: [METHOD]
+    range: [METHOD]
+  - id: BUILDS_ON
+    description: The method extends an earlier method.
+    domain: [METHOD]
+    range: [METHOD]
+gazetteer:
+  Ashish Vaswani: PERSON
+  Jacob Devlin: PERSON
+  Google Brain: ORGANIZATION
+  Attention Is All You Need: PAPER
+  Transformer: METHOD
+  BERT: METHOD
+  LSTM: METHOD
+  WMT 2014: DATASET
+  SQuAD: DATASET

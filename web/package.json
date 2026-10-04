@@ -1,0 +1,23 @@
+{
+  "name": "edgextract-web",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Browser demo: edgextract compiled to WebAssembly.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "test:e2e": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@types/d3-force": "^3.0.10",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.2"
+  },
+  "dependencies": {
+    "d3-force": "^3.0.0"
+  }
+}

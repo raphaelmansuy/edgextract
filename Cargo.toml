@@ -1,0 +1,10 @@
+[workspace]
+members = ["rust/edgextract", "rust/edgextract-wasm"]
+resolver = "2"
+
+# The wasm build ships to browsers: small beats fast here, and the work is
+# dominated by the model call, not by this code.
+[profile.release]
+opt-level = "s"
+lto = true
+codegen-units = 1

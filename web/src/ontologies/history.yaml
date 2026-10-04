@@ -1,0 +1,44 @@
+id: history
+version: 1
+title: History
+types:
+  - id: PERSON
+    description: A named historical figure.
+    aliases: [emperor, general]
+    color: "#7dd3fc"
+  - id: PLACE
+    description: A named country, city, or region.
+    aliases: [country, city, island]
+    color: "#86efac"
+  - id: EVENT
+    description: A named battle, war, treaty, or other event.
+    aliases: [battle, war, treaty]
+    color: "#fdba74"
+relations:
+  - id: BORN_IN
+    description: The person was born in this place.
+    domain: [PERSON]
+    range: [PLACE]
+  - id: RULED
+    description: The person ruled this place.
+    domain: [PERSON]
+    range: [PLACE]
+  - id: FOUGHT_IN
+    description: The person took part in this event.
+    domain: [PERSON]
+    range: [EVENT]
+  - id: TOOK_PLACE_IN
+    description: The event happened in this place.
+    domain: [EVENT]
+    range: [PLACE]
+  - id: CAPITAL_OF
+    description: The city is the capital of the country.
+    domain: [PLACE]
+    range: [PLACE]
+gazetteer:
+  Napoleon Bonaparte: PERSON
+  Corsica: PLACE
+  France: PLACE
+  Paris: PLACE
+  Belgium: PLACE
+  Battle of Waterloo: EVENT

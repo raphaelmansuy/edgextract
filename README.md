@@ -36,6 +36,29 @@ result = extract_text(text, ontology, model="tev1")
 write_report("graph.html", text, result, ontology, title="My note")
 ```
 
+## Try it in your browser
+
+The Rust crate compiles to WebAssembly, and a small Vite + TypeScript page runs the whole pipeline in a tab. Your text goes only to the decision model you name (by default your own Ollama), never to a server of ours.
+
+```bash
+ollama pull tev1                  # Ollama already accepts pages served from localhost;
+                                  # for another origin set OLLAMA_ORIGINS before `ollama serve`
+```
+
+```bash
+make demo        # builds the wasm, then serves http://localhost:5273
+```
+
+![The browser demo reading four sentences of company news](docs/img/demo/01-northwind.png)
+
+- **Bring any document.** Upload or drop a `.md` / `.txt` file, or paste text.
+- **Bring any ontology.** Pick one of seven samples (company news, tech docs, research papers, film, medicine, history, CoNLL04), start from a template, upload your own YAML, and edit it with live validation.
+- **Names no list knows are still read.** Every capitalized name in your text is put to the model as a closed question ("is this a name this ontology can hold?"), then typed. You can also pin names to an ontology with one click.
+- **Own the cutoff.** Two sliders move what is kept, sent to review, or dropped. The decision cache means moving them asks the model nothing new.
+- **The model does the extracting.** The page asks an Ollama / SystemOne host (default `http://localhost:11434`, model `tev1`; Ollama must allow the page's origin via `OLLAMA_ORIGINS`). There is no rule-based mode in the page. If the host cannot answer, the graph stays empty.
+
+`make demo-e2e` runs the Playwright suite against a deterministic test double of the host (34 tests, with screenshots in [`docs/img/demo`](docs/img/demo)). Details in [`web/README.md`](web/README.md).
+
 ## Why not just ask a chat model for JSON?
 
 A chat model writes the next token. A JSON schema makes the output *well-formed*. It does not make it *true*, and it does not tell you how sure the model was. You parse, repair, and hope.

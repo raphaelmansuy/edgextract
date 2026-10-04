@@ -1,0 +1,39 @@
+id: biomedical
+version: 1
+title: Biomedical notes
+types:
+  - id: DRUG
+    description: A named drug or medicine.
+    aliases: [drug, medicine]
+    color: "#86efac"
+  - id: DISEASE
+    description: A named disease or condition.
+    aliases: [disease, cancer, condition]
+    color: "#fda4af"
+  - id: GENE
+    description: A named gene or gene fusion.
+    aliases: [gene]
+    color: "#c4b5fd"
+relations:
+  - id: TREATS
+    description: The drug is used to treat the disease.
+    domain: [DRUG]
+    range: [DISEASE]
+  - id: INHIBITS
+    description: The drug blocks the gene's product.
+    domain: [DRUG]
+    range: [GENE]
+  - id: ASSOCIATED_WITH
+    description: The gene is linked to the disease.
+    domain: [GENE]
+    range: [DISEASE]
+gazetteer:
+  Metformin: DRUG
+  Imatinib: DRUG
+  Tamoxifen: DRUG
+  Type 2 Diabetes: DISEASE
+  Chronic Myeloid Leukemia: DISEASE
+  Breast Cancer: DISEASE
+  BCR-ABL: GENE
+  BRCA1: GENE
+  ESR1: GENE

@@ -1,0 +1,19 @@
+[package]
+name = "edgextract-wasm"
+version = "0.1.0"
+edition = "2021"
+license = "Apache-2.0"
+description = "edgextract compiled to WebAssembly for the browser demo."
+authors = ["Raphael MANSUY"]
+publish = false
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+edgextract = { path = "../edgextract", default-features = false }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+wasm-bindgen = "0.2"
+js-sys = "0.3"
+console_error_panic_hook = "0.1"

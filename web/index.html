@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>edgextract · knowledge graphs in your browser</title>
+    <meta name="description" content="edgextract compiled to WebAssembly: markdown in, a knowledge graph out, with an ontology you write and a cutoff you own. Your text goes only to the decision model you name." />
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='9' cy='22' r='5' fill='%237dd3fc'/%3E%3Ccircle cx='23' cy='10' r='5' fill='%23c4b5fd'/%3E%3Cpath d='M12 19L20 13' stroke='%23e2e8f0' stroke-width='2'/%3E%3C/svg%3E" />
+  </head>
+  <body>
+    <div id="app">
+      <header class="top">
+        <div class="brand">
+          <svg class="logo" viewBox="0 0 32 32" aria-hidden="true"><circle cx="9" cy="22" r="5" fill="#7dd3fc"/><circle cx="23" cy="10" r="5" fill="#c4b5fd"/><path d="M12 19L20 13" stroke="#e2e8f0" stroke-width="2"/></svg>
+          <span class="brand-name">edgextract</span>
+          <span class="pill" data-testid="pill-wasm">Rust → WebAssembly</span>
+        </div>
+        <p class="tagline">
+          Turn markdown into a knowledge graph with an ontology you write and a cutoff you own.
+          <strong>It runs in this tab. Your text goes only to the decision model you name, by default your own Ollama.</strong>
+        </p>
+        <div class="status" aria-live="polite">
+          <span class="dot" id="wasm-dot"></span>
+          <span id="wasm-status" data-testid="wasm-status">loading engine…</span>
+        </div>
+        <nav class="views" id="views" aria-label="Sections of the page">
+          <button type="button" data-view="inputs" data-testid="view-inputs" aria-pressed="false">Inputs</button>
+          <button type="button" data-view="graph" data-testid="view-graph" aria-pressed="true">Graph</button>
+          <button type="button" data-view="results" data-testid="view-results" aria-pressed="false">Details <span class="count warn" id="n-review-nav" hidden>0</span></button>
+        </nav>
+        <button type="button" class="primary" id="run" data-testid="run">Extract graph</button>
+        <p class="run-note" id="run-note" data-testid="run-note" role="status"></p>
+      </header>
+
+      <main class="grid" id="grid" data-view="graph">
+        <!-- ============ controls ============ -->
+        <section class="panel controls" aria-label="Inputs">
+          <div class="block">
+            <h2><span class="step">1</span> Your text</h2>
+            <div class="chips" id="samples" role="group" aria-label="Sample notes"></div>
+            <div class="row file-row">
+              <label class="btn" for="file">Upload a document</label>
+              <input type="file" id="file" data-testid="file" accept=".md,.markdown,.txt,.text,text/plain,text/markdown" hidden />
+              <span class="file-info" id="file-info" data-testid="file-info">or drop a .md / .txt file on the box</span>
+            </div>
+            <textarea id="text" data-testid="text" spellcheck="false" rows="9" aria-label="Markdown to read"></textarea>
+            <p class="msg" id="text-msg" data-testid="text-msg" role="status"></p>
+          </div>
+
+          <div class="block">
+            <h2><span class="step">2</span> Your ontology</h2>
+            <div class="row">
+              <select id="ontology" data-testid="ontology" aria-label="Ontology"></select>
+              <button type="button" class="ghost" id="toggle-yaml" data-testid="toggle-yaml" aria-expanded="false">Edit YAML</button>
+            </div>
+            <div class="row tools">
+              <button type="button" class="ghost" id="new-ontology" data-testid="new-ontology">New</button>
+              <label class="btn" for="yaml-file">Upload YAML</label>
+              <input type="file" id="yaml-file" data-testid="yaml-file" accept=".yaml,.yml,text/yaml,text/plain" hidden />
+              <button type="button" class="ghost" id="download-yaml" data-testid="download-yaml">Download</button>
+            </div>
+            <div class="kinds" id="kinds" data-testid="kinds"></div>
+            <div class="suggest" id="suggest" data-testid="suggest" hidden>
+              <div class="suggest-head">
+                <span>Optional: pin names the model would otherwise be asked about</span>
+              </div>
+              <div class="row">
+                <label class="inline">add as <select id="suggest-type" data-testid="suggest-type"></select></label>
+                <button type="button" class="ghost" id="suggest-all" data-testid="suggest-all">Add all</button>
+              </div>
+              <div class="chips" id="suggest-chips" data-testid="suggest-chips"></div>
+            </div>
+            <div id="yaml-wrap" hidden>
+              <textarea id="yaml" data-testid="yaml" spellcheck="false" rows="12" aria-label="Ontology YAML"></textarea>
+            </div>
+            <p class="msg" id="yaml-msg" data-testid="yaml-msg" role="status"></p>
+          </div>
+
+          <div class="block">
+            <h2><span class="step">3</span> The decision model</h2>
+            <p class="note" id="mode-note" data-testid="mode-note">Every name and every link is a closed question sent to <code>POST /v1/systemone</code> on the host below, straight from this tab. The model answers; your cutoff decides. If it cannot answer, the graph stays empty. Start Ollama with <code>OLLAMA_ORIGINS</code> allowing this page.</p>
+            <div id="host-fields">
+              <label>Host URL <input id="host-url" data-testid="host-url" value="http://localhost:11434" spellcheck="false" /></label>
+              <label>Model <input id="host-model" data-testid="host-model" value="tev1" spellcheck="false" /></label>
+            </div>
+          </div>
+
+          <div class="block">
+            <h2><span class="step">4</span> Your cutoff</h2>
+            <div class="bands" id="bands" aria-hidden="true">
+              <span class="band drop">drop</span><span class="band review">a person decides</span><span class="band keep">keep</span>
+            </div>
+            <label class="slider">Keep when the model says yes at least
+              <output id="keep-out" data-testid="keep-out">0.80</output>
+              <input type="range" id="keep" data-testid="keep" min="0.5" max="0.99" step="0.01" value="0.8" />
+            </label>
+            <label class="slider">Drop when it says yes at most
+              <output id="drop-out" data-testid="drop-out">0.20</output>
+              <input type="range" id="drop" data-testid="drop" min="0.01" max="0.49" step="0.01" value="0.2" />
+            </label>
+          </div>
+
+        </section>
+
+        <!-- ============ graph ============ -->
+        <section class="panel stage" aria-label="Graph">
+          <div class="statbar" id="stats" data-testid="stats"></div>
+          <div class="canvas">
+            <div class="graph-frame">
+              <svg id="graph" data-testid="graph" role="img" aria-label="Knowledge graph"></svg>
+              <div class="plan" id="plan" data-testid="plan" hidden>
+                <h3 id="plan-title">A long document</h3>
+                <p id="plan-body" data-testid="plan-body"></p>
+                <div class="actions">
+                  <button type="button" class="primary" id="plan-preview" data-testid="plan-preview"></button>
+                  <button type="button" class="ghost" id="plan-all" data-testid="plan-all">Read everything</button>
+                </div>
+              </div>
+              <div class="stack">
+                <div class="progress" id="progress" data-testid="progress" role="status" aria-live="polite" hidden>
+                  <div class="progress-top">
+                    <span class="pulse" aria-hidden="true"></span>
+                    <b id="progress-title" data-testid="progress-title">Reading…</b>
+                    <button type="button" class="ghost small" id="stop" data-testid="stop">Stop</button>
+                  </div>
+                  <div class="bar" id="bar" role="progressbar" aria-label="Reading progress" aria-valuemin="0" aria-valuemax="100"><i id="bar-fill"></i></div>
+                  <div class="progress-meta">
+                    <span id="progress-detail" data-testid="progress-detail"></span>
+                    <span id="progress-wait" data-testid="progress-wait"></span>
+                  </div>
+                </div>
+                <div class="notice" id="notice" data-testid="notice" role="status" hidden>
+                  <span id="notice-text"></span>
+                  <span class="actions"><button type="button" class="ghost small" id="continue" data-testid="continue">Continue reading</button></span>
+                </div>
+                <div class="banner error" id="error" data-testid="error" role="alert" hidden>
+                  <div id="error-text"></div>
+                  <div class="actions"><button type="button" class="ghost small" id="retry" data-testid="retry" hidden>Try again</button></div>
+                </div>
+              </div>
+            </div>
+            <div class="empty" id="empty" data-testid="empty" hidden></div>
+            <div class="canvas-foot">
+              <div class="legend" id="legend" data-testid="legend"></div>
+              <p class="graph-note" id="graph-note" data-testid="graph-note" hidden></p>
+            </div>
+          </div>
+          <div class="evidence" id="evidence" data-testid="evidence">
+            <span class="hint">Hover a link to see the sentence behind it. Drag a name to move it.</span>
+          </div>
+        </section>
+
+        <!-- ============ results ============ -->
+        <section class="panel results" aria-label="Results">
+          <div class="tabs" role="tablist">
+            <button role="tab" aria-selected="true" data-tab="document" data-testid="tab-document">Document</button>
+            <button role="tab" aria-selected="false" data-tab="links" data-testid="tab-links">Links <span class="count" id="n-links">0</span></button>
+            <button role="tab" aria-selected="false" data-tab="review" data-testid="tab-review">Review <span class="count warn" id="n-review">0</span></button>
+            <button role="tab" aria-selected="false" data-tab="json" data-testid="tab-json">JSON</button>
+          </div>
+          <div class="tabpane" id="pane-document" data-testid="pane-document"></div>
+          <div class="tabpane" id="pane-links" data-testid="pane-links" hidden></div>
+          <div class="tabpane" id="pane-review" data-testid="pane-review" hidden></div>
+          <div class="tabpane" id="pane-json" data-testid="pane-json" hidden>
+            <div class="row end">
+              <button type="button" class="ghost" id="copy-json" data-testid="copy-json">Copy</button>
+              <button type="button" class="ghost" id="download-json" data-testid="download-json">Download</button>
+            </div>
+            <pre id="json" data-testid="json"></pre>
+          </div>
+        </section>
+      </main>
+
+      <footer class="foot">
+        <span>edgextract · Apache-2.0 · same Rust crate as the CLI, compiled with <code>wasm-pack</code></span>
+        <a href="https://github.com/raphaelmansuy/edgextract">GitHub</a>
+      </footer>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
